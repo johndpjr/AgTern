@@ -1,5 +1,5 @@
 import tkinter as tk
-
+import webbrowser
 
 class InternshipDetailFrame(tk.Frame):
     """A frame containing all specific internship details."""
@@ -72,3 +72,8 @@ class InternshipDetailFrame(tk.Frame):
         """
         print('"Apply now" was clicked and the link is ' \
               f'"{self._var_internship_link.get()}"')
+
+        link = self._var_internship_link.get()
+        if(link): # Ensure not empty 
+            webbrowser.open_new_tab(link)
+
