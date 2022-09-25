@@ -48,17 +48,31 @@ class VerticalScrolledFrame(Frame):
                 canvas.itemconfigure(interior_id, width=canvas.winfo_width())
         canvas.bind('<Configure>', _configure_canvas)
 
-        # TODO: scrolling when moused over the frame only works on Windows -
-        #   try to target linux/macos.
-        #   This should work (but need to determine direction):
-        # canvas.yview_scroll(1, "units")
+        # update vertical frame position on mouse scroll.
+        # utilize event.num in case of Linux
+        # utilize event.delta in case of Windows/MacOS
         def _on_mousewheel(event):
-            canvas.yview_scroll(int(-1*(event.delta/120)), 'units')
+            if event.num == 4:
+                canvas.yview_scroll(-1, 'units')
+            elif event.num == 5:
+                canvas.yview_scroll(1, 'units')
+            else:
+                canvas.yview_scroll(int(-1*(event.delta/120)), 'units')
 
+        # bind mouse wheel input
+        # <MouseWheel> in case of Windows/MacOS
+        # <Button-4> and <Button-5> in case of Linux
         def _bound_to_mousewheel(event):
             self.bind_all("<MouseWheel>", _on_mousewheel)
+            self.bind_all("<Button-4>", _on_mousewheel)
+            self.bind_all("<Button-5>", _on_mousewheel)
         self.bind('<Enter>', _bound_to_mousewheel)
 
+        # unbind mouse wheel input
+        # <MouseWheel> in case of Windows/MacOS
+        # <Button-4> and <Button-5> in case of Linux
         def _unbound_to_mousewheel(event):
             self.unbind_all("<MouseWheel>")
-        self.bind('<Leave>', _unbound_to_mousewheel)        
+            self.unbind_all("<Button-4>")
+            self.unbind_all("<Button-5>")
+        self.bind('<Leave>', _unbound_to_mousewheel)
