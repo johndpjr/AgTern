@@ -49,7 +49,7 @@ class InternshipDetailFrame(tk.Frame):
         # Description (e.g. "At Lockheed Martin we are...")
         self._var_internship_txtbox = tk.StringVar(self)
         self._txtbx_internship_description = tk.Text(
-            self,
+            self,s
             wrap=tk.WORD
         )
 
@@ -67,13 +67,12 @@ class InternshipDetailFrame(tk.Frame):
         self.grid_columnconfigure(0, weight=1)  # allow column 0 to expand horizontally
     
     def _on_apply_now_bttn_click(self):
-        """Responds to the event when the "Apply now"
-        button is clicked.
-        """
+        """Open url of internship when the "Apply now"
+        button is clicked."""
+
         print('"Apply now" was clicked and the link is ' \
               f'"{self._var_internship_link.get()}"')
 
         link = self._var_internship_link.get()
-        if(link): # Ensure not empty 
+        if(link):  # Ensure not empty 
             webbrowser.open_new_tab(link)
-
