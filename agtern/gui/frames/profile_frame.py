@@ -3,32 +3,30 @@ from datetime import datetime
 
 
 class ProfileFrame(tk.Frame):
-    """A frame containing profile details and validation.
-    """
+    """A frame containing profile details and validation."""
 
     WINDOW_SIZE_OPTIONS = [
-        "640x480",
-        "1280x720",
-        "1920x1080",
+        '640x480',
+        '1280x720',
+        '1920x1080',
     ]
     
     MAJOR_OPTIONS = [
-        "Aerospace Engineering",
-        "Biological and Agricultural Engineering",
-        "Biomedical Engineering",
-        "Chemical Engineering",
-        "Civil and Environmental Engineering",
-        "Computer Science and Engineering",
-        "Electrical and Computer Engineering",
-        "Engineering Technology and Industrial Distribution",
-        "General Engineering",
-        "Industrial and Systems Engineering",
-        "Materials Science and Engineering",
-        "Mechanical Engineering",
-        "Multidisciplinary Engineering",
-        "Nuclear Engineering",
-        "Ocean Engineering",
-        "Petroleum Engineering",
+        'Aerospace Engineering',
+        'Biological and Agricultural Engineering',
+        'Biomedical Engineering',
+        'Chemical Engineering',
+        'Civil and Environmental Engineering',
+        'Computer Science and Engineering',
+        'Electrical and Computer Engineering',
+        'Engineering Technology and Industrial Distribution',
+        'Industrial and Systems Engineering',
+        'Materials Science and Engineering',
+        'Mechanical Engineering',
+        'Multidisciplinary Engineering',
+        'Nuclear Engineering',
+        'Ocean Engineering',
+        'Petroleum Engineering',
     ]
 
     GRAD_YEAR_OPTIONS = [
@@ -37,48 +35,47 @@ class ProfileFrame(tk.Frame):
     ]
 
     GRAD_MONTH_OPTIONS = [
-        "January", 
-        "February", 
-        "March", 
-        "April", 
-        "May", 
-        "June", 
-        "July",
-        "August", 
-        "September", 
-        "October", 
-        "November", 
-        "December",
+        'January', 
+        'February', 
+        'March', 
+        'April', 
+        'May', 
+        'June', 
+        'July',
+        'August', 
+        'September', 
+        'October', 
+        'November', 
+        'December',
     ]
     
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
 
-        # Special tkinter variables that are of type str
-        self._var_window_size = tk.StringVar(self)
-        self._var_name = tk.StringVar(self)
-        self._var_major = tk.StringVar(self)
-        self._var_grad_year = tk.StringVar(self)
-        self._var_grad_month = tk.StringVar(self)
-        self._var_error_message = tk.StringVar(self)
+        # Variables that the parent (and thus all children)
+        #   have access to
+        self._var_window_size = tk.StringVar(parent)
+        self._var_name = tk.StringVar(parent)
+        self._var_major = tk.StringVar(parent)
+        self._var_grad_year = tk.StringVar(parent)
+        self._var_grad_month = tk.StringVar(parent)
+        self._var_error_message = tk.StringVar(parent)
 
         # Set default OptionMenu values
-        if not self.master._config_parser["AgTern"]["window_width"]:
-            self._var_window_size.set("640x480")
-            self._var_name.set("Enter here.")
-            self._var_major.set("General Engineering")
+        if not self.master._config_parser['StudentProfile']['name']:
+            self._var_window_size.set('640x480')
+            self._var_name.set('Enter here.')
+            self._var_major.set('Computer Science and Engineering')
             self._var_grad_year.set(datetime.now().year)
-            self._var_grad_month.set("January")
+            self._var_grad_month.set('January')
         else:
-            self._var_window_size.set(f"{self.master._config_parser['AgTern']['window_width']}x{self.master._config_parser['AgTern']['window_height']}")
+            self._var_window_size.set(f'{self.master._config_parser["AgTern"]["window_width"]}x{self.master._config_parser["AgTern"]["window_height"]}')
             self._var_name.set(self.master._config_parser['StudentProfile']['name'])
             self._var_major.set(self.master._config_parser['StudentProfile']['major'])
             self._var_grad_year.set(self.master._config_parser['StudentProfile']['graduation_year'])
             self._var_grad_month.set(self.master._config_parser['StudentProfile']['graduation_month'])
         self._var_error_message.set('')
 
-        # Setting the textvariable here binds the value of _var_search_result
-        #   to whatever is currently in _entry_search
         self._option_window_size = tk.OptionMenu(
             self,
             self._var_window_size,
@@ -109,14 +106,14 @@ class ProfileFrame(tk.Frame):
         )
         self._bttn_save_profile = tk.Button(
             self,
-            text="Save Profile Information",
+            text='Save Profile Information',
             command=self._on_save_profile_bttn_click
         )
 
         # Display window information (currently hand-picked options)
-        tk.Label(self, text="Window Information:").grid(row=2, column=0, sticky=tk.E, padx=(0,60), pady=15)
+        tk.Label(self, text='Window Information:').grid(row=0, column=0, sticky=tk.E, padx=(0,60), pady=15)
 
-        labels = [tk.Label(self, text=label) for label in ["Size"]]
+        labels = [tk.Label(self, text=label) for label in ['Size']]
         values = [self._option_window_size]
 
         for i in range(len(labels)):
@@ -124,9 +121,9 @@ class ProfileFrame(tk.Frame):
             values[i].grid(row=i+1, column=1, sticky=tk.NSEW, padx=(0,3), pady=(0,2))
 
         # Display user information (name can be set, all others are hand-picked options)
-        tk.Label(self, text="Profile Information:").grid(row=0, column=0, sticky=tk.E, padx=(0,60), pady=15)
+        tk.Label(self, text='Profile Information:').grid(row=2, column=0, sticky=tk.E, padx=(0,60), pady=15)
 
-        labels = [tk.Label(self, text=label) for label in ["Name", "Major", "Graduation Year", "Graduation Month"]]
+        labels = [tk.Label(self, text=label) for label in ['Name', 'Major', 'Graduation Year', 'Graduation Month']]
         values = [self._entry_name, self._option_major, self._option_grad_year, self._option_grad_month]
 
         for i in range(len(labels)):
@@ -141,44 +138,36 @@ class ProfileFrame(tk.Frame):
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=2)
 
-        self.grid_rowconfigure(0, weight=1)
-        self.grid_rowconfigure(1, weight=1)
-        self.grid_rowconfigure(2, weight=1)
-        self.grid_rowconfigure(3, weight=1)
-        self.grid_rowconfigure(4, weight=1)
-        self.grid_rowconfigure(5, weight=1)
-        self.grid_rowconfigure(6, weight=1)
-        self.grid_rowconfigure(7, weight=1)
-        self.grid_rowconfigure(8, weight=1)
+        for r in range(9):
+            self.grid_rowconfigure(r, weight=1)
 
     def _on_save_profile_bttn_click(self):
-        """Responds to the event when the "Save Profile Information"
+        """Responds to the event when the 'Save Profile Information'
         button is clicked.
         """
         print('"Save Profile Information" was clicked')
 
         # Validate user-entered values
         if self._var_name.get() == '':
-            self._var_error_message.set("Name cannot be empty.")
+            self._var_error_message.set('Name cannot be empty.')
         else:
             # Set config values
             print(self._var_window_size.get())
             self.master._config_parser.read_dict({
-                "AgTern": {
-                    "window_width": self._var_window_size.get().split('x')[0],
-                    "window_height": self._var_window_size.get().split('x')[1],
+                'AgTern': {
+                    'window_width': self._var_window_size.get().split('x')[0],
+                    'window_height': self._var_window_size.get().split('x')[1],
                 },
-                "StudentProfile": {
-                    "name": self._var_name.get(),
-                    "major": self._var_major.get(),
-                    "graduation_year": self._var_grad_year.get(),
-                    "graduation_month": self._var_grad_month.get(),
+                'StudentProfile': {
+                    'name': self._var_name.get(),
+                    'major': self._var_major.get(),
+                    'graduation_year': self._var_grad_year.get(),
+                    'graduation_month': self._var_grad_month.get(),
                 }
             })
 
             # Write config values to file and notify user
             with open('agtern/config.ini', 'w') as configfile:
                 self.master._config_parser.write(configfile)
-            self._var_error_message.set("Done!")
+            self._var_error_message.set('Done!')
             
-
