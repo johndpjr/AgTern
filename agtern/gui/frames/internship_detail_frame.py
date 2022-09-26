@@ -49,7 +49,7 @@ class InternshipDetailFrame(tk.Frame):
         # Description (e.g. "At Lockheed Martin we are...")
         self._var_internship_txtbox = tk.StringVar(self)
         self._txtbx_internship_description = tk.Text(
-            self,s
+            self,
             wrap=tk.WORD
         )
 
