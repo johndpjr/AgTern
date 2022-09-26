@@ -74,9 +74,5 @@ class InternshipDetailFrame(tk.Frame):
               f'"{self._var_internship_link.get()}"')
 
         link = self._var_internship_link.get()
-<<<<<<< HEAD
         if(link):  # Ensure not empty 
-=======
-        if link:  # Ensure not empty
->>>>>>> 5e8ba6ac1993b0c4bc28b4952464fe883a0be07a
             webbrowser.open_new_tab(link)
