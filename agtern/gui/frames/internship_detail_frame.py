@@ -1,5 +1,5 @@
 import tkinter as tk
-
+import webbrowser
 
 class InternshipDetailFrame(tk.Frame):
     """A frame containing all specific internship details."""
@@ -67,8 +67,12 @@ class InternshipDetailFrame(tk.Frame):
         self.grid_columnconfigure(0, weight=1)  # allow column 0 to expand horizontally
     
     def _on_apply_now_bttn_click(self):
-        """Responds to the event when the "Apply now"
-        button is clicked.
-        """
+        """Open url of internship when the "Apply now"
+        button is clicked."""
+
         print('"Apply now" was clicked and the link is ' \
               f'"{self._var_internship_link.get()}"')
+
+        link = self._var_internship_link.get()
+        if link:  # Ensure not empty 
+            webbrowser.open_new_tab(link)
