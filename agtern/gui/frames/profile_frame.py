@@ -8,7 +8,7 @@ class ProfileFrame(tk.Frame):
 
     WINDOW_SIZE_OPTIONS = [
         "640x480",
-        "1280×720",
+        "1280x720",
         "1920x1080",
     ]
     
@@ -162,6 +162,7 @@ class ProfileFrame(tk.Frame):
             self._var_error_message.set("Name cannot be empty.")
         else:
             # Set config values
+            print(self._var_window_size.get())
             self.master._config_parser.read_dict({
                 "AgTern": {
                     "window_width": self._var_window_size.get().split('x')[0],
