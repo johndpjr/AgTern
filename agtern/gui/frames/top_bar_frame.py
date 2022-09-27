@@ -33,6 +33,7 @@ class TopBarFrame(tk.Frame):
     def _on_my_profile_bttn_click(self):
         """Responds to the event when the "My Profile" button is clicked."""
         print('"My Profile" was clicked')
+        self.master.view_profile()
 
     def _on_my_internships_bttn_click(self):
         """Responds to the event when the "My Internships"
@@ -45,3 +46,4 @@ class TopBarFrame(tk.Frame):
         button is clicked.
         """
         print('"Search Internships" was clicked')
+        self.master.view_search()
