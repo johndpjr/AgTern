@@ -19,9 +19,7 @@ class Application(tk.Tk):
         self._config_parser.read("agtern/config.ini")
 
         self.title('AgTern')
-        win_w = self._config_parser['AgTern']['window_width']
-        win_h = self._config_parser['AgTern']['window_height']
-        self.geometry(f'{win_w}x{win_h}')
+        self.set_window_size()
 
         # Create global frames
         self.frm_top_bar = TopBarFrame(self, relief=tk.RAISED, bd=2)
@@ -71,3 +69,9 @@ class Application(tk.Tk):
         for widget in self.pack_slaves():
             if self.frm_top_bar is not widget:
                 widget.pack_forget()
+
+    def set_window_size(self):
+        # Set geometry to size stored in config file
+        win_w = self._config_parser['AgTern']['window_width']
+        win_h = self._config_parser['AgTern']['window_height']
+        self.geometry(f'{win_w}x{win_h}')

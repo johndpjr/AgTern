@@ -152,7 +152,6 @@ class ProfileFrame(tk.Frame):
             self._var_error_message.set('Name cannot be empty.')
         else:
             # Set config values
-            print(self._var_window_size.get())
             self.master._config_parser.read_dict({
                 'AgTern': {
                     'window_width': self._var_window_size.get().split('x')[0],
@@ -169,5 +168,8 @@ class ProfileFrame(tk.Frame):
             # Write config values to file and notify user
             with open('agtern/config.ini', 'w') as configfile:
                 self.master._config_parser.write(configfile)
+
+            # Resize window
+            self.master.set_window_size()
             self._var_error_message.set('Done!')
             
