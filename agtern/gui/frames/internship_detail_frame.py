@@ -1,6 +1,9 @@
 import tkinter as tk
 import webbrowser
 
+import appvars
+
+
 class InternshipDetailFrame(tk.Frame):
     """A frame containing all specific internship details."""
     
@@ -14,32 +17,29 @@ class InternshipDetailFrame(tk.Frame):
             text='Internship details'
         )
         # Company (e.g. Google)
-        self._var_internship_company = tk.StringVar(self, value='Company placeholder')
         self._lbl_internship_company = tk.Label(
             self._lblfrm_internship_details,
-            textvariable=self._var_internship_company
+            textvariable=tk.StringVar(parent, value='Company placeholder', name=appvars.INTERNSHIP_COMPANY)
         )
         # Title (e.g. Software Engineering Intern)
-        self._var_internship_title = tk.StringVar(self, value='Title placeholder')
         self._lbl_internship_title = tk.Label(
             self._lblfrm_internship_details,
-            textvariable=self._var_internship_title
+            textvariable=tk.StringVar(parent, value='Title placeholder', name=appvars.INTERNSHIP_TITLE)
         )
         # Year (e.g. 2023)
         self._var_internship_year = tk.IntVar(self, value=2023)
         self._lbl_internship_year = tk.Label(
             self._lblfrm_internship_details,
-            textvariable=self._var_internship_year
+            textvariable=tk.StringVar(parent, value='Year placeholder', name=appvars.INTERNSHIP_YEAR)
         )
         # Period (e.g. Summer)
-        self._var_internship_period = tk.StringVar(self, value='Period placeholder')
         self._lbl_internship_period = tk.Label(
             self._lblfrm_internship_details,
-            textvariable=self._var_internship_period
+            textvariable=tk.StringVar(parent, value='Period placeholder', name=appvars.INTERNSHIP_PERIOD)
         )
         
         # "Apply now" button
-        self._var_internship_link = tk.StringVar(self)
+        tk.StringVar(parent, name='internship.link')
         self._bttn_apply_now = tk.Button(
             self,
             text='Apply now',
@@ -71,8 +71,8 @@ class InternshipDetailFrame(tk.Frame):
         button is clicked."""
 
         print('"Apply now" was clicked and the link is ' \
-              f'"{self._var_internship_link.get()}"')
+              f'"{self.getvar("internship.link")}"')
 
-        link = self._var_internship_link.get()
+        link = self.getvar('internship.link')
         if link:  # Ensure not empty 
             webbrowser.open_new_tab(link)

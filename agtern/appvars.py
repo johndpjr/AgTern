@@ -1,0 +1,5 @@
+INTERNSHIP_COMPANY = 'internship.company'
+INTERNSHIP_TITLE = 'internship.title'
+INTERNSHIP_YEAR = 'internship.year'
+INTERNSHIP_PERIOD = 'internship.period'
+INTERNSHIP_LINK = 'internship.link'

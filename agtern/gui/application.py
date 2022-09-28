@@ -29,6 +29,8 @@ class Application(tk.Tk):
         self._separator = ttk.Separator(self, orient=tk.VERTICAL)
         self.frm_internship_detail = InternshipDetailFrame(self)
 
+        self.controller = Controller(self)
+
         # Pack TopBarFrame at the top and fill the frame in the X direction
         self.frm_top_bar.pack(side=tk.TOP, fill=tk.X, pady=(0,3))
 

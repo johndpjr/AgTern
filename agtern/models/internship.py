@@ -9,5 +9,4 @@ class Internship:
     year: int
     period: str
     link: str
-    location: str    = ''
     description: str = ''
