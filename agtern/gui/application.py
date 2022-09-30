@@ -2,10 +2,10 @@ import tkinter as tk
 import tkinter.ttk as ttk
 import configparser
 
-from gui.frames.top_bar_frame import TopBarFrame
-from gui.frames.internship_list_frame import InternshipListFrame
-from gui.frames.internship_detail_frame import InternshipDetailFrame
-from gui.frames.profile_frame import ProfileFrame
+from .frames.top_bar_frame import TopBarFrame
+from .frames.internship_list_frame import InternshipListFrame
+from .frames.internship_detail_frame import InternshipDetailFrame
+from .frames.profile_frame import ProfileFrame
 
 
 class Application(tk.Tk):
