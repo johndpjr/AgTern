@@ -1,3 +1,3 @@
-import backend
-import frontend
-import gui
+from .backend import *
+from .frontend import *
+from .gui import *
