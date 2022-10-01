@@ -76,7 +76,6 @@ def scrape( headless: bool = True ):
         close_driver()
 
 def start_scraper():
-    open( "db.json", "w+" ) # Create json file if it doesn't exist
     scraper = Process( target = scrape, args = ( False, ) ) # DO NOT REMOVE COMMA!!
     scraper.daemon = True # Run in background, so it doesn't block the GUI (if shown)
     scraper.start()
