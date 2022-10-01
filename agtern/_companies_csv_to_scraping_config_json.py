@@ -7,7 +7,8 @@ with open( "companies.csv", "r" ) as f:
     for entry in reader:
         data.append( {
             "company": entry["company_id"],
-            "link": entry["url"].strip().strip( "\"" )
+            "link": entry["url"].strip().strip( "\"" ),
+            "scrape": {}
         } )
 
 with open( "../scraping_config.json", "w" ) as f:
