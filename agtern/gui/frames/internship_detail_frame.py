@@ -1,7 +1,7 @@
 import tkinter as tk
 import webbrowser
 
-import appvars
+from appvars import VarInternship
 
 
 class InternshipDetailFrame(tk.Frame):
@@ -19,12 +19,12 @@ class InternshipDetailFrame(tk.Frame):
         # Company (e.g. Google)
         self._lbl_internship_company = tk.Label(
             self._lblfrm_internship_details,
-            textvariable=tk.StringVar(parent, name=appvars.INTERNSHIP_COMPANY)
+            textvariable=tk.StringVar(name=VarInternship.COMPANY.value)
         )
         # Title (e.g. Software Engineering Intern)
         self._lbl_internship_title = tk.Label(
             self._lblfrm_internship_details,
-            textvariable=tk.StringVar(parent, name=appvars.INTERNSHIP_TITLE)
+            textvariable=tk.StringVar(name=VarInternship.TITLE.value)
         )
         # Container for Period and Year (e.g. Summer 2023)
         self._frm_internship_period_year = tk.Frame(
@@ -33,16 +33,16 @@ class InternshipDetailFrame(tk.Frame):
         # Period (e.g. Summer)
         self._lbl_internship_period = tk.Label(
             self._frm_internship_period_year,
-            textvariable=tk.StringVar(parent, name=appvars.INTERNSHIP_PERIOD)
+            textvariable=tk.StringVar(name=VarInternship.PERIOD.value)
         )
         # Year (e.g. 2023)
         self._lbl_internship_year = tk.Label(
             self._frm_internship_period_year,
-            textvariable=tk.StringVar(parent, name=appvars.INTERNSHIP_YEAR)
+            textvariable=tk.StringVar(name=VarInternship.YEAR.value)
         )
         
         # "Apply now" button
-        self._var_internship_link = tk.StringVar(parent, name=appvars.INTERNSHIP_LINK)
+        self._var_internship_link = tk.StringVar(name=VarInternship.LINK.value)
         self._bttn_apply_now = tk.Button(
             self,
             text='Apply now',
@@ -75,7 +75,7 @@ class InternshipDetailFrame(tk.Frame):
         """Open url of internship when the "Apply now"
         button is clicked."""
 
-        link = self.getvar(appvars.INTERNSHIP_LINK)
+        link = self.getvar(VarInternship.LINK)
         print(f'"Apply now" was clicked and the link is {link}')
         if link:  # Ensure not empty 
             webbrowser.open_new_tab(link)
