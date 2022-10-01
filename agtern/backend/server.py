@@ -6,8 +6,8 @@ import json
 """Pre-MVP: This file provides functions that read the json file that the backend writes to.
 Post-MVP: This file will manage a web server that will provide an API to access the database."""
 
-def start_server():
-    start_scraper()
+def start_server( headless_scraper = True ):
+    start_scraper( headless_scraper )
 
 def get_all_internships() -> list:
     data = []

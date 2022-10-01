@@ -75,7 +75,7 @@ def scrape( headless: bool = True ):
         # Ensure driver is closed if an exception occurs
         close_driver()
 
-def start_scraper():
-    scraper = Process( target = scrape, args = ( False, ) ) # DO NOT REMOVE COMMA!!
+def start_scraper( headless = True ):
+    scraper = Process( target = scrape, args = ( headless, ) ) # DO NOT REMOVE COMMA!!
     scraper.daemon = True # Run in background, so it doesn't block the GUI (if shown)
     scraper.start()
