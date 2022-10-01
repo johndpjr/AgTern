@@ -1,5 +1,5 @@
-from gui import Application
-from backend import start_server
+from agtern.gui import Application
+from agtern.backend import start_server
 
 if __name__ == '__main__':
     start_server()
