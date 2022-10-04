@@ -48,25 +48,33 @@ def scrape( headless: bool = True ):
                 print( f"{company_name} does not have any scrapeable properties. Skipping!" )
                 continue
 
-            print( f"Scraping {company_name}..." ) # Company name
+            print( f"Scraping {company_name}..." )
 
+            # Go to the page that should be scraped
             driver.get( company_config_entry["link"] )
 
-            data = {}
-            for property in company_config_entry["scrape"].keys():
+            data = {} # Map property name -> list of scraped values
+            for prop in company_config_entry["scrape"].keys():
                 elements = wait.until(
                         condition.presence_of_all_elements_located(
-                                ( By.XPATH, company_config_entry["scrape"][property] )
+                                ( By.XPATH, company_config_entry["scrape"][prop] )
                         )
                 )
-                data[property] = [ element.text for element in elements ]
+                data[prop] = [ element.text for element in elements ]
 
-            for i in range( len( data[list( data.keys() )[0]] ) ):
+            # Convert data (map property name -> list) to separate internship objects
+            # Ex: The first internship should contain the values from the first index
+            #     of each property array
+
+            # Use the length of the first property array as the number of internship objects
+            # to create. TODO: Raise an error if arrays are different lengths?
+            length_of_first_property_array = len( data[list( data.keys() )[0]] )
+            for i in range( length_of_first_property_array ):
                 internship = {
                     "company": company_name
                 }
-                for property in data.keys():
-                    internship[property] = data[property][i]
+                for prop in data.keys():
+                    internship[prop] = data[prop][i]
                 internships.append( internship )
 
         print( "Writing to database..." )
