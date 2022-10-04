@@ -6,7 +6,7 @@ from .frames.top_bar_frame import TopBarFrame
 from .frames.internship_list_frame import InternshipListFrame
 from .frames.internship_detail_frame import InternshipDetailFrame
 from .frames.profile_frame import ProfileFrame
-
+from ..data import DataFile
 
 class Application(tk.Tk):
     """GUI for AgTern."""
@@ -16,7 +16,8 @@ class Application(tk.Tk):
 
         # Initialize config parser
         self._config_parser = configparser.ConfigParser(allow_no_value=True)
-        self._config_parser.read("agtern/config.ini")
+        self._config_ini = DataFile( "config.ini" )
+        self._config_parser.read( self._config_ini.path )
 
         self.title('AgTern')
         self.set_window_size()

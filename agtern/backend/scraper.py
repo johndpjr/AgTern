@@ -15,6 +15,7 @@ from selenium.webdriver.common.by import By
 
 import signal
 
+from agtern.data import DataFile
 from agtern.models import Internship
 
 def scrape( headless: bool = True ):
@@ -36,7 +37,8 @@ def scrape( headless: bool = True ):
         driver = webdriver.Chrome( options = options )
         wait = WebDriverWait( driver, 5 )
 
-        with open( "scraping_config.json", "r" ) as f:
+        scraping_config_json = DataFile( "scraping_config.json", default_data = "[]" )
+        with open( scraping_config_json.path, "r" ) as f:
             config = json.load( f )
 
         internships = []
@@ -68,7 +70,8 @@ def scrape( headless: bool = True ):
                 internships.append( internship )
 
         print( "Writing to database..." )
-        with open( "db.json", "w" ) as f:
+        db_json = DataFile( "db.json" )
+        with open( db_json.path, "w" ) as f:
             json.dump( internships, f, indent = 2 )
         print( "Done!" )
     finally:
