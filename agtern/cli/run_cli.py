@@ -13,6 +13,7 @@ def run_cli( args = None ):
             nargs = "?" # Might or might not exist
     )
     parser.add_argument( "--show-scraper", action = "store_true" )
+    parser.add_argument( "--noscrape", action="store_true" )
     args = parser.parse_args( args )
 
     run_main = True
@@ -23,5 +24,6 @@ def run_cli( args = None ):
         sort_companies()
         run_main = False
 
+
     if run_main:
-        agtern.main( headless_scraper = not args.show_scraper )
+        agtern.main( noscrape = args.noscrape, headless_scraper = not args.show_scraper )
