@@ -3,11 +3,13 @@ from agtern.backend import start_server
 
 HEADLESS_SCRAPER = True
 
-def main( headless_scraper = None ):
-    if headless_scraper is None:
-        start_server( HEADLESS_SCRAPER )
-    else:
-        start_server( headless_scraper )
+def main( noscrape: bool = True, headless_scraper = None ):
+    if not noscrape:
+        if headless_scraper is None:
+            start_server( HEADLESS_SCRAPER )
+        else:
+            start_server( headless_scraper )
+
     app = Application()
     try:
         app.mainloop()
