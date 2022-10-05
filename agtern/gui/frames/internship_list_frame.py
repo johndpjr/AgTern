@@ -1,6 +1,6 @@
 import tkinter as tk
 
-from gui.frames.vertical_scrolled_frame import VerticalScrolledFrame
+from .vertical_scrolled_frame import VerticalScrolledFrame
 
 
 class InternshipListFrame(tk.Frame):
