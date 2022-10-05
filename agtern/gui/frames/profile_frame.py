@@ -10,7 +10,7 @@ class ProfileFrame(tk.Frame):
         '1280x720',
         '1920x1080',
     ]
-    
+
     MAJOR_OPTIONS = [
         'Aerospace Engineering',
         'Biological and Agricultural Engineering',
@@ -35,20 +35,20 @@ class ProfileFrame(tk.Frame):
     ]
 
     GRAD_MONTH_OPTIONS = [
-        'January', 
-        'February', 
-        'March', 
-        'April', 
-        'May', 
-        'June', 
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
         'July',
-        'August', 
-        'September', 
-        'October', 
-        'November', 
+        'August',
+        'September',
+        'October',
+        'November',
         'December',
     ]
-    
+
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
 
@@ -69,11 +69,16 @@ class ProfileFrame(tk.Frame):
             self._var_grad_year.set(datetime.now().year)
             self._var_grad_month.set('January')
         else:
-            self._var_window_size.set(f'{self.master._config_parser["AgTern"]["window_width"]}x{self.master._config_parser["AgTern"]["window_height"]}')
-            self._var_name.set(self.master._config_parser['StudentProfile']['name'])
-            self._var_major.set(self.master._config_parser['StudentProfile']['major'])
-            self._var_grad_year.set(self.master._config_parser['StudentProfile']['graduation_year'])
-            self._var_grad_month.set(self.master._config_parser['StudentProfile']['graduation_month'])
+            self._var_window_size.set(
+                f'{self.master._config_parser["AgTern"]["window_width"]}x{self.master._config_parser["AgTern"]["window_height"]}')
+            self._var_name.set(
+                self.master._config_parser['StudentProfile']['name'])
+            self._var_major.set(
+                self.master._config_parser['StudentProfile']['major'])
+            self._var_grad_year.set(
+                self.master._config_parser['StudentProfile']['graduation_year'])
+            self._var_grad_month.set(
+                self.master._config_parser['StudentProfile']['graduation_month'])
         self._var_error_message.set('')
 
         self._option_window_size = tk.OptionMenu(
@@ -111,29 +116,39 @@ class ProfileFrame(tk.Frame):
         )
 
         # Display window information (currently hand-picked options)
-        tk.Label(self, text='Window Information:').grid(row=0, column=0, sticky=tk.E, padx=(0,60), pady=15)
+        tk.Label(self, text='Window Information:').grid(
+            row=0, column=0, sticky=tk.E, padx=(0, 60), pady=15)
 
         labels = [tk.Label(self, text=label) for label in ['Size']]
         values = [self._option_window_size]
 
         for i in range(len(labels)):
-            labels[i].grid(row=i+1, column=0, sticky=tk.E, padx=(0,30), pady=(0,2))
-            values[i].grid(row=i+1, column=1, sticky=tk.NSEW, padx=(0,3), pady=(0,2))
+            labels[i].grid(row=i+1, column=0, sticky=tk.E,
+                           padx=(0, 30), pady=(0, 2))
+            values[i].grid(row=i+1, column=1, sticky=tk.NSEW,
+                           padx=(0, 3), pady=(0, 2))
 
         # Display user information (name can be set, all others are hand-picked options)
-        tk.Label(self, text='Profile Information:').grid(row=2, column=0, sticky=tk.E, padx=(0,60), pady=15)
+        tk.Label(self, text='Profile Information:').grid(
+            row=2, column=0, sticky=tk.E, padx=(0, 60), pady=15)
 
-        labels = [tk.Label(self, text=label) for label in ['Name', 'Major', 'Graduation Year', 'Graduation Month']]
-        values = [self._entry_name, self._option_major, self._option_grad_year, self._option_grad_month]
+        labels = [tk.Label(self, text=label) for label in [
+            'Name', 'Major', 'Graduation Year', 'Graduation Month']]
+        values = [self._entry_name, self._option_major,
+                  self._option_grad_year, self._option_grad_month]
 
         for i in range(len(labels)):
-            labels[i].grid(row=i+3, column=0, sticky=tk.E, padx=(0,30), pady=(0,2))
-            values[i].grid(row=i+3, column=1, sticky=tk.NSEW, padx=(0,3), pady=(0,2))
+            labels[i].grid(row=i+3, column=0, sticky=tk.E,
+                           padx=(0, 30), pady=(0, 2))
+            values[i].grid(row=i+3, column=1, sticky=tk.NSEW,
+                           padx=(0, 3), pady=(0, 2))
 
         # Display error message and button to write information to config
-        self._label_error_message.grid(row=8, column=0, sticky=tk.E, padx=(0,30), pady=(0,2))
-        self._bttn_save_profile.grid(row=8, column=1, sticky=tk.NSEW, padx=(0,3), pady=30)
-        
+        self._label_error_message.grid(
+            row=8, column=0, sticky=tk.E, padx=(0, 30), pady=(0, 2))
+        self._bttn_save_profile.grid(
+            row=8, column=1, sticky=tk.NSEW, padx=(0, 3), pady=30)
+
         # Configure column and row weights (rows are all the same weight)
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=2)
@@ -172,4 +187,3 @@ class ProfileFrame(tk.Frame):
             # Resize window
             self.master.set_window_size()
             self._var_error_message.set('Done!')
-            
