@@ -2,6 +2,7 @@ import tkinter as tk
 import tkinter.ttk as ttk
 import configparser
 
+from .controller import Controller
 from .frames.top_bar_frame import TopBarFrame
 from .frames.internship_list_frame import InternshipListFrame
 from .frames.internship_detail_frame import InternshipDetailFrame

@@ -1,7 +1,7 @@
 import tkinter as tk
 
 from .vertical_scrolled_frame import VerticalScrolledFrame
-
+from ...models import Internship
 
 class InternshipListFrame(tk.Frame):
     """A frame containing all internship results, as well as
