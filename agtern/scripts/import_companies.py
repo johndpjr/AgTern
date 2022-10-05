@@ -18,17 +18,18 @@ def import_companies():
 
     data = []
     with open( companies_csv.path, "r" ) as f:
-        reader = csv.DictReader( f, fieldnames = [ "company_id", "url" ] )
+        reader = csv.DictReader( f, fieldnames = [ "company", "link" ] )
         for entry in reader:
             found_existing_entry = False
             for original_entry in original_config: # Just update link if entry already exists
-                if original_entry["company_id"] == entry["company_id"]:
-                    original_entry["link"] = entry["url"].strip().strip( "\"" )
+                if original_entry["company"] == entry["company"]:
+                    original_entry["link"] = entry["link"].strip().strip( "\"" )
                     data.append( original_entry )
+                    found_existing_entry = True
             if not found_existing_entry:
                 data.append( {
-                    "company": entry["company_id"],
-                    "link": entry["url"].strip().strip( "\"" ),
+                    "company": entry["company"],
+                    "link": entry["link"].strip().strip( "\"" ),
                     "scrape": {}
                 } )
 
