@@ -1,8 +1,6 @@
 import tkinter as tk
 from datetime import datetime
 
-from appvars import VarProfile
-
 
 class ProfileFrame(tk.Frame):
     """A frame containing profile details and validation."""
@@ -56,26 +54,24 @@ class ProfileFrame(tk.Frame):
 
         # Variables that the parent (and thus all children)
         #   have access to
-        self._var_win_size = tk.StringVar(name=VarProfile.WIN_SIZE.value, value='640x480')
-        self._var_name = tk.StringVar(name=VarProfile.NAME.value, value='Enter here.')
-        self._var_major = tk.StringVar(name=VarProfile.MAJOR.value, value='Computer Science and Engineering')
-        self._var_grad_year = tk.StringVar(name=VarProfile.GRAD_YEAR.value, value=datetime.now().year)
-        self._var_grad_month = tk.StringVar(name=VarProfile.GRAD_MONTH.value, value='January')
-        self._var_error_message = tk.StringVar(name=VarProfile.ERROR_MSG.value)
+        self._var_win_size = tk.StringVar(value='640x480')
+        self._var_name = tk.StringVar(value='Enter here.')
+        self._var_major = tk.StringVar(value='Computer Science and Engineering')
+        self._var_grad_year = tk.StringVar(value=datetime.now().year)
+        self._var_grad_month = tk.StringVar(value='January')
+        self._var_error_msg = tk.StringVar()
 
         # Set default OptionMenu values if a config exists
-        if self.master._config_parser['StudentProfile']['name']:
-            self._var_win_size.set(f'{self.master._config_parser["AgTern"]["window_width"]}x{self.master._config_parser["AgTern"]["window_height"]}')
-            self._var_name.set(self.master._config_parser['StudentProfile']['name'])
-            self._var_major.set(self.master._config_parser['StudentProfile']['major'])
-            self._var_grad_year.set(self.master._config_parser['StudentProfile']['graduation_year'])
-            self.setvar(VarProfile.MAJOR.value, )
-            self.setvar(VarProfile.GRAD_YEAR.value, )
-            self.setvar(VarProfile.GRAD_MONTH.value, self.master._config_parser['StudentProfile']['graduation_month'])
+        if self.master.config['StudentProfile']['name']:
+            self._var_win_size.set(f'{self.master.config["AgTern"]["window_width"]}x{self.master.config["AgTern"]["window_height"]}')
+            self._var_name.set(self.master.config['StudentProfile']['name'])
+            self._var_major.set(self.master.config['StudentProfile']['major'])
+            self._var_grad_year.set(self.master.config['StudentProfile']['graduation_year'])
+            self._var_grad_month.set(self.master.config['StudentProfile']['graduation_month'])
 
         self._option_window_size = tk.OptionMenu(
             self,
-            self.getvar(VarProfile.WIN_SIZE.value),
+            self._var_win_size,
             *self.WINDOW_SIZE_OPTIONS,
         )
         self._entry_name = tk.Entry(
@@ -97,9 +93,9 @@ class ProfileFrame(tk.Frame):
             self._var_grad_month,
             *self.GRAD_MONTH_OPTIONS,
         )
-        self._label_error_message = tk.Label(
+        self._lbl_error_msg = tk.Label(
             self,
-            textvariable=self._var_error_message,
+            textvariable=self._var_error_msg,
         )
         self._bttn_save_profile = tk.Button(
             self,
@@ -128,7 +124,7 @@ class ProfileFrame(tk.Frame):
             values[i].grid(row=i+3, column=1, sticky=tk.NSEW, padx=(0,3), pady=(0,2))
 
         # Display error message and button to write information to config
-        self._label_error_message.grid(row=8, column=0, sticky=tk.E, padx=(0,30), pady=(0,2))
+        self._lbl_error_msg.grid(row=8, column=0, sticky=tk.E, padx=(0,30), pady=(0,2))
         self._bttn_save_profile.grid(row=8, column=1, sticky=tk.NSEW, padx=(0,3), pady=30)
         
         # Configure column and row weights (rows are all the same weight)
@@ -145,17 +141,18 @@ class ProfileFrame(tk.Frame):
         print('"Save Profile Information" was clicked')
 
         # Validate user-entered values
-        if self.getvar(VarProfile.NAME.value) == '':
-            self._var_error_message.set('Name cannot be empty.')
+        if self._var_name.get() == '':
+            self._var_error_msg.set('Name cannot be empty.')
         else:
             # Set config values
-            self.master._config_parser.read_dict({
+            winw, winh = self._var_win_size.get().split('x')
+            self.master.config.read_dict({
                 'AgTern': {
-                    'window_width': self._var_window_size.get().split('x')[0],
-                    'window_height': self._var_window_size.get().split('x')[1],
+                    'window_width': winw,
+                    'window_height': winh,
                 },
                 'StudentProfile': {
-                    'name': self.getvar(VarProfile.NAME.value),
+                    'name': self._var_name.get(),
                     'major': self._var_major.get(),
                     'graduation_year': self._var_grad_year.get(),
                     'graduation_month': self._var_grad_month.get(),
@@ -163,10 +160,10 @@ class ProfileFrame(tk.Frame):
             })
 
             # Write config values to file and notify user
-            with open('agtern/config.ini', 'w') as configfile:
-                self.master._config_parser.write(configfile)
+            with open(self.master.dfile_config.path, 'w') as configfile:
+                self.master.config.write(configfile)
 
             # Resize window
             self.master.set_window_size()
-            self._var_error_message.set('Done!')
+            self._var_error_msg.set('Done!')
             

@@ -2,7 +2,6 @@ import tkinter as tk
 import tkinter.ttk as ttk
 import configparser
 
-from .controller import Controller
 from .frames.top_bar_frame import TopBarFrame
 from .frames.internship_list_frame import InternshipListFrame
 from .frames.internship_detail_frame import InternshipDetailFrame
@@ -16,9 +15,9 @@ class Application(tk.Tk):
         super().__init__()
 
         # Initialize config parser
-        self._config_parser = configparser.ConfigParser(allow_no_value=True)
-        self._config_ini = DataFile( "config.ini" )
-        self._config_parser.read( self._config_ini.path )
+        self.config = configparser.ConfigParser(allow_no_value=True)
+        self.dfile_config = DataFile( "config.ini" )
+        self.config.read( self.dfile_config.path )
 
         self.title('AgTern')
         self.set_window_size()
@@ -30,14 +29,12 @@ class Application(tk.Tk):
         self._separator = ttk.Separator(self, orient=tk.VERTICAL)
         self.frm_internship_detail = InternshipDetailFrame(self)
 
-        self.controller = Controller(self)
-
         # Pack TopBarFrame at the top and fill the frame in the X direction
         self.frm_top_bar.pack(side=tk.TOP, fill=tk.X, pady=(0,3))
 
         # Send user to profile if config.ini not set
         # Otherwise go to internship search 
-        if not self._config_parser['StudentProfile']['name']:
+        if not self.config['StudentProfile']['name']:
             self.view_profile()
         else:
             self.view_search()
@@ -53,7 +50,7 @@ class Application(tk.Tk):
     def view_search(self):
         """Display InternshipListFrame and InternshipDetailFrame."""
         # Restrict access to internship search before config creation
-        if not self._config_parser['StudentProfile']['name']:
+        if not self.config['StudentProfile']['name']:
             return
         
         # Clear previous view frames
@@ -76,6 +73,6 @@ class Application(tk.Tk):
 
     def set_window_size(self):
         # Set geometry to size stored in config file
-        win_w = self._config_parser['AgTern']['window_width']
-        win_h = self._config_parser['AgTern']['window_height']
+        win_w = self.config['AgTern']['window_width']
+        win_h = self.config['AgTern']['window_height']
         self.geometry(f'{win_w}x{win_h}')
