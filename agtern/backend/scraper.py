@@ -2,9 +2,11 @@
 """Pre-MVP: This file reads from a config file to scrape websites and save them in a json file.
 Post-MVP: This file will read configs from a database to scrape websites and save the results back into the database."""
 
-from multiprocessing import Process
+from multiprocessing import Process, log_to_stderr
 import json
 import dataclasses
+import logging
+import traceback
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -12,6 +14,7 @@ from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.wait import WebDriverWait
 import selenium.webdriver.support.expected_conditions as condition
 from selenium.webdriver.common.by import By
+from webdriver_manager.chrome import ChromeDriverManager
 
 import signal
 
@@ -23,10 +26,12 @@ def scrape(headless: bool = True):
     """Pre-MVP: This function scrapes all websites in the config and stores them in a file.
     Post-MVP: This function will take arguments to specify how and where to scrape. The results will be stored in a database."""
     driver = None
+    log_to_stderr(logging.DEBUG)
 
     def close_driver(signal_number=None, frame=None):
         if driver is not None:
             driver.close()
+        print("INFO: Closing driver...")
         exit(0)
 
     # Ensure driver is closed if interrupted:
@@ -35,7 +40,8 @@ def scrape(headless: bool = True):
     try:
         options = Options()
         options.headless = headless
-        driver = webdriver.Chrome(options=options)
+        driver = webdriver.Chrome(
+            ChromeDriverManager().install(), options=options)
         wait = WebDriverWait(driver, 5)
 
         scraping_config_json = DataFile(
@@ -85,6 +91,9 @@ def scrape(headless: bool = True):
         with open(db_json.path, "w") as f:
             json.dump(internships, f, indent=2)
         print("Done!")
+    except Exception as e:
+        # Log any errors to stdout
+        logging.error(traceback.format_exc())
     finally:
         # Ensure driver is closed if an exception occurs
         close_driver()
@@ -95,4 +104,5 @@ def start_scraper(headless=True):
         headless, ))  # DO NOT REMOVE COMMA!!
     # Run in background, so it doesn't block the GUI (if shown)
     scraper.daemon = True
+    print("INFO: Starting driver...")
     scraper.start()
