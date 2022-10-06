@@ -129,6 +129,7 @@
     "link": "https://www.tesla.com/careers/search/?query=Internship&type=3&site=US",
     "scrape": {
       "title": "//tbody/tr[@class='tds-table-row']/td[1]",
+      "link": "//tbody/tr[@class='tds-table-row']/td[1]/a",
       "category": "//tbody/tr[@class='tds-table-row']/td[2]",
       "location": "//tbody/tr[@class='tds-table-row']/td[3]"
     }

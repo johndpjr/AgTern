@@ -4,16 +4,13 @@ Post-MVP: This file will read configs from a database to scrape websites and sav
 
 from multiprocessing import Process
 import json
-import dataclasses
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.wait import WebDriverWait
 import selenium.webdriver.support.expected_conditions as condition
 from selenium.webdriver.common.by import By
 
-import signal
 
 from agtern.data import DataFile
 from agtern.models import Internship
@@ -60,7 +57,13 @@ def scrape( headless: bool = True ):
                                 ( By.XPATH, company_config_entry["scrape"][prop] )
                         )
                 )
-                data[prop] = [ element.text for element in elements ]
+                contents = []
+                for element in elements:
+                    if element.tag_name == 'a':
+                        contents.append( element.get_attribute('href') )
+                    else:
+                        contents.append( element.text )
+                data[prop] = contents
 
             # Convert data (map property name -> list) to separate internship objects
             # Ex: The first internship should contain the values from the first index
