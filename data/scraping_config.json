@@ -1,131 +1,131 @@
 [
   {
-    "company": "AT&T",
+    "name": "AT&T",
     "link": "https://www.att.jobs/students",
     "scrape": {}
   },
   {
-    "company": "Allstate",
+    "name": "Allstate",
     "link": "https://www.allstate.jobs/job-search-results/?level[]=Intern",
     "scrape": {}
   },
   {
-    "company": "Amazon",
+    "name": "Amazon",
     "link": "https://www.amazon.jobs/en/teams/internships-for-students?offset=0&result_limit=10&sort=relevant&country%5B%5D=USA&distanceType=Mi&radius=24km&latitude=&longitude=&loc_group_id=&loc_query=&base_query=&city=&country=&region=&county=&query_options=&",
     "scrape": {}
   },
   {
-    "company": "Apple",
+    "name": "Apple",
     "link": "https://jobs.apple.com/en-us/search?team=Internships-STDNT-INTRN",
     "scrape": {}
   },
   {
-    "company": "Boeing",
+    "name": "Boeing",
     "link": "https://jobs.boeing.com/category/internship-jobs/185/9287/1",
     "scrape": {}
   },
   {
-    "company": "Cigna",
+    "name": "Cigna",
     "link": "https://jobs.cigna.com/us/en/search-results?keywords=Intern",
     "scrape": {}
   },
   {
-    "company": "Comcast",
+    "name": "Comcast",
     "link": "https://jobs.comcast.com/university-relations/internships-coops#",
     "scrape": {}
   },
   {
-    "company": "Dell",
+    "name": "Dell",
     "link": "https://jobs.dell.com/search-jobs",
     "scrape": {}
   },
   {
-    "company": "Ecolab",
+    "name": "Ecolab",
     "link": "https://jobs.ecolab.com/job-search-results/?keyword=intern",
     "scrape": {}
   },
   {
-    "company": "ExxonMobil",
+    "name": "ExxonMobil",
     "link": "https://jobs.exxonmobil.com/search/?q=&locationsearch=&optionsFacetsDD_department=&optionsFacetsDD_shifttype=Intern%2Fco-op%2Fapprentice",
     "scrape": {}
   },
   {
-    "company": "GeneralElectric",
+    "name": "GeneralElectric",
     "link": "https://jobs.gecareers.com/global/en/search-results",
     "scrape": {}
   },
   {
-    "company": "GeneralMotors",
+    "name": "GeneralMotors",
     "link": "https://search-careers.gm.com/jobs/?search=&department=Students+%26+Recent+Graduates",
     "scrape": {}
   },
   {
-    "company": "Google",
+    "name": "Google",
     "link": "https://careers.google.com/jobs/results/",
     "scrape": {}
   },
   {
-    "company": "HewlettPackardEnterprise",
+    "name": "HewlettPackardEnterprise",
     "link": "https://careers.hpe.com/us/en/search-results",
     "scrape": {}
   },
   {
-    "company": "HomeDepot",
+    "name": "HomeDepot",
     "link": "https://careers.homedepot.com/job-search-results/?category[]=Internship",
     "scrape": {}
   },
   {
-    "company": "Humana",
+    "name": "Humana",
     "link": "https://careers.humana.com/job-search-results/?category[]=Internship&source=Humana_Website",
     "scrape": {}
   },
   {
-    "company": "IBM",
+    "name": "IBM",
     "link": "https://www.ibm.com/employment/#jobs?%23jobs=&experience=Intern",
     "scrape": {}
   },
   {
-    "company": "Intel",
-    "link": "https://jobs.intel.com/search-jobs?acm=8451568&alrpm=ALL&ascf=[%7B%22key%22:%22ALL%22",
+    "name": "Intel",
+    "link": "https://jobs.intel.com/search-jobs?acm=8451568&alrpm=ALL&ascf=[%7B%22key%22:%22ALL%22,%22value%22:%22%22%7D]",
     "scrape": {}
   },
   {
-    "company": "JPMorgan",
+    "name": "JPMorgan",
     "link": "https://careers.jpmorgan.com/global/en/students/programs?deeplink=multiTabNav1::tab3",
     "scrape": {}
   },
   {
-    "company": "Kellogg",
+    "name": "Kellogg",
     "link": "https://jobs.kellogg.com/search/",
     "scrape": {}
   },
   {
-    "company": "Marathon",
+    "name": "Marathon",
     "link": "https://mpc.wd1.myworkdayjobs.com/MPCCareers?workerSubType=762d3bc5687201008504b33faf520000",
     "scrape": {}
   },
   {
-    "company": "McKesson",
+    "name": "McKesson",
     "link": "https://mckesson.wd3.myworkdayjobs.com/Acquisition_campus/",
     "scrape": {}
   },
   {
-    "company": "Microsoft",
+    "name": "Microsoft",
     "link": "https://careers.microsoft.com/students/us/en/search-results",
     "scrape": {}
   },
   {
-    "company": "Oracle",
+    "name": "Oracle",
     "link": "https://eeho.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/requisitions?lastSelectedFacet=AttributeChar4&selectedFlexFieldsFacets=%22AttributeChar4%7CStudent%2FIntern%22",
     "scrape": {}
   },
   {
-    "company": "Target",
+    "name": "Target",
     "link": "https://jobs.target.com/search-jobs",
     "scrape": {}
   },
   {
-    "company": "Tesla",
+    "name": "Tesla",
     "link": "https://www.tesla.com/careers/search/?query=Internship&type=3&site=US",
     "scrape": {
       "title": "//tbody/tr[@class='tds-table-row']/td[1]",
@@ -134,28 +134,28 @@
     }
   },
   {
-    "company": "TexasInstruments",
+    "name": "TexasInstruments",
     "link": "https://careers.ti.com/search-jobs/?brand=Interns",
     "scrape": {}
   },
   {
-    "company": "Textron",
+    "name": "Textron",
     "link": "https://www.textron.com/job-details",
     "scrape": {}
   },
   {
-    "company": "Verizon",
+    "name": "Verizon",
     "link": "https://www.verizon.com/about/work/search/campus-and-apprenticeships/jobs?sort_by=cfml10%2Cdesc",
     "scrape": {}
   },
   {
-    "company": "Visa",
+    "name": "Visa",
     "link": "https://careers.smartrecruiters.com/Visa/university-recruiting",
     "scrape": {}
   },
   {
-    "company": "Walmart",
-    "link": "https://careers.walmart.com/results?q=2022&page=1&sort=rank&expand=department",
+    "name": "Walmart",
+    "link": "https://careers.walmart.com/results?q=2022&page=1&sort=rank&expand=department,brand,type,rate&jobCareerArea=all",
     "scrape": {}
   }
 ]
