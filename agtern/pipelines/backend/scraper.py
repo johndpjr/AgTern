@@ -29,16 +29,6 @@ def scrape(headless: bool = True):
     """Pre-MVP: This function scrapes all websites in the config and stores them in a file.
     Post-MVP: This function will take arguments to specify how and where to scrape. The results will be stored in a database."""
     driver = None
-    log_to_stderr(logging.DEBUG)
-    root = logging.getLogger()
-    root.setLevel(logging.DEBUG)
-
-    handler = logging.StreamHandler(sys.stdout)
-    handler.setLevel(logging.DEBUG)
-    formatter = logging.Formatter(
-        '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    handler.setFormatter(formatter)
-    root.addHandler(handler)
 
     def close_driver(signal_number=None, frame=None):
         if driver is not None:
