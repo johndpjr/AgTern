@@ -1,6 +1,6 @@
 
 import agtern
-from agtern.pipelines import *
+from agtern.pipelines import sort_companies, import_companies
 from argparse import ArgumentParser
 
 

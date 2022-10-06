@@ -2,11 +2,8 @@ import tkinter as tk
 import tkinter.ttk as ttk
 import configparser
 
-from .frames.top_bar_frame import TopBarFrame
-from .frames.internship_list_frame import InternshipListFrame
-from .frames.internship_detail_frame import InternshipDetailFrame
-from .frames.profile_frame import ProfileFrame
-from ..pipelines.utils.data import DataFile
+from .frames import TopBarFrame, InternshipListFrame, InternshipDetailFrame, ProfileFrame
+from agtern.pipelines import DataFile
 
 
 class Application(tk.Tk):

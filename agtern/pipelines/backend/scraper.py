@@ -21,8 +21,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 import signal
 
-from ..utils.data import DataFile
-from ..utils.models import Internship
+from ..utils import DataFile, Internship
 
 
 def scrape(headless: bool = True):
