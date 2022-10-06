@@ -6,23 +6,14 @@ from argparse import ArgumentParser
 
 def run_cli(args=None):
     parser = ArgumentParser(prog="AgTern")
-    parser.add_argument(
-        "script",
-        choices=["import-companies", "sort-companies"],
-        action="store",
-        default=None,
-        nargs="?"  # Might or might not exist
-    )
+    parser.add_argument("--update-companies", action="store_true")
     parser.add_argument("--show-scraper", action="store_true")
     args = parser.parse_args(args)
 
-    run_main = True
-    if args.script == "import-companies":
-        import_companies()
-        run_main = False
-    elif args.script == "sort-companies":
+    if args.update_companies:
+        print("INFO: Updating company info...")
         sort_companies()
-        run_main = False
-
-    if run_main:
+        import_companies()
+    else:
+        print("INFO: Starting program...")
         agtern.main(headless_scraper=not args.show_scraper)

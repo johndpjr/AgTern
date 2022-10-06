@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import json
 from agtern.data import DataFile
 
@@ -7,8 +8,9 @@ def import_companies():
     """Imports all company names and links from companies.csv into scraping_config.json."""
 
     # Gets paths of companies CSV and scraping config JSON
-    companies_csv = DataFile("companies.csv", default_data="name,link")
-    scraping_config_json = DataFile("scraping_config.json", default_data="[]")
+    companies_csv = DataFile("companies.csv", default_data='name,link')
+    scraping_config_json = DataFile(
+        "scraping_config.json", default_data='[{"name":null,"link":null,"scrape":null}]')
 
     # Converts readable JSON into object read in by DataFrame
     with open(scraping_config_json.path, "r") as f:
@@ -23,18 +25,12 @@ def import_companies():
     new_df = pd.DataFrame()
     new_df["name"] = company_df["name"]
     new_df["link"] = company_df["link"]
-    new_df["scrape"] = "{}"
 
-    # Tries to set existing scrape configs to new JSON object.
-    # Keeps default scrape '{}' for all internships if scraping_config.json
-    # 'name' and 'scrape' do not exist (will occur if the file hasn't been created)
-    try:
-        new_df.loc[new_df["name"].isin(original_df["name"]), "scrape"] = \
-            original_df.loc[original_df["name"] == new_df["name"], "scrape"]
-    except:
-        print("WARNING: Setting scrape configurations to '{}'")
+    # Merge DataFrames to retain scrape values
+    new_df = new_df.merge(original_df.drop(
+        "link", axis=1), how="left", on=["name"])
 
     # Rewrites JSON file using new DataFrame (in readable format)
     print("INFO: Writing info to scraping_config.json...")
     with open(scraping_config_json.path, "w") as f:
-        json.dump(readable_json, f, indent=2)
+        json.dump(json.loads(new_df.to_json(orient='records')), f, indent=2)
