@@ -1,6 +1,6 @@
 import pandas as pd
 import csv
-from agtern.data import DataFile
+from . import DataFile
 
 
 def sort_companies():

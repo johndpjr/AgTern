@@ -3,7 +3,7 @@ from .scraper import start_scraper
 
 import json
 
-from ..data import DataFile
+from ..utils.data import DataFile
 
 """Pre-MVP: This file provides functions that read the json file that the backend writes to.
 Post-MVP: This file will manage a web server that will provide an API to access the database."""

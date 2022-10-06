@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import json
-from agtern.data import DataFile
+from . import DataFile
 
 
 def import_companies():

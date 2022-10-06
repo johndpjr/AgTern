@@ -1,6 +1,6 @@
 
 import agtern
-from agtern.scripts import *
+from agtern.pipelines import *
 from argparse import ArgumentParser
 
 

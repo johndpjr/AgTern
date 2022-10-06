@@ -6,7 +6,7 @@ from .frames.top_bar_frame import TopBarFrame
 from .frames.internship_list_frame import InternshipListFrame
 from .frames.internship_detail_frame import InternshipDetailFrame
 from .frames.profile_frame import ProfileFrame
-from ..data import DataFile
+from ..pipelines.utils.data import DataFile
 
 
 class Application(tk.Tk):

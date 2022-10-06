@@ -4,8 +4,11 @@ Post-MVP: This file will read configs from a database to scrape websites and sav
 
 from multiprocessing import Process, log_to_stderr
 import json
-import dataclasses
+import csv
+from dataclasses import dataclass, fields
 import logging
+import sys
+import pandas as pd
 import traceback
 
 from selenium import webdriver
@@ -18,8 +21,8 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 import signal
 
-from agtern.data import DataFile
-from agtern.models import Internship
+from ..utils.data import DataFile
+from ..utils.models import Internship
 
 
 def scrape(headless: bool = True):
@@ -27,6 +30,15 @@ def scrape(headless: bool = True):
     Post-MVP: This function will take arguments to specify how and where to scrape. The results will be stored in a database."""
     driver = None
     log_to_stderr(logging.DEBUG)
+    root = logging.getLogger()
+    root.setLevel(logging.DEBUG)
+
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setLevel(logging.DEBUG)
+    formatter = logging.Formatter(
+        '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    handler.setFormatter(formatter)
+    root.addHandler(handler)
 
     def close_driver(signal_number=None, frame=None):
         if driver is not None:
@@ -42,54 +54,44 @@ def scrape(headless: bool = True):
         options.headless = headless
         driver = webdriver.Chrome(
             ChromeDriverManager().install(), options=options)
+        print("INFO: Waiting...")
         wait = WebDriverWait(driver, 5)
 
         scraping_config_json = DataFile(
-            "scraping_config.json", default_data="[]")
+            "scraping_config.json", default_data='[{"name":null,"link":null,"scrape":null}]')
         with open(scraping_config_json.path, "r") as f:
             config = json.load(f)
 
-        internships = []
-        for company_config_entry in config:
-            company_name = company_config_entry["company"]
-            if "scrape" not in company_config_entry.keys() or len(company_config_entry["scrape"].keys()) == 0:
-                print(
-                    f"{company_name} does not have any scrapeable properties. Skipping!")
-                continue
+        company_scrape_df = pd.DataFrame(config)
+        internship_df = pd.DataFrame()
 
-            print(f"Scraping {company_name}...")
+        company_scrape_df = company_scrape_df.loc[company_scrape_df["scrape"].notna(
+        )]
+        print(company_scrape_df)
+        for idx, entry in company_scrape_df.iterrows():
+            print(f"INFO: Scraping {entry['name']}...")
 
             # Go to the page that should be scraped
-            driver.get(company_config_entry["link"])
+            driver.get(entry["link"])
 
-            data = {}  # Map property name -> list of scraped values
-            for prop in company_config_entry["scrape"].keys():
+            data = pd.DataFrame()
+            for field in fields(Internship):
+                if field.name not in entry["scrape"]:
+                    data[field.name] = None
+                    continue
                 elements = wait.until(
                     condition.presence_of_all_elements_located(
-                        (By.XPATH, company_config_entry["scrape"][prop])
+                        (By.XPATH, entry["scrape"][field.name])
                     )
                 )
-                data[prop] = [element.text for element in elements]
+                data[field.name] = pd.Series(
+                    [element.text for element in elements])
+            data["company"] = entry["name"]
+            internship_df = internship_df.append(data)
+        print("INFO: Writing to database...")
+        internship_df.to_csv(
+            "internships.csv", index=False, quoting=csv.QUOTE_ALL)
 
-            # Convert data (map property name -> list) to separate internship objects
-            # Ex: The first internship should contain the values from the first index
-            #     of each property array
-
-            # Use the length of the first property array as the number of internship objects
-            # to create. TODO: Raise an error if arrays are different lengths?
-            length_of_first_property_array = len(data[list(data.keys())[0]])
-            for i in range(length_of_first_property_array):
-                internship = {
-                    "company": company_name
-                }
-                for prop in data.keys():
-                    internship[prop] = data[prop][i]
-                internships.append(internship)
-
-        print("Writing to database...")
-        db_json = DataFile("db.json")
-        with open(db_json.path, "w") as f:
-            json.dump(internships, f, indent=2)
         print("Done!")
     except Exception as e:
         # Log any errors to stdout
