@@ -1,4 +1,3 @@
-
 from .scraper import start_scraper
 
 import json

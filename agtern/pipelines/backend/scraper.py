@@ -1,4 +1,3 @@
-
 """Pre-MVP: This file reads from a config file to scrape websites and save them in a json file.
 Post-MVP: This file will read configs from a database to scrape websites and save the results back into the database."""
 
@@ -41,21 +40,21 @@ def scrape(headless: bool = True):
     try:
         options = Options()
         options.headless = headless
-        driver = webdriver.Chrome(
-            ChromeDriverManager().install(), options=options)
+        driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
         print("INFO: Waiting...")
         wait = WebDriverWait(driver, 5)
 
         scraping_config_json = DataFile(
-            "scraping_config.json", default_data='[{"name":null,"link":null,"scrape":null}]')
+            "scraping_config.json",
+            default_data='[{"name":null,"link":null,"scrape":null}]',
+        )
         with open(scraping_config_json.path, "r") as f:
             config = json.load(f)
 
         company_scrape_df = pd.DataFrame(config)
         internship_df = pd.DataFrame()
 
-        company_scrape_df = company_scrape_df.loc[company_scrape_df["scrape"].notna(
-        )]
+        company_scrape_df = company_scrape_df.loc[company_scrape_df["scrape"].notna()]
         print(company_scrape_df)
         for idx, entry in company_scrape_df.iterrows():
             print(f"INFO: Scraping {entry['name']}...")
@@ -73,13 +72,11 @@ def scrape(headless: bool = True):
                         (By.XPATH, entry["scrape"][field.name])
                     )
                 )
-                data[field.name] = pd.Series(
-                    [element.text for element in elements])
+                data[field.name] = pd.Series([element.text for element in elements])
             data["company"] = entry["name"]
             internship_df = internship_df.append(data)
         print("INFO: Writing to database...")
-        internship_df.to_csv(
-            "internships.csv", index=False, quoting=csv.QUOTE_ALL)
+        internship_df.to_csv("internships.csv", index=False, quoting=csv.QUOTE_ALL)
 
         print("Done!")
     except Exception as e:
@@ -91,8 +88,7 @@ def scrape(headless: bool = True):
 
 
 def start_scraper(headless=True):
-    scraper = Process(target=scrape, args=(
-        headless, ))  # DO NOT REMOVE COMMA!!
+    scraper = Process(target=scrape, args=(headless,))  # DO NOT REMOVE COMMA!!
     # Run in background, so it doesn't block the GUI (if shown)
     scraper.daemon = True
     print("INFO: Starting driver...")

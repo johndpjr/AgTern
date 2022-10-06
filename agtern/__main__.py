@@ -17,5 +17,5 @@ def main(noscrape: bool = True, headless_scraper=None):
         pass  # Do nothing and hide Traceback
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -12,7 +12,11 @@ repos:
     -   id: check-yaml
     -   if: requirements-txt-fixer
     -   id: check-added-large-files
-    repo: https://github.com/pre-commit/mirrors-autopep8
-    rev: v1.7.0
+    repo: github.com/PyCQA/isort
+    rev: v5.10.1
     hooks:
-    -   id: autopep8
+    -   id: isort
+    repo: https://github.com/psf/black
+    rev: 22.8.0
+    hooks:
+    -   id: black

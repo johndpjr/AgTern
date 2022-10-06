@@ -1,4 +1,3 @@
-
 import agtern
 from agtern.pipelines import sort_companies, import_companies
 from argparse import ArgumentParser
@@ -17,5 +16,4 @@ def run_cli(args=None):
         import_companies()
     else:
         print("INFO: Starting program...")
-        agtern.main(noscrape=args.noscrape,
-                    headless_scraper=not args.show_scraper)
+        agtern.main(noscrape=args.noscrape, headless_scraper=not args.show_scraper)
