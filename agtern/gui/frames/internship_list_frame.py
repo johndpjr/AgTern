@@ -1,7 +1,7 @@
 import tkinter as tk
 
 from .vertical_scrolled_frame import VerticalScrolledFrame
-from ...models import Internship
+from ...pipelines import Internship
 
 
 class InternshipListFrame(tk.Frame):
