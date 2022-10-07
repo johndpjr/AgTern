@@ -67,7 +67,9 @@ class Application(tk.Tk):
         self._separator.pack(side=tk.LEFT, fill=tk.Y, padx=6, pady=3)
         # Pack InternshipDetailFrame on the right side and fill the frame
         #   in both directions
-        self.frm_internship_detail.pack(side=tk.LEFT, fill=tk.BOTH, padx=(0, 3), pady=3)
+        self.frm_internship_detail.pack(
+            side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(0, 3), pady=3
+        )
 
     def view_clear(self):
         # Unpack all current widgets except for top bar

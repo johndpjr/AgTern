@@ -68,7 +68,13 @@ def scrape(headless: bool = True):
                         (By.XPATH, entry["scrape"][field.name])
                     )
                 )
-                data[field.name] = pd.Series([element.text for element in elements])
+                contents = []
+                for element in elements:
+                    if element.tag_name == "a":
+                        contents.append(element.get_attribute("href"))
+                    else:
+                        contents.append(element.text)
+                data[field.name] = pd.Series(contents)
             data["company"] = entry["name"]
             internship_df = internship_df.append(data)
         print("INFO: Writing to database...")
