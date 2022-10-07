@@ -16,7 +16,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 
-from ..utils import DataFile, Internship
+from agtern.utils.models import Internship
+
+from ..utils import DataFile
 
 
 def scrape(headless: bool = True):
@@ -76,9 +78,10 @@ def scrape(headless: bool = True):
                         contents.append(element.text)
                 data[field.name] = pd.Series(contents)
             data["company"] = entry["name"]
-            internship_df = internship_df.append(data)
+            internship_df = pd.concat([internship_df, data])
         print("INFO: Writing to database...")
-        internship_df.to_csv("internships.csv", index=False, quoting=csv.QUOTE_ALL)
+        internships_csv = DataFile("internships.csv", is_temp=True)
+        internship_df.to_csv(internships_csv.path, index=False, quoting=csv.QUOTE_ALL)
 
         print("Done!")
     except Exception as e:

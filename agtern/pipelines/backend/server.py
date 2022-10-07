@@ -1,5 +1,7 @@
 import json
 
+import pandas as pd
+
 from ..utils import DataFile
 from .scraper import start_scraper
 
@@ -12,9 +14,6 @@ def start_server(headless_scraper=True):
 
 
 def get_all_internships() -> list:
-    data = []
-    db_json = DataFile("db.json", default_data="[]")
-    # IMPORTANT: Open as read-only! Scraper could be writing at the same time!
-    with open(db_json.path, "r") as f:
-        data = json.load(f)
-    return data
+    internships_csv = DataFile("internships.csv")
+    internships_df = pd.read_csv(internships_csv.path)
+    return internships_df.to_dict(orient="records")
