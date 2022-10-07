@@ -1,7 +1,6 @@
 # NOTE: this code is from a defunct tkinter wiki site
 # https://web.archive.org/web/20170514022131id_/http://tkinter.unpythonic.net/wiki/VerticalScrolledFrame
 # It provides an easy and painless interface to using scrollbars
-from tkinter import *  # from x import * is bad practice
 from tkinter.ttk import *
 
 

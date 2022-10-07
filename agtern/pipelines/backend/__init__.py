@@ -1,2 +1,2 @@
 from .scraper import start_scraper
-from .server import start_server, get_all_internships
+from .server import get_all_internships, start_server

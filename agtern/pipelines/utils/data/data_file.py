@@ -1,6 +1,6 @@
-from pathlib import Path
 from os import makedirs
 from os.path import isfile
+from pathlib import Path
 from typing import Union
 
 

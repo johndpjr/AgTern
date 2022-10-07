@@ -1,14 +1,15 @@
+import configparser
 import tkinter as tk
 import tkinter.ttk as ttk
-import configparser
+
+from agtern.pipelines import DataFile
 
 from .frames import (
-    TopBarFrame,
-    InternshipListFrame,
     InternshipDetailFrame,
+    InternshipListFrame,
     ProfileFrame,
+    TopBarFrame,
 )
-from agtern.pipelines import DataFile
 
 
 class Application(tk.Tk):

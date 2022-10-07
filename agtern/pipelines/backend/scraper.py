@@ -1,24 +1,20 @@
 """Pre-MVP: This file reads from a config file to scrape websites and save them in a json file.
 Post-MVP: This file will read configs from a database to scrape websites and save the results back into the database."""
 
-from multiprocessing import Process, log_to_stderr
-import json
 import csv
-from dataclasses import dataclass, fields
+import json
 import logging
-import sys
-import pandas as pd
 import traceback
+from dataclasses import fields
+from multiprocessing import Process
 
+import pandas as pd
+import selenium.webdriver.support.expected_conditions as condition
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.remote.webelement import WebElement
-from selenium.webdriver.support.wait import WebDriverWait
-import selenium.webdriver.support.expected_conditions as condition
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
-
-import signal
 
 from ..utils import DataFile, Internship
 

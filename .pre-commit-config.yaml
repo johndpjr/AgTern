@@ -10,13 +10,14 @@ repos:
     -   id: check-json
     -   id: check-xml
     -   id: check-yaml
-    -   if: requirements-txt-fixer
+    -   id: requirements-txt-fixer
     -   id: check-added-large-files
-    repo: github.com/PyCQA/isort
-    rev: v5.10.1
-    hooks:
-    -   id: isort
-    repo: https://github.com/psf/black
-    rev: 22.8.0
+-   repo: https://github.com/psf/black
+    rev: '22.8.0'
     hooks:
     -   id: black
+-   repo: https://github.com/pycqa/isort
+    rev: '5.10.1'
+    hooks:
+    -   id: isort
+        args: ["--profile", "black"]

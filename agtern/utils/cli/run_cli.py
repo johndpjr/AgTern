@@ -1,6 +1,7 @@
-import agtern
-from agtern.pipelines import sort_companies, import_companies
 from argparse import ArgumentParser
+
+import agtern
+from agtern.pipelines import import_companies, sort_companies
 
 
 def run_cli(args=None):
