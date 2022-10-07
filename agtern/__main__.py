@@ -1,4 +1,5 @@
-from agtern import Application, start_server
+from agtern.gui import Application
+from agtern.pipelines import start_server
 
 HEADLESS_SCRAPER = True
 
