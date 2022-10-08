@@ -17,8 +17,7 @@ class DataFile:
             self.path = Path.cwd().joinpath("data", "temp", filename)
         else:
             self.path = Path.cwd().joinpath("data", filename)
-        if default_data is not None:
-            self.create(default_data)
+        assert self.create(default_data)
 
     def exists(self):
         return isfile(self.path)
@@ -27,15 +26,13 @@ class DataFile:
         """Creates a data file if it doesn't exist. Returns true if successful."""
         if self.exists():
             return True
-        if default_data is not None:
-            try:
-                if self.is_temp:
-                    makedirs(Path.cwd().joinpath("data", "temp"), exist_ok=True)
-                else:
-                    makedirs(Path.cwd().joinpath("data"), exist_ok=True)
-                with open(self.path, "w") as f:
-                    if default_data is not None:
-                        f.write(default_data)
-            except OSError:
-                pass
+        try:
+            if self.is_temp:
+                makedirs(Path.cwd().joinpath("data", "temp"), exist_ok=True)
+            else:
+                makedirs(Path.cwd().joinpath("data"), exist_ok=True)
+            with open(self.path, "w") as f:
+                f.write(default_data if default_data else "")
+        except OSError:
+            pass
         return self.exists()
