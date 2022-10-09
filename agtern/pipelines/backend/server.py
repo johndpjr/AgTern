@@ -13,6 +13,7 @@ def start_server(headless_scraper=True):
     start_scraper(headless_scraper)
 
 
+# Transform CSV into list of Internship objects
 def get_all_internships() -> list:
     internships_csv = DataFile("internships.csv")
     internships_df = pd.read_csv(internships_csv.path)
