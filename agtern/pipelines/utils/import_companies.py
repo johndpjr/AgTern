@@ -2,7 +2,7 @@ import json
 
 import pandas as pd
 
-from . import DataFile
+from ..data import DataFile
 
 
 def import_companies():

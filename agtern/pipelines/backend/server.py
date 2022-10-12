@@ -2,7 +2,7 @@ import json
 
 import pandas as pd
 
-from ..utils import DataFile
+from ..data import DataFile
 from .scraper import start_scraper
 
 """Pre-MVP: This file provides functions that read the json file that the backend writes to.

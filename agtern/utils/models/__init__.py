@@ -1,1 +1,0 @@
-from .internship import Internship

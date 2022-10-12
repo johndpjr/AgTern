@@ -1,7 +1,6 @@
 import tkinter as tk
 
-from agtern.utils import Internship
-
+from ...models import Internship
 from .vertical_scrolled_frame import VerticalScrolledFrame
 
 

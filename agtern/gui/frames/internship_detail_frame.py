@@ -1,7 +1,7 @@
 import tkinter as tk
 import webbrowser
 
-from agtern.utils import Internship
+from ...models import Internship
 
 
 class InternshipDetailFrame(tk.Frame):
