@@ -6,60 +6,45 @@ from ...models import Internship
 
 class InternshipDetailFrame(tk.Frame):
     """A frame containing all specific internship details."""
-    
+
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
 
         # Create a LabelFrame (a container for labels) to contain
         #   basic internship details like Company, Title, and Year & Period
-        self._lblfrm_iship_details = tk.LabelFrame(
-            self,
-            text='Internship details'
-        )
+        self._lblfrm_iship_details = tk.LabelFrame(self, text="Internship details")
         # Company (e.g. Google)
         self._var_iship_company = tk.StringVar()
         self._lbl_iship_company = tk.Label(
-            self._lblfrm_iship_details,
-            textvariable=self._var_iship_company
+            self._lblfrm_iship_details, textvariable=self._var_iship_company
         )
         # Title (e.g. Software Engineering Intern)
         self._var_iship_title = tk.StringVar()
         self._lbl_iship_title = tk.Label(
-            self._lblfrm_iship_details,
-            textvariable=self._var_iship_title
+            self._lblfrm_iship_details, textvariable=self._var_iship_title
         )
         # Container for Period and Year (e.g. Summer 2023)
-        self._frm_iship_period_year = tk.Frame(
-            self._lblfrm_iship_details
-        )
+        self._frm_iship_period_year = tk.Frame(self._lblfrm_iship_details)
         # Period (e.g. Summer)
         self._var_iship_period = tk.StringVar()
         self._lbl_iship_period = tk.Label(
-            self._frm_iship_period_year,
-            textvariable=self._var_iship_period
+            self._frm_iship_period_year, textvariable=self._var_iship_period
         )
         # Year (e.g. 2023)
         self._var_iship_year = tk.StringVar()
         self._lbl_iship_year = tk.Label(
-            self._frm_iship_period_year,
-            textvariable=self._var_iship_year
+            self._frm_iship_period_year, textvariable=self._var_iship_year
         )
-        
+
         # "Apply now" button
         self._var_iship_link = tk.StringVar()
         self._bttn_apply_now = tk.Button(
-            self,
-            text='Apply now',
-            command=self._on_apply_now_bttn_click
+            self, text="Apply now", command=self._on_apply_now_bttn_click
         )
 
         # Description (e.g. "At Lockheed Martin we are...")
         self._var_iship_txtbox = tk.StringVar(self)
-        self._txtbx_iship_description = tk.Text(
-            self,
-            wrap=tk.WORD,
-            state=tk.DISABLED
-        )
+        self._txtbx_iship_description = tk.Text(self, wrap=tk.WORD, state=tk.DISABLED)
 
         self._lblfrm_iship_details.grid(row=0, sticky=tk.EW)
         self._lbl_iship_company.grid(row=0, sticky=tk.W)
@@ -72,16 +57,13 @@ class InternshipDetailFrame(tk.Frame):
 
         self._txtbx_iship_description.grid(row=2, sticky=tk.NSEW)
 
-        self.grid_rowconfigure(2, weight=1)     # allow row 2 to expand vertically
-        self.grid_columnconfigure(0, weight=1)  # allow column 0 to expand horizontally
-    
     def _on_apply_now_bttn_click(self):
         """Open url of internship when the "Apply now"
         button is clicked."""
 
         link = self._var_iship_link.get()
         print(f'"Apply now" was clicked and the link is {link}')
-        if link:  # Ensure not empty 
+        if link:  # Ensure not empty
             webbrowser.open_new_tab(link)
 
     def show_internship_detail(self, iship: Internship):

@@ -1,7 +1,7 @@
 # NOTE: this code is from a defunct tkinter wiki site
 # https://web.archive.org/web/20170514022131id_/http://tkinter.unpythonic.net/wiki/VerticalScrolledFrame
 # It provides an easy and painless interface to using scrollbars
-from tkinter import *   # from x import * is bad practice
+from tkinter import *
 from tkinter.ttk import *
 
 
@@ -11,14 +11,14 @@ class VerticalScrolledFrame(Frame):
     * Construct and pack/place/grid normally
     * This frame only allows vertical scrolling
     """
+
     def __init__(self, parent, *args, **kw):
         Frame.__init__(self, parent, *args, **kw)
 
         # create a canvas object and a vertical scrollbar for scrolling it
         vscrollbar = Scrollbar(self, orient=VERTICAL)
         vscrollbar.pack(fill=Y, side=RIGHT, expand=FALSE)
-        canvas = Canvas(self, bd=0, highlightthickness=0,
-                        yscrollcommand=vscrollbar.set)
+        canvas = Canvas(self, bd=0, highlightthickness=0, yscrollcommand=vscrollbar.set)
         canvas.pack(side=LEFT, fill=BOTH, expand=TRUE)
         vscrollbar.config(command=canvas.yview)
 
@@ -28,8 +28,7 @@ class VerticalScrolledFrame(Frame):
 
         # create a frame inside the canvas which will be scrolled with it
         self.interior = interior = Frame(canvas)
-        interior_id = canvas.create_window(0, 0, window=interior,
-                                           anchor=NW)
+        interior_id = canvas.create_window(0, 0, window=interior, anchor=NW)
 
         # track changes to the canvas and frame width and sync them,
         # also updating the scrollbar
@@ -40,24 +39,26 @@ class VerticalScrolledFrame(Frame):
             if interior.winfo_reqwidth() != canvas.winfo_width():
                 # update the canvas's width to fit the inner frame
                 canvas.config(width=interior.winfo_reqwidth())
-        interior.bind('<Configure>', _configure_interior)
+
+        interior.bind("<Configure>", _configure_interior)
 
         def _configure_canvas(event):
             if interior.winfo_reqwidth() != canvas.winfo_width():
                 # update the inner frame's width to fill the canvas
                 canvas.itemconfigure(interior_id, width=canvas.winfo_width())
-        canvas.bind('<Configure>', _configure_canvas)
+
+        canvas.bind("<Configure>", _configure_canvas)
 
         # update vertical frame position on mouse scroll.
         # utilize event.num in case of Linux
         # utilize event.delta in case of Windows/MacOS
         def _on_mousewheel(event):
             if event.num == 4:
-                canvas.yview_scroll(-1, 'units')
+                canvas.yview_scroll(-1, "units")
             elif event.num == 5:
-                canvas.yview_scroll(1, 'units')
+                canvas.yview_scroll(1, "units")
             else:
-                canvas.yview_scroll(int(-1*(event.delta/120)), 'units')
+                canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
 
         # bind mouse wheel input
         # <MouseWheel> in case of Windows/MacOS
@@ -66,7 +67,8 @@ class VerticalScrolledFrame(Frame):
             self.bind_all("<MouseWheel>", _on_mousewheel)
             self.bind_all("<Button-4>", _on_mousewheel)
             self.bind_all("<Button-5>", _on_mousewheel)
-        self.bind('<Enter>', _bound_to_mousewheel)
+
+        self.bind("<Enter>", _bound_to_mousewheel)
 
         # unbind mouse wheel input
         # <MouseWheel> in case of Windows/MacOS
@@ -75,4 +77,5 @@ class VerticalScrolledFrame(Frame):
             self.unbind_all("<MouseWheel>")
             self.unbind_all("<Button-4>")
             self.unbind_all("<Button-5>")
-        self.bind('<Leave>', _unbound_to_mousewheel)
+
+        self.bind("<Leave>", _unbound_to_mousewheel)
