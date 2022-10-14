@@ -1,3 +1,4 @@
+from dataclasses import fields
 import pandas as pd
 from math import nan
 
@@ -20,13 +21,7 @@ def get_all_internships() -> list:
     return [
         update_internship(
             Internship(
-                iship["company"],
-                iship["title"],
-                iship["year"],
-                iship["period"],
-                iship["link"],
-                iship["location"],
-                iship["description"],
+                *[iship[field.name] or '' for field in fields(Internship)]
             )
         ) for iship in internships_df.to_dict(orient="records")
     ]

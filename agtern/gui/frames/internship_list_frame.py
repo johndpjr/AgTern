@@ -67,7 +67,7 @@ class InternshipListFrame(tk.Frame):
         for i in internships:
             text = f"{i.company}\n{i.title}"
             if i.period is not None or i.year is not None:
-                text += f"\n{i.period} {i.year}"
+                text += "\n" + f"{i.period} {i.year}".strip()
 
             tk.Button(
                 self._frm_iship_list_container.interior,

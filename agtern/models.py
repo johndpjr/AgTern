@@ -7,7 +7,7 @@ class Internship:
 
     company: str
     title: str
-    year: int
+    year: str
     period: str
     link: str
     location: str = ""
