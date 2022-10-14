@@ -1,1 +1,1 @@
-from .api import get_all_internships
+from .api import api_get_all_internships
