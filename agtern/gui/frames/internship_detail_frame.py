@@ -57,6 +57,9 @@ class InternshipDetailFrame(tk.Frame):
 
         self._txtbx_iship_description.grid(row=2, sticky=tk.NSEW)
 
+        self.grid_rowconfigure(2, weight=1)
+        self.grid_columnconfigure(0, weight=1)
+
     def _on_apply_now_bttn_click(self):
         """Open url of internship when the "Apply now"
         button is clicked."""
