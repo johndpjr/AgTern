@@ -10,6 +10,7 @@ class DataFile:
         filename: str,
         is_temp: bool = False,
         default_data: Union[str, None] = None,
+        create_on_init: bool = True
     ):
         self.filename = filename
         self.is_temp = is_temp
@@ -17,7 +18,9 @@ class DataFile:
             self.path = Path.cwd().joinpath("data", "temp", filename)
         else:
             self.path = Path.cwd().joinpath("data", filename)
-        assert self.create(default_data)
+        
+        if create_on_init:
+            assert self.create(default_data)
 
     def exists(self):
         return isfile(self.path)

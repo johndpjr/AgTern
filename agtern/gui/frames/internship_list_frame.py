@@ -1,7 +1,9 @@
+from threading import Thread
+from time import sleep
 import tkinter as tk
 
 from ...models import Internship
-from ...pipelines import api_get_all_internships
+from ...pipelines import api_get_all_internships, DataFile
 from .vertical_scrolled_frame import VerticalScrolledFrame
 
 
@@ -45,6 +47,21 @@ class InternshipListFrame(tk.Frame):
         # Let the internship container expand vertically
         self.grid_rowconfigure(1, weight=1)
 
+        internships_csv = DataFile(
+            "internships.csv", is_temp=True, create_on_init=False
+        )
+
+        def check_file_existence():
+            while not internships_csv.exists():
+                sleep(5)
+            self._populate_internships()
+
+        if not internships_csv.exists():
+            Thread(target=check_file_existence, daemon=True).start()
+        else:
+            self._populate_internships()
+
+    def _populate_internships(self):
         internships = api_get_all_internships()
 
         for i in internships:
@@ -62,8 +79,8 @@ class InternshipListFrame(tk.Frame):
         """Responds to the event when the "Search"
         button is clicked.
         """
-        # You can get the value of what's in the search box by calling get()
-        #   on its corresponding StringVar variable
+        # Get the contents of the search box by calling get()
+        # on its corresponding StringVar variable
 
         print(
             '"Search" was clicked and the search is '
