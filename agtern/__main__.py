@@ -1,3 +1,4 @@
+import logging
 from argparse import ArgumentParser
 
 from .gui import Application
@@ -21,7 +22,13 @@ def run_cli():
     parser.add_argument("--update-companies", action="store_true")
     parser.add_argument("--show-scraper", action="store_true")
     parser.add_argument("--noscrape", action="store_true")
+    parser.add_argument("--dev", action="store_true")
     args = parser.parse_args()
+
+    if args.dev:
+        LOG.setLevel(logging.INFO)
+    else:
+        LOG.warning("Running in production (set --dev for INFO messages)...")
 
     if args.update_companies:
         LOG.info("Updating company info...")

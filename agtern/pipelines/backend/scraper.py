@@ -3,7 +3,6 @@ Post-MVP: This file will read configs from a database to scrape websites and sav
 
 import csv
 import json
-import logging
 import traceback
 from dataclasses import fields
 from multiprocessing import Process
@@ -42,7 +41,7 @@ def scrape(headless: bool = True):
         options = Options()
         options.headless = headless
         driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
-        LOG.info("INFO: Waiting...")
+        LOG.info("Waiting...")
         wait = WebDriverWait(driver, 5)
 
         # Get JSON data from scraping_config.json (empty DataFrame if not exists)
@@ -61,7 +60,7 @@ def scrape(headless: bool = True):
         # Iterate through valid sources to be scraped
         company_scrape_df = company_scrape_df.loc[company_scrape_df["scrape"].notna()]
         for idx, entry in company_scrape_df.iterrows():
-            LOG.info(f"INFO: Scraping {entry['name']}...")
+            LOG.info(f"Scraping {entry['name']}...")
 
             # Go to the page that should be scraped
             driver.get(entry["link"])
@@ -95,7 +94,7 @@ def scrape(headless: bool = True):
 
             # Append company data to database DataFrame
             internship_df = pd.concat([internship_df, data])
-        LOG.info("INFO: Writing to database...")
+        LOG.info("Writing to database...")
 
         # Write DataFrame info to temp data CSV
         # TODO: Write to actual database (AWS?)
@@ -105,7 +104,7 @@ def scrape(headless: bool = True):
         LOG.info("Done!")
     except Exception as e:
         # Log any errors to stdout
-        logging.error(traceback.format_exc())
+        LOG.error(traceback.format_exc())
     finally:
         # Ensure driver is closed if an exception occurs
         close_driver()

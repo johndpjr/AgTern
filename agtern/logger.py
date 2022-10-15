@@ -12,19 +12,19 @@ def setup_logger(name):
     file = "log/agtern.log"
     format = "%(asctime)s [%(levelname)s] %(message)s"
 
-    # setup logger
-    logging.basicConfig(filename=file, format=format, filemode="a", level=logging.INFO)
-    rotate_file = logging.handlers.TimedRotatingFileHandler(
+    # setup handlers and formatters
+    rotateHandler = logging.handlers.TimedRotatingFileHandler(
         file, when="midnight", interval=1, backupCount=7
     )
-    logger = logging.getLogger(name)
-    logger.addHandler(rotate_file)
-
-    # print log messages to console
     consoleHandler = logging.StreamHandler()
     logFormatter = logging.Formatter(format)
+
+    # attach handlers to logger
+    logger = logging.getLogger(name)
     consoleHandler.setFormatter(logFormatter)
+    rotateHandler.setFormatter(logFormatter)
     logger.addHandler(consoleHandler)
+    logger.addHandler(rotateHandler)
 
     return logger
 
