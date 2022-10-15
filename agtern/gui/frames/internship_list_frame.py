@@ -1,9 +1,9 @@
+import tkinter as tk
 from threading import Thread
 from time import sleep
-import tkinter as tk
 
 from ...models import Internship
-from ...pipelines import api_get_all_internships, DataFile
+from ...pipelines import DataFile, api_get_all_internships
 from .vertical_scrolled_frame import VerticalScrolledFrame
 
 
@@ -66,7 +66,7 @@ class InternshipListFrame(tk.Frame):
 
         for i in internships:
             text = f"{i.company}\n{i.title}"
-            if i.period is not None or i.year is not None:
+            if i.period or i.year:
                 text += "\n" + f"{i.period} {i.year}".strip()
 
             tk.Button(
