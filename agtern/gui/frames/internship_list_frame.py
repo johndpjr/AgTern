@@ -1,9 +1,10 @@
+import tkinter as tk
 from threading import Thread
 from time import sleep
-import tkinter as tk
 
+from ...logger import LOG
 from ...models import Internship
-from ...pipelines import api_get_all_internships, DataFile
+from ...pipelines import DataFile, api_get_all_internships
 from .vertical_scrolled_frame import VerticalScrolledFrame
 
 
@@ -82,7 +83,7 @@ class InternshipListFrame(tk.Frame):
         # Get the contents of the search box by calling get()
         # on its corresponding StringVar variable
 
-        print(
+        LOG.info(
             '"Search" was clicked and the search is '
             f'"{self._var_search_result.get()}"'
         )

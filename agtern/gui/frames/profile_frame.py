@@ -1,6 +1,8 @@
 import tkinter as tk
 from datetime import datetime
 
+from ...logger import LOG
+
 
 class ProfileFrame(tk.Frame):
     """A frame containing profile details and validation."""
@@ -163,7 +165,7 @@ class ProfileFrame(tk.Frame):
         """Responds to the event when the 'Save Profile Information'
         button is clicked.
         """
-        print('"Save Profile Information" was clicked')
+        LOG.info('"Save Profile Information" was clicked')
 
         # Validate user-entered values
         if self._var_name.get() == "":

@@ -1,6 +1,7 @@
 import tkinter as tk
 import webbrowser
 
+from ...logger import LOG
 from ...models import Internship
 
 
@@ -65,7 +66,7 @@ class InternshipDetailFrame(tk.Frame):
         button is clicked."""
 
         link = self._var_iship_link.get()
-        print(f'"Apply now" was clicked and the link is {link}')
+        LOG.info(f'"Apply now" was clicked and the link is {link}')
         if link:  # Ensure not empty
             webbrowser.open_new_tab(link)
 

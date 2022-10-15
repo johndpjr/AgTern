@@ -1,6 +1,7 @@
 from argparse import ArgumentParser
 
 from .gui import Application
+from .logger import LOG
 from .pipelines import import_companies, sort_companies, start_server
 
 
@@ -23,11 +24,11 @@ def run_cli():
     args = parser.parse_args()
 
     if args.update_companies:
-        print("INFO: Updating company info...")
+        LOG.info("Updating company info...")
         sort_companies()
         import_companies()
     else:
-        print("INFO: Starting program...")
+        LOG.info("Starting program...")
         main(noscrape=args.noscrape, headless_scraper=not args.show_scraper)
 
 
