@@ -1,5 +1,7 @@
 import tkinter as tk
 
+from ...logger import LOG
+
 
 class TopBarFrame(tk.Frame):
     """A persistent frame for common actions."""
@@ -25,12 +27,12 @@ class TopBarFrame(tk.Frame):
 
     def _on_my_profile_bttn_click(self):
         """Responds to the event when the "My Profile" button is clicked."""
-        print('"My Profile" was clicked')
+        LOG.info('"My Profile" was clicked')
         self.master.view_profile()
 
     def _on_search_internships_bttn_click(self):
         """Responds to the event when the "Search Internships"
         button is clicked.
         """
-        print('"Search Internships" was clicked')
+        LOG.info('"Search Internships" was clicked')
         self.master.view_search()

@@ -3,7 +3,6 @@ Post-MVP: This file will read configs from a database to scrape websites and sav
 
 import csv
 import json
-import logging
 import traceback
 from dataclasses import fields
 from multiprocessing import Process
@@ -16,6 +15,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 
+from ...logger import LOG
 from ...models import Internship
 from ..data import DataFile
 
@@ -30,7 +30,7 @@ def scrape(headless: bool = True):
         # Make sure driver exists
         if driver is not None:
             driver.close()
-        print("INFO: Closing driver...")
+        LOG.info("Closing driver...")
         # Close Process
         exit(0)
 
@@ -41,7 +41,7 @@ def scrape(headless: bool = True):
         options = Options()
         options.headless = headless
         driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
-        print("INFO: Waiting...")
+        LOG.info("Waiting...")
         wait = WebDriverWait(driver, 5)
 
         # Get JSON data from scraping_config.json (empty DataFrame if not exists)
@@ -60,7 +60,7 @@ def scrape(headless: bool = True):
         # Iterate through valid sources to be scraped
         company_scrape_df = company_scrape_df.loc[company_scrape_df["scrape"].notna()]
         for idx, entry in company_scrape_df.iterrows():
-            print(f"INFO: Scraping {entry['name']}...")
+            LOG.info(f"Scraping {entry['name']}...")
 
             # Go to the page that should be scraped
             driver.get(entry["link"])
@@ -94,17 +94,17 @@ def scrape(headless: bool = True):
 
             # Append company data to database DataFrame
             internship_df = pd.concat([internship_df, data])
-        print("INFO: Writing to database...")
+        LOG.info("Writing to database...")
 
         # Write DataFrame info to temp data CSV
         # TODO: Write to actual database (AWS?)
         internships_csv = DataFile("internships.csv", is_temp=True)
         internship_df.to_csv(internships_csv.path, index=False, quoting=csv.QUOTE_ALL)
 
-        print("Done!")
+        LOG.info("Done!")
     except Exception as e:
         # Log any errors to stdout
-        logging.error(traceback.format_exc())
+        LOG.error(traceback.format_exc())
     finally:
         # Ensure driver is closed if an exception occurs
         close_driver()
@@ -114,5 +114,5 @@ def start_scraper(headless=True):
     scraper = Process(target=scrape, args=(headless,))  # DO NOT REMOVE COMMA!!
     # Run in background, so it doesn't block the GUI (if shown)
     scraper.daemon = True
-    print("INFO: Starting driver...")
+    LOG.info("Starting driver...")
     scraper.start()
