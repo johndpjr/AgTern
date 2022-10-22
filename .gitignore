@@ -131,3 +131,5 @@ dmypy.json
 # Ignore Chrome Driver and temp data
 data/temp/
 chromedriver.exe
+
+/log
