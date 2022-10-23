@@ -2,8 +2,7 @@ from dataclasses import fields
 import pandas as pd
 from math import nan
 
-from ..data import DataFile
-from ...models import Internship
+from ...common import Internship, DataFile
 from .extractor import update_internship
 from .scraper import start_scraper
 

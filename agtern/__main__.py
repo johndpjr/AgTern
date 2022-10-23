@@ -1,9 +1,9 @@
 import logging
 from argparse import ArgumentParser
 
+from .common import LOG
 from .gui import Application
-from .logger import LOG
-from .pipelines import import_companies, sort_companies, start_server
+from .server import import_companies, sort_companies, start_server
 
 
 def main(noscrape: bool = True, headless_scraper: bool = True):

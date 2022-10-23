@@ -2,8 +2,7 @@ import json
 
 import pandas as pd
 
-from ...logger import LOG
-from ..data import DataFile
+from ...common import DataFile, LOG
 
 
 def import_companies():

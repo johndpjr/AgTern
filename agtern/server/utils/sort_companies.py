@@ -2,7 +2,7 @@ import csv
 
 import pandas as pd
 
-from ..data import DataFile
+from ...common import DataFile
 
 
 def sort_companies():

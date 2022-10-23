@@ -1,6 +1,6 @@
 import re
 
-from ...models import Internship
+from ...common import Internship
 
 
 def update_internship(internship: Internship) -> Internship:
