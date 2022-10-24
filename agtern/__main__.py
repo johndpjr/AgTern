@@ -32,11 +32,19 @@ def run_cli():
 
     if args.update_companies:
         LOG.info("Updating company info...")
-        sort_companies()
-        import_companies()
+        try:
+            sort_companies()
+            import_companies()
+        except Exception:
+            LOG.error("An exception occurred...", exc_info=True)
+        LOG.info("Closing program...")
     else:
         LOG.info("Starting program...")
-        main(noscrape=args.noscrape, headless_scraper=not args.show_scraper)
+        try:
+            main(noscrape=args.noscrape, headless_scraper=not args.show_scraper)
+        except Exception:
+            LOG.error("An exception occurred...", exc_info=True)
+        LOG.info("Closing program...")
 
 
 if __name__ == "__main__":
