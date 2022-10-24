@@ -61,17 +61,17 @@ class Application(tk.Tk):
         self.view_clear()
 
         """uh oh new frame code! might break!"""
-        self.frm_internship_search.pack(side=tk.LEFT, padx=3, pady=3)
+        self.frm_internship_search.pack(side=tk.LEFT, fill=tk.Y, padx=(5, 3), pady=3)
+        # Add a Separator widget to divide the previous and next frames
+        self._separator.pack(side=tk.LEFT, fill=tk.Y, padx=6, pady=3)
 
         # Pack InternshipListFrame on the left and fill the frame
         #   in both directions
-        self.frm_internship_list.pack(side=tk.LEFT, fill=tk.BOTH, padx=(3, 0), pady=3)
-        # Add a Separator widget to divide the previous and next frames
-        self._separator.pack(side=tk.LEFT, fill=tk.Y, padx=6, pady=3)
+        self.frm_internship_list.pack(side=tk.LEFT, fill=tk.Y, padx=3, pady=3)
         # Pack InternshipDetailFrame on the right side and fill the frame
         #   in both directions
         self.frm_internship_detail.pack(
-            side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(0, 3), pady=3
+            side=tk.RIGHT, fill=tk.BOTH, expand=True, padx=(0, 3), pady=3
         )
 
     def view_clear(self):
