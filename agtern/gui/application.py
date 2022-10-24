@@ -4,12 +4,12 @@ import tkinter.ttk as ttk
 
 from ..pipelines import DataFile
 from .frames import (
+    InternshipSearchFrame,
     InternshipDetailFrame,
     InternshipListFrame,
     ProfileFrame,
     TopBarFrame,
 )
-
 
 class Application(tk.Tk):
     """GUI for AgTern."""
@@ -31,6 +31,7 @@ class Application(tk.Tk):
         self.frm_internship_list = InternshipListFrame(self)
         self._separator = ttk.Separator(self, orient=tk.VERTICAL)
         self.frm_internship_detail = InternshipDetailFrame(self)
+        self.frm_internship_search = InternshipSearchFrame(self)
 
         # Pack TopBarFrame at the top and fill the frame in the X direction
         self.frm_top_bar.pack(side=tk.TOP, fill=tk.X, pady=(0, 3))
@@ -58,6 +59,9 @@ class Application(tk.Tk):
 
         # Clear previous view frames
         self.view_clear()
+
+        """uh oh new frame code! might break!"""
+        self.frm_internship_search.pack(side=tk.LEFT, padx=3, pady=3)
 
         # Pack InternshipListFrame on the left and fill the frame
         #   in both directions

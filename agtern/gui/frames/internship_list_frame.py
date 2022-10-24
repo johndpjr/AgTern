@@ -9,9 +9,7 @@ from .vertical_scrolled_frame import VerticalScrolledFrame
 
 
 class InternshipListFrame(tk.Frame):
-    """A frame containing all internship results, as well as
-    a search and sort by feature.
-    """
+    """A frame containing all internship results"""
 
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
