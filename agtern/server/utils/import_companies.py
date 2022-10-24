@@ -2,7 +2,7 @@ import json
 
 import pandas as pd
 
-from ...common import DataFile, LOG
+from ...common import LOG, DataFile
 
 
 def import_companies():
@@ -32,6 +32,6 @@ def import_companies():
     new_df = new_df.merge(original_df.drop("link", axis=1), how="left", on=["name"])
 
     # Rewrites JSON file using new DataFrame (in readable format)
-    log.INFO("Writing info to scraping_config.json...")
+    LOG.info("Writing info to scraping_config.json...")
     with open(scraping_config_json.path, "w") as f:
         json.dump(json.loads(new_df.to_json(orient="records")), f, indent=2)
