@@ -1,8 +1,7 @@
 import tkinter as tk
 import webbrowser
 
-from ...logger import LOG
-from ...models import Internship
+from ...common import LOG, Internship
 
 
 class InternshipDetailFrame(tk.Frame):

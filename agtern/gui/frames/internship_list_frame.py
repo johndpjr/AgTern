@@ -2,9 +2,12 @@ import tkinter as tk
 from threading import Thread
 from time import sleep
 
-from ...logger import LOG
-from ...models import Internship
-from ...pipelines import DataFile, api_get_all_internships
+from ...common import (
+    api_get_all_internships,
+    DataFile,
+    Internship,
+    LOG,
+)
 from .vertical_scrolled_frame import VerticalScrolledFrame
 
 
