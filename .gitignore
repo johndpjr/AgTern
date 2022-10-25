@@ -128,8 +128,8 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Ignore Chrome Driver and temp data
+# Ignore temp data and SQLite db
 data/temp/
-chromedriver.exe
+data/*.db
 
 /log

@@ -1,3 +1,5 @@
+from argparse import ArgumentParser, Namespace
+from threading import Thread
 import logging
 from argparse import ArgumentParser
 
@@ -6,16 +8,19 @@ from .gui import Application
 from .server import import_companies, sort_companies, start_server
 
 
-def main(no_scrape: bool = True, headless_scraper: bool = True, scrape_only: bool = False):
-    if not no_scrape:
-        start_server(headless_scraper, scrape_only)
-
-    if not scrape_only:
-        app = Application()
-        try:
-            app.mainloop()
-        except KeyboardInterrupt:  # Ctrl+C
-            pass  # Do nothing and hide Traceback
+def main(args: Namespace):
+    # TODO: based on env, run server in another thread
+    #   if both Application and Sever are running
+    Thread(
+        target=start_server,
+        daemon=True,
+        args=(args,)
+    ).start()
+    app = Application()
+    try:
+        app.mainloop()
+    except KeyboardInterrupt:  # Ctrl+C
+        pass  # Do nothing and hide Traceback
 
 
 def run_cli():
@@ -32,25 +37,12 @@ def run_cli():
     else:
         LOG.warning("Running in production (set --dev for INFO messages)...")
 
-    if args.update_companies:
-        LOG.info("Updating company info...")
-        try:
-            sort_companies()
-            import_companies()
-        except Exception:
-            LOG.error("An exception occurred...", exc_info=True)
-        LOG.info("Closing program...")
-    else:
+    try:
         LOG.info("Starting program...")
-        try:
-            main(
-                no_scrape=args.no_scrape,
-                headless_scraper=not args.show_scraper and not args.scrape_only,
-                scrape_only=args.scrape_only
-            )
-        except Exception:
-            LOG.error("An exception occurred...", exc_info=True)
+        main(args)
         LOG.info("Closing program...")
+    except Exception as e:
+        LOG.error(f"An exception occurred: {e}", exc_info=True)
 
 
 if __name__ == "__main__":
