@@ -39,8 +39,9 @@ def scrape(ctx: ScrapingContext, properties: List[ScrapePropertyModel]):
     # TODO: Implement regex property
     for prop in properties:
         elements = ctx.scraper.scrape_xpath(prop.xpath)
-        # Create column with found elements and add to temp DataFrame
+        # Create column with found elements and add to DataFrame
         contents = []
         for element in elements:
             contents.append(element.get_attribute(prop.html_property))
         ctx.data[prop.name] = pd.Series(contents)
+    ctx.data["company"] = ctx.company

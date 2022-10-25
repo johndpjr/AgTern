@@ -3,6 +3,9 @@ import re
 from ...common import Internship
 
 
+# TODO: Refactor these regexes into scraping config after the config has regex support
+
+
 def update_internship(internship: Internship) -> Internship:
     """Extracts additional information from an internship title."""
 
