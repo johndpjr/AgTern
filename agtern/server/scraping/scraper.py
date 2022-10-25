@@ -39,11 +39,11 @@ class WebScraper:
             driver_manager = ChromeDriverManager()
             driver_exists = driver_manager.driver_cache.find_driver(driver_manager.driver)
             if not driver_exists:
-                print("Chrome WebDriver does not exist! Downloading...")
+                logging.info("Chrome WebDriver does not exist! Downloading...")
             driver_path = ChromeDriverManager().install()
             if not driver_exists:
-                print("Done downloading Chrome WebDriver!")
-            print("Starting Chrome WebDriver...")
+                logging.info("Done downloading Chrome WebDriver!")
+            logging.info("Starting Chrome WebDriver...")
             self.driver = Chrome(driver_path, options=options)
         else:
             self.driver = Chrome(options=options)
@@ -63,7 +63,9 @@ class WebScraper:
     def scrape_company(self, link: str, config: pd.Series) -> pd.DataFrame:
         data = pd.DataFrame()
         if "company" not in config:
-            print("One of the companies in the scraping config does not have a \"company\" property. Skipping!")
+            logging.warning(
+                "One of the companies in the scraping config does not have a \"company\" property. Skipping!"
+            )
             return data
         company_name = config["company"]
         context = ScrapingContext(scraper=self, company=company_name, data=data)
@@ -73,11 +75,11 @@ class WebScraper:
         for action in procedure:
             action_num += 1
             try:
-                print(f"Running Action {action_num}:")
+                logging.info(f"Running Action {action_num}:")
                 action()
             except Exception as e:
-                print(f"ERROR: Could not execute {company_name}:{action_num}!")
-                print(traceback.format_exc())
+                logging.error(f"ERROR: Could not execute {company_name}:{action_num}!")
+                logging.error(traceback.format_exc())
         return data
 
 
@@ -94,9 +96,9 @@ def scrape(headless: bool = True):
     def close_driver(signal_number=None, frame=None):
         # Make sure driver exists
         if scraper is not None:
-            print("INFO: Closing driver...")
+            logging.info("Closing driver...")
             scraper.driver.close()
-            print("Done!")
+            logging.info("Done!")
         # Close Process
         exit(0)
 
@@ -107,7 +109,7 @@ def scrape(headless: bool = True):
         scraper = WebScraper()
         scraper.start(headless)
 
-        print("Loading scraping config...")
+        logging.info("Loading scraping config...")
         # Get JSON data from scraping_config.json (empty DataFrame if not exists)
         scraping_config_json = DataFile(
             "scraping_config.json",
@@ -124,18 +126,18 @@ def scrape(headless: bool = True):
         # Iterate through valid sources to be scraped
         company_scrape_df: pd.DataFrame = company_scrape_df.loc[company_scrape_df["scrape"].notna()]
         for idx, entry in company_scrape_df.iterrows():
-            print(f"INFO: Scraping {entry['company']}...")
+            logging.info(f"Scraping {entry['company']}...")
             data = scraper.scrape_company(entry["link"], entry)
             # Append company data to database DataFrame
             internship_df = pd.concat([internship_df, data])
-        print("INFO: Writing to database...")
+        logging.info("Writing to database...")
 
         # Write DataFrame info to temp data CSV
         # TODO: Write to actual database (AWS?)
         internships_csv = DataFile("internships.csv", is_temp=True)
         internship_df.to_csv(internships_csv.path, index=False, quoting=csv.QUOTE_ALL)
 
-        print("Done!")
+        logging.info("Done!")
     except Exception as e:
         # Log any errors to stdout
         logging.error(traceback.format_exc())
@@ -145,7 +147,7 @@ def scrape(headless: bool = True):
 
 
 def start_scraper(headless=True, scrape_only=False, multiprocessing=True):
-    print("INFO: Starting scraper...")
+    logging.info("INFO: Starting scraper...")
     if scrape_only:
         scrape(headless)
     else:

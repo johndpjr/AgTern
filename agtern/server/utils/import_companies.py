@@ -1,5 +1,6 @@
 # pipelines.utils.import_companies
 import json
+import logging
 
 import pandas as pd
 
@@ -24,7 +25,7 @@ def import_companies():
     original_df = pd.DataFrame(readable_json)
 
     # Creates new JSON object with companies from CSV
-    print("INFO: Generating company info...")
+    logging.info("Generating company info...")
     new_df = pd.DataFrame()
     new_df["company"] = company_df["name"]
     new_df["link"] = company_df["link"]
@@ -33,6 +34,6 @@ def import_companies():
     new_df = new_df.merge(original_df.drop("link", axis=1), how="left", on=["name"])
 
     # Rewrites JSON file using new DataFrame (in readable format)
-    print("INFO: Writing info to scraping_config.json...")
+    logging.info("Writing info to scraping_config.json...")
     with open(scraping_config_json.path, "w") as f:
         json.dump(json.loads(new_df.to_json(orient="records")), f, indent=2)

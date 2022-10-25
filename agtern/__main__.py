@@ -1,3 +1,4 @@
+import logging
 from argparse import ArgumentParser
 
 from .gui import Application
@@ -25,11 +26,11 @@ def run_cli():
     args = parser.parse_args()
 
     if args.update_companies:
-        print("INFO: Updating company info...")
+        logging.info("Updating company info...")
         sort_companies()
         import_companies()
     else:
-        print("INFO: Starting program...")
+        logging.info("Starting program...")
         main(
             noscrape=args.noscrape,
             headless_scraper=not args.show_scraper and not args.scrape_only,
