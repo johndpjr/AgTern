@@ -48,7 +48,7 @@ class Application(tk.Tk):
         can be modified."""
         # Clear previous view frames
         self.view_clear()
-
+        
         self.frm_profile_detail.pack(side=tk.TOP, fill=tk.BOTH, padx=(0, 3), pady=3)
 
     def view_search(self):
@@ -60,7 +60,6 @@ class Application(tk.Tk):
         # Clear previous view frames
         self.view_clear()
 
-        """uh oh new frame code! might break!"""
         self.frm_internship_search.pack(side=tk.LEFT, fill=tk.Y, padx=(5, 3), pady=3)
         # Add a Separator widget to divide the previous and next frames
         self._separator.pack(side=tk.LEFT, fill=tk.Y, padx=6, pady=3)
