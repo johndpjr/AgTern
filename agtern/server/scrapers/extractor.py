@@ -1,9 +1,9 @@
 import re
 
-from ...common import Internship
+from ...common import InternshipBase
 
 
-def update_internship(internship: Internship) -> Internship:
+def update_internship(internship: InternshipBase) -> InternshipBase:
     """Extracts additional information from an internship title."""
 
     full_title = internship.title

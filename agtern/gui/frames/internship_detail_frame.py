@@ -1,7 +1,7 @@
 import tkinter as tk
 import webbrowser
 
-from ...common import LOG, Internship
+from ...common import LOG, InternshipBase
 
 
 class InternshipDetailFrame(tk.Frame):
@@ -69,7 +69,7 @@ class InternshipDetailFrame(tk.Frame):
         if link:  # Ensure not empty
             webbrowser.open_new_tab(link)
 
-    def show_internship_detail(self, iship: Internship):
+    def show_internship_detail(self, iship: InternshipBase):
         """Sets all of the internship detail variables to whatever
         internship was clicked."""
 

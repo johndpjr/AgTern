@@ -4,7 +4,6 @@ Post-MVP: This file will read configs from a database to scrape websites and sav
 import csv
 import json
 import traceback
-from dataclasses import fields
 from multiprocessing import Process
 
 import pandas as pd
@@ -15,7 +14,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 
-from ...common import DataFile, LOG, Internship
+from ...common import DataFile, LOG, InternshipBase
 
 
 def scrape(headless: bool = True):
@@ -67,15 +66,15 @@ def scrape(headless: bool = True):
             data = pd.DataFrame()
 
             # Find scrape info for fields in Internship model
-            for field in fields(Internship):
+            for field in InternshipBase.__fields__.keys():
                 # If scrape info not given for field, fill column with NaN
-                if field.name not in entry["scrape"]:
-                    data[field.name] = None
+                if field not in entry["scrape"]:
+                    data[field] = None
                     continue
                 # Otherwise wait until element is found via XPATH
                 elements = wait.until(
                     condition.presence_of_all_elements_located(
-                        (By.XPATH, entry["scrape"][field.name])
+                        (By.XPATH, entry["scrape"][field])
                     )
                 )
                 # Create column with found elements and add to temp DataFrame
@@ -86,7 +85,7 @@ def scrape(headless: bool = True):
                         contents.append(element.get_attribute("href"))
                     else:
                         contents.append(element.text)
-                data[field.name] = pd.Series(contents)
+                data[field] = pd.Series(contents)
             # Fill 'company' column with company being searched
             data["company"] = entry["name"]
 
@@ -108,9 +107,11 @@ def scrape(headless: bool = True):
         close_driver()
 
 
-def start_scraper(headless=True):
-    scraper = Process(target=scrape, args=(headless,))  # DO NOT REMOVE COMMA!!
-    # Run in background, so it doesn't block the GUI (if shown)
-    scraper.daemon = True
+def start_scraper(headless: bool = True):
+    scraper = Process(
+        target=scrape,
+        daemon=True,
+        args=(headless,)
+    )
     LOG.info("Starting driver...")
     scraper.start()

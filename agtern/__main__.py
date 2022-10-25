@@ -1,15 +1,20 @@
+from argparse import ArgumentParser, Namespace
+from threading import Thread
 import logging
-from argparse import ArgumentParser
 
 from .common import LOG
 from .gui import Application
-from .server import import_companies, sort_companies, start_server
+from .server import start_server
 
 
-def main(noscrape: bool = True, headless_scraper: bool = True):
-    if not noscrape:
-        start_server(headless_scraper)
-
+def main(args: Namespace):
+    # TODO: based on env, run server in another thread
+    #   if both Application and Sever are running
+    Thread(
+        target=start_server,
+        daemon=True,
+        args=(args,)
+    ).start()
     app = Application()
     try:
         app.mainloop()
@@ -30,21 +35,12 @@ def run_cli():
     else:
         LOG.warning("Running in production (set --dev for INFO messages)...")
 
-    if args.update_companies:
-        LOG.info("Updating company info...")
-        try:
-            sort_companies()
-            import_companies()
-        except Exception:
-            LOG.error("An exception occurred...", exc_info=True)
-        LOG.info("Closing program...")
-    else:
+    try:
         LOG.info("Starting program...")
-        try:
-            main(noscrape=args.noscrape, headless_scraper=not args.show_scraper)
-        except Exception:
-            LOG.error("An exception occurred...", exc_info=True)
+        main(args)
         LOG.info("Closing program...")
+    except Exception as e:
+        LOG.error(f"An exception occurred: {e}", exc_info=True)
 
 
 if __name__ == "__main__":

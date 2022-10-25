@@ -2,7 +2,7 @@ import configparser
 import tkinter as tk
 import tkinter.ttk as ttk
 
-from ..common import DataFile
+from ..common import DataFile, AgTernAPI
 from .frames import (
     InternshipDetailFrame,
     InternshipListFrame,
@@ -24,6 +24,9 @@ class Application(tk.Tk):
 
         self.title("AgTern")
         self.set_window_size()
+
+        # Create a shared API instance that all frames will use
+        self.api = AgTernAPI()
 
         # Create global frames
         self.frm_top_bar = TopBarFrame(self, relief=tk.RAISED, bd=2)

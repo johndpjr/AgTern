@@ -1,13 +1,6 @@
 import tkinter as tk
-from threading import Thread
-from time import sleep
 
-from ...common import (
-    api_get_all_internships,
-    DataFile,
-    Internship,
-    LOG,
-)
+from ...common import InternshipBase, LOG
 from .vertical_scrolled_frame import VerticalScrolledFrame
 
 
@@ -51,22 +44,11 @@ class InternshipListFrame(tk.Frame):
         # Let the internship container expand vertically
         self.grid_rowconfigure(1, weight=1)
 
-        internships_csv = DataFile(
-            "internships.csv", is_temp=True, create_on_init=False
-        )
-
-        def check_file_existence():
-            while not internships_csv.exists():
-                sleep(5)
-            self._populate_internships()
-
-        if not internships_csv.exists():
-            Thread(target=check_file_existence, daemon=True).start()
-        else:
-            self._populate_internships()
+        self._populate_internships()
 
     def _populate_internships(self):
-        internships = api_get_all_internships()
+        # TODO: make this asynchronous
+        internships = self.master.api.get_all_internships()
 
         for i in internships:
             text = f"{i.company}\n{i.title}"
@@ -91,6 +73,6 @@ class InternshipListFrame(tk.Frame):
             f'"{self._var_search_result.get()}"'
         )
 
-    def _on_iship_list_item_bttn_click(self, iship: Internship):
+    def _on_iship_list_item_bttn_click(self, iship: InternshipBase):
         """Displays internship information in the InternshipDetailFrame."""
         self.master.frm_internship_detail.show_internship_detail(iship)
