@@ -1,3 +1,5 @@
+import tkinter
+
 import selenium.webdriver.support.expected_conditions as condition
 from selenium.webdriver.common.by import By
 import tkinter as tk
@@ -12,12 +14,6 @@ def getfavicon(usedUrl):
         if (domainServer != url):
             break
     domainServer += "/favicon.ico"
-    return(domainServer)
-url = getfavicon(url)
-print("A")
-print(url)
-#Currently obtains the root favicon.ico link
+    image = tk.PhotoImage(file=domainServer)
+    return(image)
 
-#Left to do:
-# Save from the website the .assets folder
-# Return the file address
