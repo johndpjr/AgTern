@@ -18,10 +18,10 @@ def start_server(headless_scraper=True, scrape_only=False):
 def get_all_internships() -> list:
     internships_csv = DataFile("internships.csv", is_temp=True, create_on_init=False)
     internships_df = pd.read_csv(internships_csv.path).replace({nan: None})
-    return [
-        update_internship(
-            Internship(
-                *[iship[field.name] or '' for field in fields(Internship)]
-            )
-        ) for iship in internships_df.to_dict(orient="records")
-    ]
+    internships = []
+    for iship in internships_df.to_dict(orient="records"):
+        parameters = []
+        for field in fields(Internship):
+            parameters.append(iship[field.name] if field.name in iship else "")
+        internships.append(update_internship(Internship(*parameters)))
+    return internships
