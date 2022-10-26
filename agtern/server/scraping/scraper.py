@@ -146,7 +146,7 @@ def scrape(headless: bool = True):
 
 
 def start_scraper(headless=True, scrape_only=False, multiprocessing=True):
-    LOG.info("INFO: Starting scraper...")
+    LOG.info("Starting scraper...")
     if scrape_only:
         scrape(headless)
     else:
