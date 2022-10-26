@@ -1,6 +1,6 @@
-import logging
 from argparse import ArgumentParser
 
+from .common import LOG
 from .gui import Application
 from .server import import_companies, sort_companies, start_server
 
@@ -23,14 +23,20 @@ def run_cli():
     parser.add_argument("--show-scraper", action="store_true")
     parser.add_argument("--noscrape", action="store_true")
     parser.add_argument("--scrape-only", action="store_true")
+    parser.add_argument("--dev", action="store_true")
     args = parser.parse_args()
 
+    if args.dev:
+        LOG.setLevel(logging.INFO)
+    else:
+        LOG.warning("Running in production (set --dev for INFO messages)...")
+
     if args.update_companies:
-        logging.info("Updating company info...")
+        LOG.info("Updating company info...")
         sort_companies()
         import_companies()
     else:
-        logging.info("Starting program...")
+        LOG.info("Starting program...")
         main(
             noscrape=args.noscrape,
             headless_scraper=not args.show_scraper and not args.scrape_only,

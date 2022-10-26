@@ -4,7 +4,6 @@ from __future__ import annotations  # Allow type annotations before the type is 
 
 import csv
 import json
-import logging
 import traceback
 from multiprocessing import Process
 from threading import Thread
@@ -18,6 +17,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 
 from .actions import ScrapingContext, parse_config
+from ... import LOG
 from ...common import DataFile
 
 
@@ -39,11 +39,11 @@ class WebScraper:
             driver_manager = ChromeDriverManager()
             driver_exists = driver_manager.driver_cache.find_driver(driver_manager.driver)
             if not driver_exists:
-                logging.info("Chrome WebDriver does not exist! Downloading...")
+                LOG.info("Chrome WebDriver does not exist! Downloading...")
             driver_path = ChromeDriverManager().install()
             if not driver_exists:
-                logging.info("Done downloading Chrome WebDriver!")
-            logging.info("Starting Chrome WebDriver...")
+                LOG.info("Done downloading Chrome WebDriver!")
+            LOG.info("Starting Chrome WebDriver...")
             self.driver = Chrome(driver_path, options=options)
         else:
             self.driver = Chrome(options=options)
@@ -63,7 +63,7 @@ class WebScraper:
     def scrape_company(self, link: str, config: pd.Series) -> pd.DataFrame:
         data = pd.DataFrame()
         if "company" not in config:
-            logging.warning(
+            LOG.warning(
                 "One of the companies in the scraping config does not have a \"company\" property. Skipping!"
             )
             return data
@@ -75,11 +75,11 @@ class WebScraper:
         for action in procedure:
             action_num += 1
             try:
-                logging.info(f"Running Action {action_num}:")
+                LOG.info(f"Running Action {action_num}:")
                 action()
             except Exception as e:
-                logging.error(f"ERROR: Could not execute {company_name}:{action_num}!")
-                logging.error(traceback.format_exc())
+                LOG.error(f"ERROR: Could not execute {company_name}:{action_num}!")
+                LOG.error(traceback.format_exc())
         return data
 
 
@@ -96,9 +96,9 @@ def scrape(headless: bool = True):
     def close_driver(signal_number=None, frame=None):
         # Make sure driver exists
         if scraper is not None:
-            logging.info("Closing driver...")
+            LOG.info("Closing driver...")
             scraper.driver.close()
-            logging.info("Done!")
+            LOG.info("Done!")
         # Close Process
         exit(0)
 
@@ -109,7 +109,7 @@ def scrape(headless: bool = True):
         scraper = WebScraper()
         scraper.start(headless)
 
-        logging.info("Loading scraping config...")
+        LOG.info("Loading scraping config...")
         # Get JSON data from scraping_config.json (empty DataFrame if not exists)
         scraping_config_json = DataFile(
             "scraping_config.json",
@@ -126,28 +126,28 @@ def scrape(headless: bool = True):
         # Iterate through valid sources to be scraped
         company_scrape_df: pd.DataFrame = company_scrape_df.loc[company_scrape_df["scrape"].notna()]
         for idx, entry in company_scrape_df.iterrows():
-            logging.info(f"Scraping {entry['company']}...")
+            LOG.info(f"Scraping {entry['company']}...")
             data = scraper.scrape_company(entry["link"], entry)
             # Append company data to database DataFrame
             internship_df = pd.concat([internship_df, data])
-        logging.info("Writing to database...")
+        LOG.info("Writing to database...")
 
         # Write DataFrame info to temp data CSV
         # TODO: Write to actual database (AWS?)
         internships_csv = DataFile("internships.csv", is_temp=True)
         internship_df.to_csv(internships_csv.path, index=False, quoting=csv.QUOTE_ALL)
 
-        logging.info("Done!")
+        LOG.info("Done!")
     except Exception as e:
         # Log any errors to stdout
-        logging.error(traceback.format_exc())
+        LOG.error(traceback.format_exc())
     finally:
         # Ensure driver is closed if an exception occurs
         close_driver()
 
 
 def start_scraper(headless=True, scrape_only=False, multiprocessing=True):
-    logging.info("INFO: Starting scraper...")
+    LOG.info("INFO: Starting scraper...")
     if scrape_only:
         scrape(headless)
     else:

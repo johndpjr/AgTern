@@ -1,8 +1,8 @@
-import logging
 from typing import Callable, List, Union, Type, Any, Dict
 
 from pydantic import validate_arguments, ValidationError
 
+from agtern import LOG
 from .scrape_action_registry import get_action
 from .models import ScrapingContext
 
@@ -23,12 +23,12 @@ def parse_config(
     for action_config in scraping_actions:
         action_num += 1
         if "action" not in action_config:
-            logging.error(f"Action {company_name}:{action_num} does not have an \"action\" property. Skipping!")
+            LOG.error(f"Action {company_name}:{action_num} does not have an \"action\" property. Skipping!")
             continue
         action_name = action_config["action"]
         action = get_action(action_name)
         if action is None:
-            logging.error(f"Unknown action {company_name}:{action_num} ({action_name}). Skipping!")
+            LOG.error(f"Unknown action {company_name}:{action_num} ({action_name}). Skipping!")
             continue
 
         # Assign parameters and inject dependencies
@@ -39,8 +39,8 @@ def parse_config(
             if annotation in dependencies:
                 parameters_dict[parameter_name] = dependencies[annotation]
             elif parameter_name not in action_config:
-                logging.error(f"Action {company_name}:{action_num} is missing required parameter "
-                              f"{parameter_name}: {parameter.annotation} Skipping!")
+                LOG.error(f"Action {company_name}:{action_num} is missing required parameter "
+                          f"{parameter_name}: {parameter.annotation} Skipping!")
                 parameters_valid = False
                 break
             else:
@@ -59,14 +59,14 @@ def parse_config(
                         arg_strings.append(f"{name}=\"{value}\"")
                     else:
                         arg_strings.append(f"{name}={value}")
-                logging.debug(f"Executing action {action.name}({', '.join(arg_strings)})")
+                LOG.debug(f"Executing action {action.name}({', '.join(arg_strings)})")
                 try:
                     # Create validator and validate arguments
                     validator = validate_arguments(config=config)(action.execute)
                     # Attempt to call the function
                     validator.vd.call(**parameters_dict)
                 except ValidationError as errors:
-                    logging.error(errors)
+                    LOG.error(errors)
 
             return wrapper
 
