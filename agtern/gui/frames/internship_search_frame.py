@@ -31,7 +31,7 @@ class InternshipSearchFrame(tk.Frame):
         self.MAJOR_OPTIONS = ProfileFrame.MAJOR_OPTIONS
         self.SEMESTER_OPTIONS = ('Spring', 'Summer', 'Fall')
         self.SEMESTER_CONVERT = DoubleDict({'Spring':0, 'Summer':1, 'Fall':2})
-        self.YEAR_OPTIONS = (num for num in range(2022, 2031))
+        self.YEAR_OPTIONS = tuple(range(2022, 2031))
         
         # 1 setup items!
         # 1.1 Give search bar a frame of its own...
@@ -39,7 +39,7 @@ class InternshipSearchFrame(tk.Frame):
         self.searchInput = tk.StringVar() #represents current input
         self._search_input = ttk.Entry(self._frame_search,textvariable=self.searchInput) #text box, updates searchInput
         self.search_icon = tk.PhotoImage(file='agtern/gui/assets/search-icon.png').subsample(3,3) #search button image
-        self._search_button = ttk.Button(self._frame_search, image=self.search_icon, command=self._onclick_search_button) #the actual button
+        self._search_button = ttk.Button(self._frame_search, image=self.search_icon, command=self._onclick_search) #the actual button
         # 1.2 Sort?
         self.sortInput = tk.StringVar()
         self._sortby = ttk.OptionMenu(self, self.sortInput, self.SORT_OPTIONS[0], *self.SORT_OPTIONS, command=self._onselect_sort)
@@ -56,7 +56,8 @@ class InternshipSearchFrame(tk.Frame):
         # 1.6 Year?
         self.yearInput = tk.StringVar()
         self._year = ttk.OptionMenu(self, self.yearInput, self.YEAR_OPTIONS[0], *self.YEAR_OPTIONS, command=self._onselect_year)
-        
+        # 1.7 Filter Button on the bottom
+        self._filter_button = ttk.Button(self, text='Filter', command=self._onclick_filter)
 
         # 2 now display them!
         self._frame_search.grid(row=0)
@@ -68,10 +69,12 @@ class InternshipSearchFrame(tk.Frame):
         self._label_filter.grid(row=3, sticky='EW', **self.PAD_OPTIONS)
         self._major.grid(row=4, sticky='EW', **self.PAD_OPTIONS)
         self._semester.grid(row=5, sticky='EW', **self.PAD_OPTIONS)
+        self._year.grid(row=6, stick='EW', **self.PAD_OPTIONS)
+        self._filter_button.grid(row=7, sticky='NS', **self.PAD_OPTIONS)
         
 
 
-    def _onclick_search_button(self):
+    def _onclick_search(self):
         """called when self._search_button is clicked"""
         print(f'You wrote {self.searchInput.get()} and clicked the search button')
     
@@ -90,3 +93,7 @@ class InternshipSearchFrame(tk.Frame):
     def _onselect_year(self, yearInput: str):
         """called when self._year is updated"""
         print(f'You selected year {yearInput}')
+    
+    def _onclick_filter(self):
+        """called when self._filter_button is clicked"""
+        print(f'You clicked the filter button! 🍀')
