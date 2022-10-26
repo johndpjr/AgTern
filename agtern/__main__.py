@@ -6,8 +6,8 @@ from .gui import Application
 from .server import import_companies, sort_companies, start_server
 
 
-def main(noscrape: bool = True, headless_scraper: bool = True, scrape_only: bool = False):
-    if not noscrape:
+def main(no_scrape: bool = True, headless_scraper: bool = True, scrape_only: bool = False):
+    if not no_scrape:
         start_server(headless_scraper, scrape_only)
 
     if not scrape_only:
@@ -22,7 +22,7 @@ def run_cli():
     parser = ArgumentParser(prog="AgTern")
     parser.add_argument("--update-companies", action="store_true")
     parser.add_argument("--show-scraper", action="store_true")
-    parser.add_argument("--noscrape", action="store_true")
+    parser.add_argument("--no-scrape", action="store_true")
     parser.add_argument("--scrape-only", action="store_true")
     parser.add_argument("--dev", action="store_true")
     args = parser.parse_args()
@@ -44,7 +44,7 @@ def run_cli():
         LOG.info("Starting program...")
         try:
             main(
-                noscrape=args.noscrape,
+                no_scrape=args.no_scrape,
                 headless_scraper=not args.show_scraper and not args.scrape_only,
                 scrape_only=args.scrape_only
             )

@@ -2,7 +2,7 @@ from typing import Callable, List, Union, Type, Any, Dict
 
 from pydantic import validate_arguments, ValidationError
 
-from agtern import LOG
+from ....common import LOG
 from .scrape_action_registry import get_action
 from .models import ScrapingContext
 

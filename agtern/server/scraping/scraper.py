@@ -17,8 +17,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 
 from .actions import ScrapingContext, parse_config
-from ... import LOG
-from ...common import DataFile
+from ...common import LOG, DataFile
 
 
 class WebScraper:
