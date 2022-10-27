@@ -3,12 +3,8 @@ import tkinter.ttk as ttk
 from threading import Thread
 from time import sleep
 
-from ...common import (
-    api_get_all_internships,
-    DataFile,
-    Internship,
-    LOG,
-)
+from ...common import LOG, DataFile, Internship, api_get_all_internships
+from .internship_entry_frame import InternshipEntryFrame
 from .vertical_scrolled_frame import VerticalScrolledFrame
 
 
@@ -66,19 +62,11 @@ class InternshipListFrame(tk.Frame):
 
     def _populate_internships(self):
         internships = api_get_all_internships()
-        TButton = ttk.Style(self._frm_iship_list_container)
-        TButton.configure('TButton', justify=tk.CENTER)
 
         for i in internships:
-            text = f"{i.company}\n{i.title}"
-            if i.period or i.year:
-                text += "\n" + f"{i.period} {i.year}".strip()
-
-            ttk.Button(
-                self._frm_iship_list_container.interior,
-                text=text,
-                command=lambda i=i: self._on_iship_list_item_bttn_click(i),
-            ).pack(side=tk.TOP, fill=tk.X, ipadx=5, padx=4, pady=2)
+            entry = InternshipEntryFrame(self._frm_iship_list_container.interior)
+            entry.populate_entry(i)
+            entry.pack(side=tk.TOP, fill=tk.X)
 
     def _on_search_bttn_click(self):
         """Responds to the event when the "Search"

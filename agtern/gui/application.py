@@ -4,12 +4,13 @@ import tkinter.ttk as ttk
 
 from ..common import DataFile
 from .frames import (
-    InternshipSearchFrame,
     InternshipDetailFrame,
     InternshipListFrame,
+    InternshipSearchFrame,
     ProfileFrame,
     TopBarFrame,
 )
+
 
 class Application(tk.Tk):
     """GUI for AgTern."""
@@ -24,6 +25,24 @@ class Application(tk.Tk):
 
         self.title("AgTern")
         self.set_window_size()
+
+        self.style = ttk.Style(self)
+        self.style.configure(
+            "TButton",
+            bd=0,
+            relief="solid",
+            justify=tk.CENTER,
+            background="white",
+        )
+        self.style.configure(
+            "TLabel",
+            background="white",
+        )
+        self.style.configure(
+            "TMenubutton",
+            background="white",
+        )
+        self.style.map("TButton", background=[("disabled", "white")])
 
         # Create global frames
         self.frm_top_bar = TopBarFrame(self, relief=tk.RAISED, bd=2)
@@ -48,7 +67,7 @@ class Application(tk.Tk):
         can be modified."""
         # Clear previous view frames
         self.view_clear()
-        
+
         self.frm_profile_detail.pack(side=tk.TOP, fill=tk.BOTH, padx=(0, 3), pady=3)
 
     def view_search(self):
