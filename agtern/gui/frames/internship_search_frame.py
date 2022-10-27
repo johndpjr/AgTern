@@ -31,7 +31,7 @@ class InternshipSearchFrame(tk.Frame):
         self.MAJOR_OPTIONS = ProfileFrame.MAJOR_OPTIONS
         self.SEMESTER_OPTIONS = ('Spring', 'Summer', 'Fall')
         self.SEMESTER_CONVERT = DoubleDict({'Spring':0, 'Summer':1, 'Fall':2})
-        self.YEAR_OPTIONS = tuple(range(2022, 2031))
+        self.YEAR_OPTIONS = tuple(range(2023, 2031))
         
         # 1 setup items!
         # 1.1 Give search bar a frame of its own...
