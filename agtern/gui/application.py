@@ -39,10 +39,13 @@ class Application(tk.Tk):
             background="white",
         )
         self.style.configure(
+            "TFrame",
+            background="white",
+        )
+        self.style.configure(
             "TMenubutton",
             background="white",
         )
-        self.style.map("TButton", background=[("disabled", "white")])
 
         # Create global frames
         self.frm_top_bar = TopBarFrame(self, relief=tk.RAISED, bd=2)

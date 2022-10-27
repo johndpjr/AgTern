@@ -21,8 +21,9 @@ class InternshipEntryFrame(tk.Frame):
         self._var_year = tk.StringVar()
         self._var_icon = tk.StringVar()
 
-        self.btn_entry = ttk.Button(self, style="TButton")
-        self.btn_entry.state(["disabled"])
+        self.card_entry = tk.Frame(
+            self, background="white", highlightthickness=2, highlightbackground="black"
+        )
         self.lb_name = ttk.Label(self, textvariable=self._var_name, style="TLabel")
         self.lb_title = ttk.Label(self, textvariable=self._var_title, style="TLabel")
         self.lb_period = ttk.Label(self, textvariable=self._var_period, style="TLabel")
@@ -35,7 +36,7 @@ class InternshipEntryFrame(tk.Frame):
             anchor=tk.CENTER,
         )
 
-        self.btn_entry.place_configure(
+        self.card_entry.place_configure(
             relx=0.05, rely=0.05, relwidth=0.9, relheight=0.9
         )
         self.lb_icon.place_configure(relx=0.1, rely=0.2, relwidth=0.25, relheight=0.6)
