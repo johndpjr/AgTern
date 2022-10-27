@@ -26,13 +26,15 @@ class InternshipSearchFrame(tk.Frame):
         super().__init__(parent, *args, **kwargs)
 
         #constants
-        self.PAD_OPTIONS = {'padx': 4, 'pady': 4}
+        self.PAD_OPTIONS = {'padx': 4, 'pady': 4, 'ipadx':2, 'ipady':2}
         self.SORT_OPTIONS = ('Alphabetical ⬇️', 'Alphabetical ⬆️', 'Date ⬇️', 'Date ⬆️')
         self.MAJOR_OPTIONS = ProfileFrame.MAJOR_OPTIONS
         self.SEMESTER_OPTIONS = ('Spring', 'Summer', 'Fall')
         self.SEMESTER_CONVERT = DoubleDict({'Spring':0, 'Summer':1, 'Fall':2})
         self.YEAR_OPTIONS = tuple(range(2023, 2031))
         
+
+
         # 1 setup items!
         # 1.1 Give search bar a frame of its own...
         self._frame_search = tk.Frame(self)
@@ -59,9 +61,11 @@ class InternshipSearchFrame(tk.Frame):
         # 1.7 Filter Button on the bottom
         self._filter_button = ttk.Button(self, text='Filter', command=self._onclick_filter)
 
+
+
         # 2 now display them!
-        self._frame_search.grid(row=0)
-        self._search_input.grid(row=0, column=0, stick='EW', padx=2, ipady=3)
+        self._frame_search.grid(row=0, padx=4)
+        self._search_input.grid(row=0, column=0, stick='EW', padx=4, ipady=2)
         self._search_button.grid(row=0, column=1, **self.PAD_OPTIONS)
         self._search_button.focus()
         self._sortby.grid(row=1, columnspan=2, sticky='EW', **self.PAD_OPTIONS)
@@ -71,6 +75,8 @@ class InternshipSearchFrame(tk.Frame):
         self._semester.grid(row=5, sticky='EW', **self.PAD_OPTIONS)
         self._year.grid(row=6, stick='EW', **self.PAD_OPTIONS)
         self._filter_button.grid(row=7, sticky='EW', **self.PAD_OPTIONS)
+
+
 
     def _onclick_search(self):
         """called when self._search_button is clicked"""

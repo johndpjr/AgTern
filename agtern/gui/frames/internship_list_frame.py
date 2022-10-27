@@ -1,4 +1,5 @@
 import tkinter as tk
+import tkinter.ttk as ttk
 from threading import Thread
 from time import sleep
 
@@ -24,7 +25,7 @@ class InternshipListFrame(tk.Frame):
         self.photoimage = tk.PhotoImage(
             file="agtern/gui/assets/search-icon.png"
         ).subsample(3, 3)
-        self._bttn_search = tk.Button(
+        self._bttn_search = ttk.Button(
             self,
             text="Search",
             image=self.photoimage,
@@ -62,17 +63,19 @@ class InternshipListFrame(tk.Frame):
 
     def _populate_internships(self):
         internships = api_get_all_internships()
+        TButton = ttk.Style(self._frm_iship_list_container)
+        TButton.configure('TButton', justify=tk.CENTER)
 
         for i in internships:
             text = f"{i.company}\n{i.title}"
             if i.period or i.year:
                 text += "\n" + f"{i.period} {i.year}".strip()
 
-            tk.Button(
+            ttk.Button(
                 self._frm_iship_list_container.interior,
                 text=text,
                 command=lambda i=i: self._on_iship_list_item_bttn_click(i),
-            ).pack(side=tk.TOP, fill=tk.X, padx=(0, 3))
+            ).pack(side=tk.TOP, fill=tk.X, ipadx=5, padx=4, pady=2)
 
     def _on_search_bttn_click(self):
         """Responds to the event when the "Search"

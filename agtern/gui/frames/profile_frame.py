@@ -54,7 +54,7 @@ class ProfileFrame(tk.Frame):
         # Variables that the parent (and thus all children)
         #   have access to
 
-        self._var_win_size = tk.StringVar(value="640x480")
+        self._var_win_size = tk.StringVar(value="1280x720")
         self._var_name = tk.StringVar(value="Enter here.")
         self._var_major = tk.StringVar(value="Computer Science and Engineering")
         self._var_grad_year = tk.StringVar(value=datetime.now().year)
