@@ -2,7 +2,7 @@ import configparser
 import tkinter as tk
 import tkinter.ttk as ttk
 
-from ..pipelines import DataFile
+from ..common import DataFile
 from .frames import (
     InternshipSearchFrame,
     InternshipDetailFrame,

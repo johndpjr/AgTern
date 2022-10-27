@@ -15,9 +15,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 
-from ...logger import LOG
-from ...models import Internship
-from ..data import DataFile
+from ...common import DataFile, LOG, Internship
 
 
 def scrape(headless: bool = True):

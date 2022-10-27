@@ -1,7 +1,7 @@
 import tkinter as tk
 from datetime import datetime
 
-from ...logger import LOG
+from ...common import LOG
 
 
 class ProfileFrame(tk.Frame):
