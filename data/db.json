@@ -1,0 +1,302 @@
+[
+  {
+    "company": "Tesla",
+    "title": "Autopilot Foundations Internship C/C++",
+    "category": "Autopilot & Robotics",
+    "location": "Palo Alto, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Payroll Internship (Spring 2023)",
+    "category": "Finance",
+    "location": "Draper, Utah"
+  },
+  {
+    "company": "Tesla",
+    "title": "Immigration Internship (Spring 2023)",
+    "category": "HR",
+    "location": "Austin, Texas"
+  },
+  {
+    "company": "Tesla",
+    "title": "Craftsmanship Internship (Spring 2023)",
+    "category": "Engineering & Information Technology",
+    "location": "Fremont, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Firmware Engineer Internship, Autonomy",
+    "category": "Autopilot & Robotics",
+    "location": "Palo Alto, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Autopilot Autonomy Tools Internship",
+    "category": "Autopilot & Robotics",
+    "location": "Palo Alto, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Autopilot Backend Engineering Internship",
+    "category": "Autopilot & Robotics",
+    "location": "Palo Alto, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Product Design Internship (Spring 2023)",
+    "category": "Design",
+    "location": "Hawthorne, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Car Design Internship (Spring 2023)",
+    "category": "Design",
+    "location": "Hawthorne, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Vehicle Controls Internship (Spring 2023)",
+    "category": "Engineering & Information Technology",
+    "location": "Palo Alto, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Digital Modeling Internship (Summer 2023)",
+    "category": "Design",
+    "location": "Hawthorne, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Learning Evaluation Internship (Spring 2023)",
+    "category": "HR",
+    "location": "Rogers, Minnesota"
+  },
+  {
+    "company": "Tesla",
+    "title": "Instructional Design Internship (Spring 2023)",
+    "category": "Construction & Facilities",
+    "location": "Fremont, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Power Systems Internship (Spring 2023)",
+    "category": "Energy - Solar & Storage",
+    "location": "Palo Alto, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Mechanical Engineer Internship (Spring 2023)",
+    "category": "Engineering & Information Technology",
+    "location": "Bellevue, Washington"
+  },
+  {
+    "company": "Tesla",
+    "title": "Parts Trainee (Parts Advisor Internship)",
+    "category": "Supply Chain",
+    "location": "Portland, Oregon"
+  },
+  {
+    "company": "Tesla",
+    "title": "Parts Trainee (Parts Advisor Internship)",
+    "category": "Supply Chain",
+    "location": "Bellevue, Washington"
+  },
+  {
+    "company": "Tesla",
+    "title": "Parts Trainee (Parts Advisor Internship)",
+    "category": "Supply Chain",
+    "location": "Seattle, Washington"
+  },
+  {
+    "company": "Tesla",
+    "title": "Parts Trainee (Parts Advisor Internship)",
+    "category": "Supply Chain",
+    "location": "Los Angeles, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Parts Trainee (Parts Advisor Internship)",
+    "category": "Supply Chain",
+    "location": "Van Nuys, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Parts Trainee (Parts Advisor Internship)",
+    "category": "Supply Chain",
+    "location": "Agoura Hills, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Parts Trainee (Parts Advisor Internship)",
+    "category": "Supply Chain",
+    "location": "Irvine, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Parts Trainee (Parts Advisor Internship)",
+    "category": "Supply Chain",
+    "location": "Buena Park, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Parts Trainee (Parts Advisor Internship)",
+    "category": "Supply Chain",
+    "location": "Burbank, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Parts Trainee (Parts Advisor Internship)",
+    "category": "Supply Chain",
+    "location": "Lake Forest, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Parts Trainee (Parts Advisor Internship)",
+    "category": "Supply Chain",
+    "location": "Alhambra, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Parts Trainee (Parts Advisor Internship)",
+    "category": "Supply Chain",
+    "location": "San Diego, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Parts Trainee (Parts Advisor Internship)",
+    "category": "Supply Chain",
+    "location": "Temecula, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Parts Trainee (Parts Advisor Internship)",
+    "category": "Vehicle Service",
+    "location": "Berkeley, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Parts Trainee (Parts Advisor Internship)",
+    "category": "Vehicle Service",
+    "location": "Rocklin, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Parts Trainee (Parts Advisor Internship)",
+    "category": "Vehicle Service",
+    "location": "Santa Clara, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Parts Trainee (Parts Advisor Internship)",
+    "category": "Vehicle Service",
+    "location": "Fremont, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Sales Engineering Internship (Spring 2023)",
+    "category": "Engineering & Information Technology",
+    "location": "Palo Alto, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Electrical Design Internship (Spring 2023)",
+    "category": "Energy - Solar & Storage",
+    "location": "Palo Alto, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Electrical Engineering Internship (Spring 2023)",
+    "category": "Energy - Solar & Storage",
+    "location": "Palo Alto, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Digital Content Internship (Spring 2023)",
+    "category": "Design",
+    "location": "Hawthorne, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Software Integration Engineer Internship, Autonomy",
+    "category": "Autopilot & Robotics",
+    "location": "Palo Alto, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Supercharger Operations Internship (Spring 2023)",
+    "category": "Energy - Solar & Storage",
+    "location": "Palo Alto, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Product Knowledge Internship (Spring 2023)",
+    "category": "External Relations & Employee Experience",
+    "location": "Fremont, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Business Analyst Internship (Spring 2023)",
+    "category": "Energy - Solar & Storage",
+    "location": "Fremont, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Battery Engineering Internship (Spring 2023)",
+    "category": "Engineering & Information Technology",
+    "location": "Austin, Texas"
+  },
+  {
+    "company": "Tesla",
+    "title": "IT Operations Internship (Spring 2023)",
+    "category": "Engineering & Information Technology",
+    "location": "Fremont, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Information Security Internship (Spring 2023)",
+    "category": "Engineering & Information Technology",
+    "location": "Fremont, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Data Engineering/Scientist Internship (Spring 2023)",
+    "category": "Engineering & Information Technology",
+    "location": "Fremont, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Product Management Internship (Spring 2023)",
+    "category": "Energy - Solar & Storage",
+    "location": "Palo Alto, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Public Policy Internship (Spring 2023)",
+    "category": "Legal & Government Affairs",
+    "location": "Washington, District Of Columbia"
+  },
+  {
+    "company": "Tesla",
+    "title": "Manufacturing Engineering Internship (Spring 2023)",
+    "category": "Engineering & Information Technology",
+    "location": "Fremont, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Software Engineering Internship (Spring 2023)",
+    "category": "Engineering & Information Technology",
+    "location": "Palo Alto, California"
+  },
+  {
+    "company": "Tesla",
+    "title": "Pathway to START Program Internship",
+    "category": "Vehicle Service",
+    "location": "Remote"
+  },
+  {
+    "company": "Tesla",
+    "title": "Tech Trainee (Automotive Service Internship)",
+    "category": "Vehicle Service",
+    "location": "Burbank, California"
+  }
+]

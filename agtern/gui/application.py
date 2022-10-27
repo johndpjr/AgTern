@@ -4,12 +4,12 @@ import tkinter.ttk as ttk
 
 from ..common import DataFile
 from .frames import (
+    InternshipSearchFrame,
     InternshipDetailFrame,
     InternshipListFrame,
     ProfileFrame,
     TopBarFrame,
 )
-
 
 class Application(tk.Tk):
     """GUI for AgTern."""
@@ -31,6 +31,7 @@ class Application(tk.Tk):
         self.frm_internship_list = InternshipListFrame(self)
         self._separator = ttk.Separator(self, orient=tk.VERTICAL)
         self.frm_internship_detail = InternshipDetailFrame(self)
+        self.frm_internship_search = InternshipSearchFrame(self)
 
         # Pack TopBarFrame at the top and fill the frame in the X direction
         self.frm_top_bar.pack(side=tk.TOP, fill=tk.X, pady=(0, 3))
@@ -47,7 +48,7 @@ class Application(tk.Tk):
         can be modified."""
         # Clear previous view frames
         self.view_clear()
-
+        
         self.frm_profile_detail.pack(side=tk.TOP, fill=tk.BOTH, padx=(0, 3), pady=3)
 
     def view_search(self):
@@ -59,15 +60,17 @@ class Application(tk.Tk):
         # Clear previous view frames
         self.view_clear()
 
-        # Pack InternshipListFrame on the left and fill the frame
-        #   in both directions
-        self.frm_internship_list.pack(side=tk.LEFT, fill=tk.BOTH, padx=(3, 0), pady=3)
+        self.frm_internship_search.pack(side=tk.LEFT, fill=tk.Y, padx=(5, 3), pady=3)
         # Add a Separator widget to divide the previous and next frames
         self._separator.pack(side=tk.LEFT, fill=tk.Y, padx=6, pady=3)
+
+        # Pack InternshipListFrame on the left and fill the frame
+        #   in both directions
+        self.frm_internship_list.pack(side=tk.LEFT, fill=tk.Y, padx=3, pady=3)
         # Pack InternshipDetailFrame on the right side and fill the frame
         #   in both directions
         self.frm_internship_detail.pack(
-            side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(0, 3), pady=3
+            side=tk.RIGHT, fill=tk.BOTH, expand=True, padx=(0, 3), pady=3
         )
 
     def view_clear(self):

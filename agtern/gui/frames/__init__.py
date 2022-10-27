@@ -3,3 +3,4 @@ from .internship_list_frame import InternshipListFrame
 from .profile_frame import ProfileFrame
 from .top_bar_frame import TopBarFrame
 from .vertical_scrolled_frame import VerticalScrolledFrame
+from .internship_search_frame import InternshipSearchFrame

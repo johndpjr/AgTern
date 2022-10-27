@@ -1,4 +1,5 @@
 import tkinter as tk
+import tkinter.ttk as ttk
 import webbrowser
 
 from ...common import LOG, Internship
@@ -38,8 +39,9 @@ class InternshipDetailFrame(tk.Frame):
 
         # "Apply now" button
         self._var_iship_link = tk.StringVar()
-        self._bttn_apply_now = tk.Button(
-            self, text="Apply now", command=self._on_apply_now_bttn_click
+        self._var_iship_img = tk.PhotoImage(file='agtern/gui/assets/link-icon.png').subsample(70,70)
+        self._bttn_apply_now = ttk.Button(
+            self, text="Apply now", image=self._var_iship_img, compound=tk.RIGHT, command=self._on_apply_now_bttn_click
         )
 
         # Description (e.g. "At Lockheed Martin we are...")
