@@ -1,8 +1,6 @@
 from textwrap import fill
 import tkinter as tk
 import tkinter.ttk as ttk
-from ...models import Internship
-from ...logger import LOG
 
 from .profile_frame import ProfileFrame
 
