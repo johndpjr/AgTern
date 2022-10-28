@@ -16,7 +16,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 
-from .actions import ScrapingContext, parse_config
+from .actions import ScrapingContext, parse_config, dump_schemas
 from ...common import LOG, DataFile
 
 
@@ -83,6 +83,9 @@ class WebScraper:
 
 
 ScrapingContext.update_forward_refs(WebScraper=WebScraper)  # Allow ScrapingContext to reference WebScraper
+
+
+# dump_schemas()  # Export schemas as json files (currently broken)
 
 
 def scrape(headless: bool = True):

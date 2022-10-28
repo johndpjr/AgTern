@@ -4,7 +4,7 @@ from enum import Enum
 from pydantic import BaseModel
 
 
-class Season(Enum):
+class Season(str, Enum):
     spring = "Spring"
     summer = "Summer"
     fall = "Fall"
@@ -21,6 +21,6 @@ class Internship(BaseModel):
     title: str
     link: str
     period: Season = ""
-    year: int = ""
+    year: int = 0
     location: str = ""
     description: str = ""

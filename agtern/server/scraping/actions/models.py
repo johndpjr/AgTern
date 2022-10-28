@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 import re
+from abc import ABCMeta
 from enum import Enum
 from inspect import Parameter
 from types import MappingProxyType
-from typing import Callable, Optional, List, Pattern, Union
+from typing import Callable, Optional, List, Pattern, Union, ForwardRef
 
 import pandas as pd
-from pydantic import BaseModel, conint, validator, root_validator, ValidationError
+from pydantic import *
 
 
 # See https://pydantic-docs.helpmanual.io/usage/types/ for a complete list of Pydantic built-in type annotations
@@ -26,10 +27,17 @@ class ScrapingContext(BaseModel):
 class ScrapeAction(BaseModel):
     name: str
     parameters: MappingProxyType[str, Parameter]
+    model: ABCMeta  # type: ModelMetaclass
     execute: Callable
 
     class Config:
         arbitrary_types_allowed = True
+
+    @validator("model", pre=True)
+    def validate_model(cls, value):
+        if isinstance(value, ABCMeta):
+            return value
+        raise ValueError("\"model\" is not a Pydantic model!")
 
 
 class ScrapeActionModel(BaseModel):
