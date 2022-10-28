@@ -1,7 +1,7 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 
-from ...common import LOG
+from ....common import LOG
 
 
 class TopBarFrame(tk.Frame):

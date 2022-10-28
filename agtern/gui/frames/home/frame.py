@@ -2,9 +2,9 @@ import configparser
 import tkinter as tk
 import tkinter.ttk as ttk
 
-from .internship_detail_frame import InternshipDetailFrame
-from .internship_list_frame import InternshipListFrame
-from .internship_search_frame import InternshipSearchFrame
+from .detail import InternshipDetailFrame
+from .list import InternshipListFrame
+from .search import InternshipSearchFrame
 
 
 class HomeFrame(tk.Frame):

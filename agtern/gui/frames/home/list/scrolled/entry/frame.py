@@ -2,7 +2,7 @@ import tkinter as tk
 from datetime import datetime
 from tkinter import ttk
 
-from ...common import LOG, Internship
+from .......common import Internship
 
 
 class InternshipEntryFrame(tk.Frame):

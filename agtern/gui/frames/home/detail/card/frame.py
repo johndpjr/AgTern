@@ -1,8 +1,8 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 
-from ...common import LOG, Internship
-from .internship_apply_button import InternshipApplyButton
+from ......common import Internship
+from .apply_button import InternshipApplyButton
 
 
 class InternshipDetailCard(tk.Frame):

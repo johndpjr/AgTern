@@ -3,9 +3,8 @@ import tkinter.ttk as ttk
 from threading import Thread
 from time import sleep
 
-from ...common import LOG, DataFile, Internship, api_get_all_internships
-from .internship_entry_frame import InternshipEntryFrame
-from .vertical_scrolled_frame import VerticalScrolledFrame
+from .....common import LOG, DataFile, Internship, api_get_all_internships
+from .scrolled import InternshipEntryFrame, VerticalScrolledFrame
 
 
 class InternshipListFrame(tk.Frame):
