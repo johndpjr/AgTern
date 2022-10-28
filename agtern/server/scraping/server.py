@@ -20,10 +20,11 @@ def get_all_internships() -> list:
         internships_df = pd.read_csv(internships_csv.path).replace({nan: None})
         internships = []
         for iship in internships_df.to_dict(orient="records"):
-            parameters = []
-            for field in fields(Internship):
-                parameters.append(iship[field.name] if field.name in iship else "")
-            internships.append(Internship(*parameters))
+            data = {}
+            for key, value in iship.items():
+                if value is not None:
+                    data[key] = value
+            internships.append(Internship.parse_obj(data))
     except pd.errors.EmptyDataError:
         return []
     return internships

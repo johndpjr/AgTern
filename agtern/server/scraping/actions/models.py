@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import re
+from enum import Enum
 from inspect import Parameter
 from types import MappingProxyType
 from typing import Callable, Optional, List, Pattern, Union
@@ -80,11 +81,19 @@ class RegexConfigModel(BaseModel):
             return RegexConfigModel.construct(**values)
 
 
+class DataType(str, Enum):
+    int = "int"
+    float = "float"
+    str = "str"
+    bool = "bool"
+
+
 class ScrapePropertyModel(ScrapeActionModel):
     xpath: str = None
     value: str = None  # Constant string to use as a column value
     html_property: str = "innerText"
     regex: Optional[RegexConfigModel] = None
+    store_as: DataType = DataType.str
 
     @root_validator(pre=True)
     def validate_value(cls, values):

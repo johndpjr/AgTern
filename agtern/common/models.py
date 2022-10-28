@@ -1,17 +1,26 @@
 from dataclasses import dataclass
+from enum import Enum
+
+from pydantic import BaseModel
 
 
-# TODO: Refactor this dataclass into a pydantic Model or dataclass
+class Season(Enum):
+    spring = "Spring"
+    summer = "Summer"
+    fall = "Fall"
+    winter = "Winter"
+
+    def __str__(self):
+        return self.value
 
 
-@dataclass
-class Internship:
+class Internship(BaseModel):
     """Models internship details."""
 
     company: str
     title: str
-    year: str
-    period: str
     link: str
+    period: Season = ""
+    year: int = ""
     location: str = ""
     description: str = ""

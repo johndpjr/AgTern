@@ -58,5 +58,5 @@ def scrape(ctx: ScrapingContext, properties: List[ScrapePropertyModel]):
                 else:
                     text = prop.regex.default
             contents.append(text)
-        ctx.data[prop.name] = pd.Series(contents)
+        ctx.data[prop.name] = pd.Series(contents, dtype=prop.store_as)
     ctx.data["company"] = ctx.company
