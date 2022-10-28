@@ -2,7 +2,7 @@ import tkinter as tk
 import tkinter.ttk as ttk
 from textwrap import fill
 
-from .profile_frame import ProfileFrame
+from .settings_frame import SettingsFrame
 
 
 # A dict, keyed by association
@@ -26,18 +26,19 @@ class InternshipSearchFrame(tk.Frame):
 
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
+        self.configure(background="white")
 
         # constants
         self.PAD_OPTIONS = {"padx": 4, "pady": 4, "ipadx": 2, "ipady": 2}
         self.SORT_OPTIONS = ("Alphabetical ⬇️", "Alphabetical ⬆️", "Date ⬇️", "Date ⬆️")
-        self.MAJOR_OPTIONS = ProfileFrame.MAJOR_OPTIONS
+        self.MAJOR_OPTIONS = SettingsFrame.MAJOR_OPTIONS
         self.SEMESTER_OPTIONS = ("Spring", "Summer", "Fall")
         self.SEMESTER_CONVERT = DoubleDict({"Spring": 0, "Summer": 1, "Fall": 2})
         self.YEAR_OPTIONS = tuple(range(2023, 2031))
 
         # 1 setup items!
         # 1.1 Give search bar a frame of its own...
-        self._frame_search = tk.Frame(self)
+        self._frame_search = tk.Frame(self, background="white")
         self.searchInput = tk.StringVar()  # represents current input
         self._search_input = ttk.Entry(
             self._frame_search, textvariable=self.searchInput, width=25
@@ -48,7 +49,10 @@ class InternshipSearchFrame(tk.Frame):
             3, 3
         )  # search button image
         self._search_button = ttk.Button(
-            self._frame_search, image=self.search_icon, command=self._onclick_search
+            self._frame_search,
+            image=self.search_icon,
+            command=self._onclick_search,
+            style="White.TButton",
         )  # the actual button
         # 1.2 Sort?
         self.sortInput = tk.StringVar()
@@ -60,8 +64,10 @@ class InternshipSearchFrame(tk.Frame):
             command=self._onselect_sort,
         )
         # 1.3 Separator/Labels
-        self._line = ttk.Separator(self)
-        self._label_filter = tk.Label(self, text="Filters", anchor=tk.W)  # text
+        self._line = ttk.Separator(self, orient="horizontal")
+        self._label_filter = ttk.Label(
+            self, text="Filters", style="DetailFrame.TLabel"
+        )  # text
         # 1.4 Major?
         self.majorInput = tk.StringVar()
         self._major = ttk.OptionMenu(
@@ -92,14 +98,18 @@ class InternshipSearchFrame(tk.Frame):
         )
         # 1.7 Filter Button on the bottom
         self._filter_button = ttk.Button(
-            self, text="Filter", command=self._onclick_filter
+            self, text="Filter", command=self._onclick_filter, style="White.TButton"
         )
+
+        # 1.8 Change background of OptionMenu options
+        self._major["menu"].config(bg="white")
+        self._year["menu"].config(bg="white")
+        self._semester["menu"].config(bg="white")
 
         # 2 now display them!
         self._frame_search.grid(row=0, padx=4)
         self._search_input.grid(row=0, column=0, stick="EW", padx=4, ipady=2)
         self._search_button.grid(row=0, column=1, **self.PAD_OPTIONS)
-        self._search_button.focus()
         self._sortby.grid(row=1, columnspan=2, sticky="EW", **self.PAD_OPTIONS)
         self._line.grid(row=2, columnspan=2, sticky="EW", **self.PAD_OPTIONS)
         self._label_filter.grid(row=3, sticky="EW", **self.PAD_OPTIONS)

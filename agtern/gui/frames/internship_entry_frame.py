@@ -22,12 +22,20 @@ class InternshipEntryFrame(tk.Frame):
         self._var_icon = tk.StringVar()
 
         self.card_entry = tk.Frame(
-            self, background="white", highlightthickness=2, highlightbackground="black"
+            self, background="white", highlightthickness=1, highlightbackground="black"
         )
-        self.lb_name = ttk.Label(self, textvariable=self._var_name, style="TLabel")
-        self.lb_title = ttk.Label(self, textvariable=self._var_title, style="TLabel")
-        self.lb_period = ttk.Label(self, textvariable=self._var_period, style="TLabel")
-        self.lb_year = ttk.Label(self, textvariable=self._var_year, style="TLabel")
+        self.lb_name = ttk.Label(
+            self, textvariable=self._var_name, style="EntryFrame.TLabel"
+        )
+        self.lb_title = ttk.Label(
+            self, textvariable=self._var_title, style="EntryFrame.TLabel"
+        )
+        self.lb_period = ttk.Label(
+            self, textvariable=self._var_period, style="EntryFrame.TLabel"
+        )
+        self.lb_year = ttk.Label(
+            self, textvariable=self._var_year, style="EntryFrame.TLabel"
+        )
         self.lb_icon = tk.Label(
             self,
             textvariable=self._var_icon,
@@ -48,12 +56,24 @@ class InternshipEntryFrame(tk.Frame):
         # bind mouse click input
         def _bound_to_mouseclick(event):
             self.bind_all("<Button-1>", self.populate_detail_frame)
+            self.card_entry.config(bg="#CC2222")
+            self.lb_icon.config(bg="#CC2222", fg="white")
+            self.lb_name.config(style="EntryFrameHighlight.TLabel")
+            self.lb_title.config(style="EntryFrameHighlight.TLabel")
+            self.lb_period.config(style="EntryFrameHighlight.TLabel")
+            self.lb_year.config(style="EntryFrameHighlight.TLabel")
 
         self.bind("<Enter>", _bound_to_mouseclick)
 
         # unbind mouse click input
         def _unbound_to_mouseclick(event):
             self.unbind_all("<Button-1>")
+            self.card_entry.config(bg="white")
+            self.lb_icon.config(bg="white", fg="black")
+            self.lb_name.config(style="EntryFrame.TLabel")
+            self.lb_title.config(style="EntryFrame.TLabel")
+            self.lb_period.config(style="EntryFrame.TLabel")
+            self.lb_year.config(style="EntryFrame.TLabel")
 
         self.bind("<Leave>", _unbound_to_mouseclick)
 

@@ -13,6 +13,7 @@ class InternshipListFrame(tk.Frame):
 
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
+        self.configure(background="white")
 
         self._var_search_result = tk.StringVar()
         self._entry_search = tk.Entry(

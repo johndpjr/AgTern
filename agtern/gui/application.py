@@ -3,13 +3,8 @@ import tkinter as tk
 import tkinter.ttk as ttk
 
 from ..common import DataFile
-from .frames import (
-    InternshipDetailFrame,
-    InternshipListFrame,
-    InternshipSearchFrame,
-    ProfileFrame,
-    TopBarFrame,
-)
+from .frames import HomeFrame, SettingsFrame, TopBarFrame
+from .styles import set_styles
 
 
 class Application(tk.Tk):
@@ -27,79 +22,36 @@ class Application(tk.Tk):
         self.set_window_size()
 
         self.style = ttk.Style(self)
-        self.style.configure(
-            "TButton",
-            bd=0,
-            relief="solid",
-            justify=tk.CENTER,
-            background="white",
-        )
-        self.style.configure(
-            "TLabel",
-            background="white",
-        )
-        self.style.configure(
-            "TFrame",
-            background="white",
-        )
-        self.style.configure(
-            "TMenubutton",
-            background="white",
-        )
+        self.style.theme_use("clam")
+        self.configure(background="white")
+        set_styles(self.style)
 
         # Create global frames
         self.frm_top_bar = TopBarFrame(self, relief=tk.RAISED, bd=2)
-        self.frm_profile_detail = ProfileFrame(self)
-        self.frm_internship_list = InternshipListFrame(self)
-        self._separator = ttk.Separator(self, orient=tk.VERTICAL)
-        self.frm_internship_detail = InternshipDetailFrame(self)
-        self.frm_internship_search = InternshipSearchFrame(self)
+        self.frm_body = HomeFrame(self)
+        self.frm_settings = SettingsFrame(self)
 
         # Pack TopBarFrame at the top and fill the frame in the X direction
-        self.frm_top_bar.pack(side=tk.TOP, fill=tk.X, pady=(0, 3))
+        self.frm_top_bar.place_configure(relx=0, rely=0, relwidth=1, relheight=0.075)
+        self.frm_body.place_configure(relx=0, rely=0.075, relwidth=1, relheight=0.925)
 
-        # Send user to profile if config.ini not set
-        # Otherwise go to internship search
-        if not self.config["StudentProfile"]["name"]:
-            self.view_profile()
-        else:
-            self.view_search()
-
-    def view_profile(self):
+    def view_settings(self):
         """Show the My Profile view, where window and profile information
         can be modified."""
-        # Clear previous view frames
-        self.view_clear()
-
-        self.frm_profile_detail.pack(side=tk.TOP, fill=tk.BOTH, padx=(0, 3), pady=3)
-
-    def view_search(self):
-        """Display InternshipListFrame and InternshipDetailFrame."""
-        # Restrict access to internship search before config creation
-        if not self.config["StudentProfile"]["name"]:
-            return
-
-        # Clear previous view frames
-        self.view_clear()
-
-        self.frm_internship_search.pack(side=tk.LEFT, fill=tk.Y, padx=(5, 3), pady=3)
-        # Add a Separator widget to divide the previous and next frames
-        self._separator.pack(side=tk.LEFT, fill=tk.Y, padx=6, pady=3)
-
-        # Pack InternshipListFrame on the left and fill the frame
-        #   in both directions
-        self.frm_internship_list.pack(side=tk.LEFT, fill=tk.Y, padx=3, pady=3)
-        # Pack InternshipDetailFrame on the right side and fill the frame
-        #   in both directions
-        self.frm_internship_detail.pack(
-            side=tk.RIGHT, fill=tk.BOTH, expand=True, padx=(0, 3), pady=3
+        self.frm_settings.place_configure(
+            relx=0.025, rely=0.09, relwidth=0.4, relheight=0.5
         )
+
+    def remove_settings(self):
+        """Remove the My Profile view, where window and profile information
+        can be modified."""
+        self.frm_settings.place_forget()
 
     def view_clear(self):
         # Unpack all current widgets except for top bar
-        for widget in self.pack_slaves():
+        for widget in self.place_slaves():
             if self.frm_top_bar is not widget:
-                widget.pack_forget()
+                widget.place_forget()
 
     def set_window_size(self):
         # Set geometry to size stored in config file

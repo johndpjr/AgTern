@@ -10,32 +10,30 @@ class TopBarFrame(tk.Frame):
     def __init__(self, parent, *args, **kwargs):
         # Initialize a Frame (since we inherit from tk.Frame)
         super().__init__(parent, *args, **kwargs)
+        self.configure(background="#CC2222")
         self.PAD_OPTIONS = {"padx": 4, "pady": 4, "ipadx": 2, "ipady": 2}
+        self.var_img = tk.PhotoImage(
+            file="agtern/gui/assets/settings-icon.png"
+        ).subsample(3, 3)
+        self.settings_open = False
 
         # Create all widgets of this frame
         self._bttn_my_profile = ttk.Button(
-            self, text="My Profile", command=self._on_my_profile_bttn_click
-        )
-        self._bttn_search_internships = ttk.Button(
             self,
-            text="Search Internships",
-            command=self._on_search_internships_bttn_click,
+            image=self.var_img,
+            command=self._on_my_profile_bttn_click,
+            padding="5 5 5 5",
+            style="White.TButton",
         )
 
         # Pack all widgets into this frame
         self._bttn_my_profile.pack(side=tk.LEFT, anchor=tk.W, **self.PAD_OPTIONS)
-        self._bttn_search_internships.pack(
-            side=tk.RIGHT, anchor=tk.E, **self.PAD_OPTIONS
-        )
 
     def _on_my_profile_bttn_click(self):
         """Responds to the event when the "My Profile" button is clicked."""
         LOG.info('"My Profile" was clicked')
-        self.master.view_profile()
-
-    def _on_search_internships_bttn_click(self):
-        """Responds to the event when the "Search Internships"
-        button is clicked.
-        """
-        LOG.info('"Search Internships" was clicked')
-        self.master.view_search()
+        if not self.settings_open:
+            self.master.view_settings()
+        else:
+            self.master.remove_settings()
+        self.settings_open = not self.settings_open
