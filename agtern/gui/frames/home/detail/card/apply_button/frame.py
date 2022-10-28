@@ -2,6 +2,8 @@ import tkinter as tk
 import tkinter.ttk as ttk
 import webbrowser
 
+from .......common import LOG
+
 
 class InternshipApplyButton(tk.Frame):
     """A frame containing all specific internship details."""
