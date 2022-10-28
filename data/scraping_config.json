@@ -133,7 +133,26 @@
         "properties": [
           {
             "name": "title",
-            "xpath": "//tbody/tr[@class='tds-table-row']/td[1]"
+            "xpath": "//tbody/tr[@class='tds-table-row']/td[1]",
+            "regex": {
+              "pattern": ".+?intern(ship)?(\\))?",
+              "ignore_case": true
+            }
+          },
+          {
+            "name": "year",
+            "xpath": "//tbody/tr[@class='tds-table-row']/td[1]",
+            "regex": {
+              "pattern": "\\d{4}"
+            }
+          },
+          {
+            "name": "period",
+            "xpath": "//tbody/tr[@class='tds-table-row']/td[1]",
+            "regex": {
+              "pattern": "summer|spring|fall|winter",
+              "ignore_case": true
+            }
           },
           {
             "name": "link",

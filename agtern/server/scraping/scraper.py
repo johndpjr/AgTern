@@ -74,7 +74,7 @@ class WebScraper:
         for action in procedure:
             action_num += 1
             try:
-                LOG.info(f"Running Action {action_num}:")
+                LOG.info(f"Running Action {company_name}:{action_num}...")
                 action()
             except Exception as e:
                 LOG.error(f"ERROR: Could not execute {company_name}:{action_num}!")
@@ -133,7 +133,7 @@ def scrape(headless: bool = True):
 
         # Write DataFrame info to temp data CSV
         # TODO: Write to actual database (AWS?)
-        internships_csv = DataFile("internships.csv", is_temp=True)
+        internships_csv = DataFile("internships.csv", is_temp=True, create_on_init=False)
         internship_df.to_csv(internships_csv.path, index=False, quoting=csv.QUOTE_ALL)
 
         LOG.info("Done!")

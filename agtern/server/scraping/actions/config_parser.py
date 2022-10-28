@@ -1,6 +1,8 @@
 from typing import Callable, List, Union, Type, Any, Dict
 
 from pydantic import validate_arguments, ValidationError
+from pydantic.decorator import ValidatedFunction
+from pydantic.main import BaseModel
 
 from ....common import LOG
 from .scrape_action_registry import get_action
@@ -62,9 +64,9 @@ def parse_config(
                 LOG.debug(f"Executing action {action.name}({', '.join(arg_strings)})")
                 try:
                     # Create validator and validate arguments
-                    validator = validate_arguments(config=config)(action.execute)
+                    validator: ValidatedFunction = validate_arguments(config=config)(action.execute).vd
                     # Attempt to call the function
-                    validator.vd.call(**parameters_dict)
+                    validator.call(**parameters_dict)
                 except ValidationError as errors:
                     LOG.error(errors)
 
