@@ -3,6 +3,7 @@ from datetime import datetime
 from tkinter import ttk
 
 from ....common import LOG
+from ...styles import *
 
 
 class SettingsFrame(tk.Frame):
@@ -51,7 +52,7 @@ class SettingsFrame(tk.Frame):
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
         self.configure(
-            background="#CC2222", highlightthickness=2, highlightbackground="black"
+            background=HIGHLIGHT, highlightthickness=2, highlightbackground=BORDER
         )
 
         # Variables that the parent (and thus all children)
@@ -132,7 +133,7 @@ class SettingsFrame(tk.Frame):
                 row=i + 1, column=1, sticky=tk.NSEW, padx=(0, 3), pady=(0, 2)
             )
             if values[i].__class__ == ttk.OptionMenu:
-                values[i]["menu"].config(bg="white")
+                values[i]["menu"].config(bg=BACKGROUND)
 
         # Display user information (name can be set, all others are hand-picked options)
         ttk.Label(self, text="Profile Information:", style="Settings.TLabel").grid(
@@ -156,7 +157,7 @@ class SettingsFrame(tk.Frame):
                 row=i + 3, column=1, sticky=tk.NSEW, padx=(0, 3), pady=(0, 2)
             )
             if values[i].__class__ == ttk.OptionMenu:
-                values[i]["menu"].config(bg="white")
+                values[i]["menu"].config(bg=BACKGROUND)
 
         # Display error message and button to write information to config
 

@@ -3,6 +3,7 @@ import tkinter.ttk as ttk
 import webbrowser
 
 from .......common import LOG
+from ......styles import *
 
 
 class InternshipApplyButton(tk.Frame):
@@ -13,9 +14,9 @@ class InternshipApplyButton(tk.Frame):
         self.configure(
             width=350,
             height=100,
-            bg="white",
+            bg=BACKGROUND,
             highlightthickness=1,
-            highlightbackground="black",
+            highlightbackground=BORDER,
         )
 
         self._var_link = tk.StringVar()
@@ -34,7 +35,7 @@ class InternshipApplyButton(tk.Frame):
         # bind mouse click input
         def _bound_to_mouseclick(event):
             self.bind_all("<Button-1>", self._on_apply_now_bttn_click)
-            self.configure(bg="#CC2222")
+            self.configure(bg=HIGHLIGHT)
             self._lbl_apply.config(style="DetailFrameHighlight.TLabel")
             self._photo_img.config(style="DetailFrameHighlight.TLabel")
 
@@ -43,7 +44,7 @@ class InternshipApplyButton(tk.Frame):
         # unbind mouse click input
         def _unbound_to_mouseclick(event):
             self.unbind_all("<Button-1>")
-            self.configure(bg="white")
+            self.configure(bg=BACKGROUND)
             self._lbl_apply.config(style="DetailFrame.TLabel")
             self._photo_img.config(style="DetailFrame.TLabel")
 

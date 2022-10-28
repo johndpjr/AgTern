@@ -2,6 +2,7 @@ import tkinter as tk
 import tkinter.ttk as ttk
 
 from .....common import Internship
+from ....styles import *
 from .card import InternshipDetailCard
 
 
@@ -10,7 +11,7 @@ class InternshipDetailFrame(tk.Frame):
 
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
-        self.config(background="white")
+        self.config(background=BACKGROUND)
 
         self._card_iship_details = InternshipDetailCard(self)
 
@@ -24,7 +25,7 @@ class InternshipDetailFrame(tk.Frame):
             wrap=tk.WORD,
             state=tk.DISABLED,
             highlightthickness=1,
-            highlightbackground="black",
+            highlightbackground=BORDER,
         )
 
         self._txtbx_iship_description.grid(row=1, sticky=tk.NSEW)

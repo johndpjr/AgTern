@@ -2,6 +2,7 @@ import tkinter as tk
 import tkinter.ttk as ttk
 
 from ......common import Internship
+from .....styles import *
 from .apply_button import InternshipApplyButton
 
 
@@ -13,9 +14,9 @@ class InternshipDetailCard(tk.Frame):
         self.configure(
             width=700,
             height=250,
-            bg="white",
+            bg=BACKGROUND,
             highlightthickness=1,
-            highlightbackground="black",
+            highlightbackground=BORDER,
         )
 
         self._var_company = tk.StringVar()

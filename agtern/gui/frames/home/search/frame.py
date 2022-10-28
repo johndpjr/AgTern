@@ -2,6 +2,7 @@ import tkinter as tk
 import tkinter.ttk as ttk
 from textwrap import fill
 
+from ....styles import *
 from ...settings import SettingsFrame
 
 
@@ -26,7 +27,7 @@ class InternshipSearchFrame(tk.Frame):
 
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
-        self.configure(background="white")
+        self.configure(background=BACKGROUND)
 
         # constants
         self.PAD_OPTIONS = {"padx": 4, "pady": 4, "ipadx": 2, "ipady": 2}
@@ -38,7 +39,7 @@ class InternshipSearchFrame(tk.Frame):
 
         # 1 setup items!
         # 1.1 Give search bar a frame of its own...
-        self._frame_search = tk.Frame(self, background="white")
+        self._frame_search = tk.Frame(self, background=BACKGROUND)
         self.searchInput = tk.StringVar()  # represents current input
         self._search_input = ttk.Entry(
             self._frame_search, textvariable=self.searchInput, width=25
@@ -102,9 +103,9 @@ class InternshipSearchFrame(tk.Frame):
         )
 
         # 1.8 Change background of OptionMenu options
-        self._major["menu"].config(bg="white")
-        self._year["menu"].config(bg="white")
-        self._semester["menu"].config(bg="white")
+        self._major["menu"].config(bg=BACKGROUND)
+        self._year["menu"].config(bg=BACKGROUND)
+        self._semester["menu"].config(bg=BACKGROUND)
 
         # 2 now display them!
         self._frame_search.grid(row=0, padx=4)

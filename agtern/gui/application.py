@@ -4,7 +4,7 @@ import tkinter.ttk as ttk
 
 from ..common import DataFile
 from .frames import HomeFrame, SettingsFrame, TopBarFrame
-from .styles import set_styles
+from .styles import *
 
 
 class Application(tk.Tk):
@@ -23,7 +23,7 @@ class Application(tk.Tk):
 
         self.style = ttk.Style(self)
         self.style.theme_use("clam")
-        self.configure(background="white")
+        self.configure(background=BACKGROUND)
         set_styles(self.style)
 
         # Create global frames

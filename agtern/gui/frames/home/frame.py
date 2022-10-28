@@ -2,6 +2,7 @@ import configparser
 import tkinter as tk
 import tkinter.ttk as ttk
 
+from ...styles import *
 from .detail import InternshipDetailFrame
 from .list import InternshipListFrame
 from .search import InternshipSearchFrame
@@ -12,7 +13,7 @@ class HomeFrame(tk.Frame):
 
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
-        self.configure(background="white")
+        self.configure(background=BACKGROUND)
 
         # Create global frames
         self.frm_internship_list = InternshipListFrame(self)

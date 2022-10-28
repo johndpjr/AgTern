@@ -4,6 +4,7 @@ from threading import Thread
 from time import sleep
 
 from .....common import LOG, DataFile, Internship, api_get_all_internships
+from ....styles import *
 from .scrolled import InternshipEntryFrame, VerticalScrolledFrame
 
 
@@ -12,7 +13,7 @@ class InternshipListFrame(tk.Frame):
 
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
-        self.configure(background="white")
+        self.configure(background=BACKGROUND)
 
         self._var_search_result = tk.StringVar()
         self._entry_search = tk.Entry(

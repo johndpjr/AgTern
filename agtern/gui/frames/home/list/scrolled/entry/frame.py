@@ -3,6 +3,7 @@ from datetime import datetime
 from tkinter import ttk
 
 from .......common import Internship
+from ......styles import *
 
 
 class InternshipEntryFrame(tk.Frame):
@@ -10,7 +11,7 @@ class InternshipEntryFrame(tk.Frame):
 
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
-        self.configure(width=360, height=120, bg="white")
+        self.configure(width=360, height=120, bg=BACKGROUND)
 
         # Variables that the parent (and thus all children)
         #   have access to
@@ -22,7 +23,10 @@ class InternshipEntryFrame(tk.Frame):
         self._var_icon = tk.StringVar()
 
         self.card_entry = tk.Frame(
-            self, background="white", highlightthickness=1, highlightbackground="black"
+            self,
+            background=BACKGROUND,
+            highlightthickness=1,
+            highlightbackground=BORDER,
         )
         self.lb_name = ttk.Label(
             self, textvariable=self._var_name, style="EntryFrame.TLabel"
@@ -39,7 +43,7 @@ class InternshipEntryFrame(tk.Frame):
         self.lb_icon = tk.Label(
             self,
             textvariable=self._var_icon,
-            bg="white",
+            bg=BACKGROUND,
             font=("Helvetica", 36),
             anchor=tk.CENTER,
         )
@@ -56,8 +60,8 @@ class InternshipEntryFrame(tk.Frame):
         # bind mouse click input
         def _bound_to_mouseclick(event):
             self.bind_all("<Button-1>", self.populate_detail_frame)
-            self.card_entry.config(bg="#CC2222")
-            self.lb_icon.config(bg="#CC2222", fg="white")
+            self.card_entry.config(bg=HIGHLIGHT)
+            self.lb_icon.config(bg=HIGHLIGHT, fg=TEXT_LIGHT)
             self.lb_name.config(style="EntryFrameHighlight.TLabel")
             self.lb_title.config(style="EntryFrameHighlight.TLabel")
             self.lb_period.config(style="EntryFrameHighlight.TLabel")
@@ -68,8 +72,8 @@ class InternshipEntryFrame(tk.Frame):
         # unbind mouse click input
         def _unbound_to_mouseclick(event):
             self.unbind_all("<Button-1>")
-            self.card_entry.config(bg="white")
-            self.lb_icon.config(bg="white", fg="black")
+            self.card_entry.config(bg=BACKGROUND)
+            self.lb_icon.config(bg=BACKGROUND, fg=TEXT_DARK)
             self.lb_name.config(style="EntryFrame.TLabel")
             self.lb_title.config(style="EntryFrame.TLabel")
             self.lb_period.config(style="EntryFrame.TLabel")

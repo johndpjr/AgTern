@@ -1,6 +1,13 @@
 import tkinter as tk
 from tkinter.ttk import *
 
+BACKGROUND = "#FFFFFF"
+HIGHLIGHT = "#500000"
+THUMB = "#AA1111"
+BORDER = "#000000"
+TEXT_DARK = "#000000"
+TEXT_LIGHT = "#FFFFFF"
+
 
 def set_styles(style: Style):
     style.configure(
@@ -8,65 +15,65 @@ def set_styles(style: Style):
         bd=0,
         relief="solid",
         justify=tk.CENTER,
-        background="white",
-        foreground="black",
+        background=BACKGROUND,
+        foreground=TEXT_DARK,
     )
     style.configure(
         "Red.TButton",
         bd=0,
         relief="solid",
         justify=tk.CENTER,
-        background="#CC2222",
-        foreground="black",
+        background=HIGHLIGHT,
+        foreground=TEXT_DARK,
     )
     style.configure(
         "DetailFrame.TLabel",
-        background="white",
-        foreground="black",
+        background=BACKGROUND,
+        foreground=TEXT_DARK,
         font=("MS Reference Sans Serif", 14),
     )
     style.configure(
         "DetailFrameHighlight.TLabel",
-        background="#CC2222",
-        foreground="white",
+        background=HIGHLIGHT,
+        foreground=TEXT_LIGHT,
         font=("MS Reference Sans Serif", 14),
     )
     style.configure(
         "EntryFrame.TLabel",
-        background="white",
-        foreground="black",
+        background=BACKGROUND,
+        foreground=TEXT_DARK,
         font=("MS Reference Sans Serif", 10),
     )
     style.configure(
         "EntryFrameHighlight.TLabel",
-        background="#CC2222",
-        foreground="white",
+        background=HIGHLIGHT,
+        foreground=TEXT_LIGHT,
         font=("MS Reference Sans Serif", 10),
     )
     style.configure(
         "Settings.TLabel",
-        background="#CC2222",
-        foreground="white",
+        background=HIGHLIGHT,
+        foreground=TEXT_LIGHT,
         font=("MS Reference Sans Serif", 10),
     )
     style.configure(
         "TFrame",
-        background="white",
+        background=BACKGROUND,
     )
     style.configure(
         "TMenubutton",
-        background="white",
+        background=BACKGROUND,
     )
     style.configure(
         "TSeparator",
-        background="white",
+        background=BACKGROUND,
     )
     style.configure(
         "Vertical.TScrollbar",
-        troughcolor="white",
-        bordercolor="white",
-        background="#CC2222",
+        troughcolor=BACKGROUND,
+        bordercolor=BACKGROUND,
+        background=HIGHLIGHT,
         gripcount=0,
-        arrowcolor="white",
+        arrowcolor=BACKGROUND,
     )
-    style.map("Vertical.TScrollbar", background=[("active", "#AA1111")])
+    style.map("Vertical.TScrollbar", background=[("active", THUMB)])

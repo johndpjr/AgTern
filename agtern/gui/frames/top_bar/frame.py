@@ -2,6 +2,7 @@ import tkinter as tk
 import tkinter.ttk as ttk
 
 from ....common import LOG
+from ...styles import *
 
 
 class TopBarFrame(tk.Frame):
@@ -10,7 +11,7 @@ class TopBarFrame(tk.Frame):
     def __init__(self, parent, *args, **kwargs):
         # Initialize a Frame (since we inherit from tk.Frame)
         super().__init__(parent, *args, **kwargs)
-        self.configure(background="#CC2222")
+        self.configure(background=HIGHLIGHT)
         self.PAD_OPTIONS = {"padx": 4, "pady": 4, "ipadx": 2, "ipady": 2}
         self.var_img = tk.PhotoImage(
             file="agtern/gui/assets/settings-icon.png"

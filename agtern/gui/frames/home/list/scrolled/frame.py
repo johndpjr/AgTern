@@ -4,6 +4,9 @@
 from tkinter import *
 from tkinter.ttk import *
 
+from ......common import LOG
+from .....styles import *
+
 
 class VerticalScrolledFrame(Frame):
     """A pure Tkinter scrollable frame that actually works!
