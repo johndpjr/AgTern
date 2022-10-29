@@ -17,9 +17,9 @@ class Season(str, Enum):
 class Internship(BaseModel):
     """Models internship details."""
 
-    company: str
-    title: str
-    link: str
+    company: str = ""
+    title: str = ""
+    link: str = ""
     period: Season = ""
     year: int = 0
     location: str = ""
