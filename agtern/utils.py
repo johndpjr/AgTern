@@ -3,7 +3,7 @@ import tkinter
 import selenium.webdriver.support.expected_conditions as condition
 from selenium.webdriver.common.by import By
 import tkinter as tk
-url = 'google.com/shmeepshmop'
+url = 'google.com/images'
 extensions = ['.com', '.net', '.org', '.eu', '.info', '.uk', '.gov']
 domainServer = ''
 
