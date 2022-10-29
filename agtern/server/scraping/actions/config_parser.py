@@ -72,5 +72,8 @@ def parse_config(
 
             return wrapper
 
-        prepared_actions.append(wrap_action(action, parameters_dict))
+        prepared_action = wrap_action(action, parameters_dict)
+        prepared_action.action = action
+        prepared_action.parameters_dict = parameters_dict
+        prepared_actions.append(prepared_action)
     return prepared_actions
