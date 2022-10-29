@@ -2,7 +2,9 @@ from dataclasses import fields
 import pandas as pd
 from math import nan
 
-from ...common import DataFile, Internship
+from pydantic import ValidationError
+
+from ...common import LOG, DataFile, Internship
 from .scraper import start_scraper
 
 """Pre-MVP: This file provides functions that read the json file that the backend writes to.
@@ -24,7 +26,11 @@ def get_all_internships() -> list:
             for key, value in iship.items():
                 if value is not None:
                     data[key] = value
-            internships.append(Internship.parse_obj(data))
+            try:
+                internships.append(Internship.parse_obj(data))
+            except ValidationError as errors:
+                LOG.error(f"Unable to convert entry to Internship: {iship}")
+                LOG.error(errors)
     except pd.errors.EmptyDataError:
         return []
     return internships

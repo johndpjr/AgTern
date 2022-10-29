@@ -102,7 +102,7 @@ def scrape(headless: bool = True):
     # Close driver when work is finished
     def close_driver(signal_number=None, frame=None):
         # Make sure driver exists
-        if scraper is not None:
+        if scraper is not None and scraper.driver is not None:
             LOG.info("Closing driver...")
             scraper.driver.close()
             LOG.info("Done!")
