@@ -1,6 +1,3 @@
-"""Pre-MVP: This file reads from a config file to scrape websites and save them in a json file.
-Post-MVP: This file will read configs from a database to scrape websites and save the results back into the database."""
-
 import csv
 import json
 import traceback
@@ -18,8 +15,9 @@ from ...common import DataFile, LOG, InternshipBase
 
 
 def scrape(headless: bool = True):
-    """Pre-MVP: This function scrapes all websites in the config and stores them in a file.
-    Post-MVP: This function will take arguments to specify how and where to scrape. The results will be stored in a database."""
+
+    """Scrapes websites for internships and (will) store them in a database."""
+    # TODO: write results to database
     driver = None
 
     # Close driver when work is finished

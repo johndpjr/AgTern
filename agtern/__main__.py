@@ -8,13 +8,13 @@ from .server import start_server
 
 
 def main(args: Namespace):
-    # TODO: based on env, run server in another thread
-    #   if both Application and Sever are running
-    Thread(
-        target=start_server,
-        daemon=True,
-        args=(args,)
-    ).start()
+    if args.dev:
+        Thread(
+            target=start_server,
+            daemon=True,
+            args=(args,)
+        ).start()
+
     app = Application()
     try:
         app.mainloop()

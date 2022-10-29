@@ -47,7 +47,8 @@ class InternshipListFrame(tk.Frame):
         self._populate_internships()
 
     def _populate_internships(self):
-        # TODO: make this asynchronous
+        # TODO: make this asynchronous so that requests won't block the GUI event loop
+        #   (big mess- asyncio and tkinter cannot share an event loop)
         internships = self.master.api.get_all_internships()
 
         for i in internships:
