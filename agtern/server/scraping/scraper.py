@@ -74,7 +74,7 @@ class WebScraper:
         for action in procedure:
             action_num += 1
             try:
-                LOG.info(f"Running Action {company_name}:{action_num}...")
+                LOG.info(f"Running Action {company_name}:{action_num} ({action.action.name})...")
                 action()
             except Exception as e:
                 LOG.error(f"ERROR: Could not execute {company_name}:{action_num}!")

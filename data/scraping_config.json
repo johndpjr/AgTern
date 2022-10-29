@@ -130,44 +130,57 @@
     "scrape": [
       {
         "action": "scrape",
-        "properties": [
-          {
-            "name": "title",
-            "xpath": "//tbody/tr[@class='tds-table-row']/td[1]",
-            "regex": {
-              "pattern": ".+?intern(ship)?(\\))?",
-              "ignore_case": true
-            }
-          },
-          {
-            "name": "year",
-            "xpath": "//tbody/tr[@class='tds-table-row']/td[1]",
-            "regex": {
-              "pattern": "\\d{4}"
-            }
-          },
-          {
-            "name": "period",
-            "xpath": "//tbody/tr[@class='tds-table-row']/td[1]",
-            "regex": {
-              "pattern": "summer|spring|fall|winter",
-              "ignore_case": true
-            }
-          },
-          {
-            "name": "link",
-            "xpath": "//tbody/tr[@class='tds-table-row']/td[1]/a",
-            "html_property": "href"
-          },
-          {
-            "name": "category",
-            "xpath": "//tbody/tr[@class='tds-table-row']/td[2]"
-          },
-          {
-            "name": "location",
-            "xpath": "//tbody/tr[@class='tds-table-row']/td[3]"
+        "prop": {
+          "name": "title",
+          "xpath": "//tbody/tr[@class='tds-table-row']/td[1]",
+          "regex": {
+            "pattern": ".+?intern(ship)?(\\))?",
+            "ignore_case": true
           }
-        ]
+        }
+      },
+      {
+        "action": "scrape",
+        "prop": {
+          "name": "year",
+          "xpath": "//tbody/tr[@class='tds-table-row']/td[1]",
+          "regex": {
+            "pattern": "\\d{4}"
+          }
+        }
+      },
+      {
+        "action": "scrape",
+        "prop": {
+          "name": "period",
+          "xpath": "//tbody/tr[@class='tds-table-row']/td[1]",
+          "regex": {
+            "pattern": "summer|spring|fall|winter",
+            "ignore_case": true
+          }
+        }
+      },
+      {
+        "action": "scrape",
+        "prop": {
+          "name": "link",
+          "xpath": "//tbody/tr[@class='tds-table-row']/td[1]/a",
+          "html_property": "href"
+        }
+      },
+      {
+        "action": "scrape",
+        "prop": {
+          "name": "category",
+          "xpath": "//tbody/tr[@class='tds-table-row']/td[2]"
+        }
+      },
+      {
+        "action": "scrape",
+        "prop": {
+          "name": "location",
+          "xpath": "//tbody/tr[@class='tds-table-row']/td[3]"
+        }
       }
     ]
   },

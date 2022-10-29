@@ -35,28 +35,27 @@ def sleep(ms: float):
 
 
 @scrape_action("scrape")
-def scrape(ctx: ScrapingContext, properties: List[ScrapePropertyModel]):
-    for prop in properties:
-        if prop.value is not None:
-            ctx.data[prop.name] = prop.value
-            continue
-        elements = ctx.scraper.scrape_xpath(prop.xpath)
-        # Create column with found elements and add to DataFrame
-        contents = []
-        for element in elements:
-            # Scrape off of current page
-            text = element.get_attribute(prop.html_property)
-            if prop.regex is not None:
-                # Match against regex in config
-                match = prop.regex.pattern.search(text)
-                if match is not None:
-                    # Replace text with either group or format string
-                    if prop.regex.format is not None:
-                        text = prop.regex.format.format(match.groupdict())
-                    else:
-                        text = match.group(prop.regex.group)  # Group 0 is the whole match
+def scrape(ctx: ScrapingContext, prop: ScrapePropertyModel):
+    if prop.value is not None:
+        ctx.data[prop.name] = prop.value
+        return
+    elements = ctx.scraper.scrape_xpath(prop.xpath)
+    # Create column with found elements and add to DataFrame
+    contents = []
+    for element in elements:
+        # Scrape off of current page
+        text = element.get_attribute(prop.html_property)
+        if prop.regex is not None:
+            # Match against regex in config
+            match = prop.regex.pattern.search(text)
+            if match is not None:
+                # Replace text with either group or format string
+                if prop.regex.format is not None:
+                    text = prop.regex.format.format(match.groupdict())
                 else:
-                    text = prop.regex.default
-            contents.append(text)
-        ctx.data[prop.name] = pd.Series(contents, dtype=prop.store_as)
+                    text = match.group(prop.regex.group)  # Group 0 is the whole match
+            else:
+                text = prop.regex.default
+        contents.append(text)
+    ctx.data[prop.name] = pd.Series(contents, dtype=prop.store_as)
     ctx.data["company"] = ctx.company
