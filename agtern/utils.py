@@ -4,7 +4,7 @@ import selenium.webdriver.support.expected_conditions as condition
 from selenium.webdriver.common.by import By
 import tkinter as tk
 url = 'google.com/shmeepshmop'
-extensions = ['.com', '.net', '.org', '.eu', '.info', '.uk']
+extensions = ['.com', '.net', '.org', '.eu', '.info', '.uk', '.gov']
 domainServer = ''
 
 def getfavicon(usedUrl):
