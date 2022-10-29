@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import time
+from random import randint
 from typing import Callable, List
 
 import pandas as pd
 from pydantic import AnyUrl
+from selenium.webdriver import ActionChains
 
 from .models import ScrapingContext, ScrapePropertyModel
 from .scrape_action_registry import register_action
@@ -32,6 +34,26 @@ def goto(ctx: ScrapingContext, url: AnyUrl):
 @scrape_action("sleep")
 def sleep(ms: float):
     time.sleep(ms / 1000)
+
+
+@scrape_action("click")
+def click(ctx: ScrapingContext, xpath: str):
+    ActionChains(ctx.scraper.driver).click(ctx.scraper.scrape_xpath(xpath)[0]).perform()
+
+
+@scrape_action("scroll_to_bottom")
+def scroll_to_bottom(ctx: ScrapingContext):
+    screen_height = ctx.scraper.js("return window.screen.height")
+    at_bottom = False
+    num_scrolls = 0
+    while not at_bottom:
+        num_scrolls += 1
+        time.sleep(randint(100, 250) / 1000)
+        ActionChains(ctx.scraper.driver).scroll_by_amount(0, screen_height).perform()
+        time.sleep(0.2)  # Time to complete request and show more elements
+        scroll_height = ctx.scraper.js("return document.body.scrollHeight")
+        if screen_height * num_scrolls > scroll_height:
+            at_bottom = True
 
 
 @scrape_action("scrape")

@@ -7,10 +7,11 @@ import json
 import traceback
 from multiprocessing import Process
 from threading import Thread
+from typing import Any
 
 import pandas as pd
 import selenium.webdriver.support.expected_conditions as condition
-from selenium.webdriver import Chrome
+from undetected_chromedriver import Chrome
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
@@ -34,23 +35,27 @@ class WebScraper:
         if options is None:
             options = Options()
         options.headless = headless
-        if auto_download:
-            driver_manager = ChromeDriverManager()
-            driver_exists = driver_manager.driver_cache.find_driver(driver_manager.driver)
-            if not driver_exists:
-                LOG.info("Chrome WebDriver does not exist! Downloading...")
-            driver_path = ChromeDriverManager().install()
-            if not driver_exists:
-                LOG.info("Done downloading Chrome WebDriver!")
-            LOG.info("Starting Chrome WebDriver...")
-            self.driver = Chrome(driver_path, options=options)
-        else:
-            self.driver = Chrome(options=options)
+        # if auto_download:
+        #     driver_manager = ChromeDriverManager()
+        #     driver_exists = driver_manager.driver_cache.find_driver(driver_manager.driver)
+        #     if not driver_exists:
+        #         LOG.info("Chrome WebDriver does not exist! Downloading...")
+        #     driver_path = ChromeDriverManager().install()
+        #     if not driver_exists:
+        #         LOG.info("Done downloading Chrome WebDriver!")
+        #     LOG.info("Starting Chrome WebDriver...")
+        #     self.driver = Chrome(driver_path, options=options)
+        # else:
+        #     self.driver = Chrome(options=options)
+        self.driver = Chrome(options=options)
         self.wait = WebDriverWait(self.driver, 5)
 
     def goto(self, link: str):
         self.driver.get(link)
         self.wait.until(lambda d: d.execute_script("return document.readyState") == "complete")
+
+    def js(self, code: str, *args: Any) -> Any:
+        return self.driver.execute_script(code, *args)
 
     def scrape_xpath(self, xpath: str) -> list:
         return self.wait.until(

@@ -126,8 +126,11 @@
   },
   {
     "company": "Tesla",
-    "link": "https://www.tesla.com/careers/search/?query=Internship&type=3&site=US",
+    "link": "https://www.tesla.com/careers/search/?type=3&site=US",
     "scrape": [
+      {
+        "action": "scroll_to_bottom"
+      },
       {
         "action": "scrape",
         "prop": {
