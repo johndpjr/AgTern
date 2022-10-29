@@ -5,18 +5,21 @@ from abc import ABCMeta
 from enum import Enum
 from inspect import Parameter
 from types import MappingProxyType
-from typing import Callable, Optional, List, Pattern, Union, ForwardRef
+from typing import Callable, Optional, List, Pattern, Union, ForwardRef, TYPE_CHECKING
 
 import pandas as pd
 from pydantic import *
+
+if TYPE_CHECKING:
+    from ..scraper import WebScraper
+    from pydantic.main import ModelMetaclass
 
 
 # See https://pydantic-docs.helpmanual.io/usage/types/ for a complete list of Pydantic built-in type annotations
 
 
 class ScrapingContext(BaseModel):
-    # noinspection PyUnresolvedReferences
-    scraper: "WebScraper"  # ForwardRef to prevent circular reference
+    scraper: WebScraper
     company: str
     data: pd.DataFrame = None
 
@@ -27,7 +30,7 @@ class ScrapingContext(BaseModel):
 class ScrapeAction(BaseModel):
     name: str
     parameters: MappingProxyType[str, Parameter]
-    model: ABCMeta  # type: ModelMetaclass
+    model: Union[BaseModel, ABCMeta]  # Hack to make IntelliSense work
     execute: Callable
 
     class Config:
@@ -35,7 +38,8 @@ class ScrapeAction(BaseModel):
 
     @validator("model", pre=True)
     def validate_model(cls, value):
-        if isinstance(value, ABCMeta):
+        if isinstance(value, BaseModel) or \
+                str(type(value)).find("pydantic.main.ModelMetaclass") != -1:  # Need this because we can't import it
             return value
         raise ValueError("\"model\" is not a Pydantic model!")
 
@@ -53,8 +57,8 @@ class RegexConfigModel(BaseModel):
     # Regex flags
     # See https://docs.python.org/3/howto/regex.html#compilation-flags
     ascii: bool = False
-    dotall: bool = False
-    ignorecase: bool = False
+    dot_all: bool = False
+    ignore_case: bool = False
     locale: bool = False
     multiline: bool = False
     verbose: bool = False
@@ -100,7 +104,7 @@ class ScrapePropertyModel(ScrapeActionModel):
     xpath: str = None
     value: str = None  # Constant string to use as a column value
     html_property: str = "innerText"
-    regex: Optional[RegexConfigModel] = None
+    regex: RegexConfigModel = None
     store_as: DataType = DataType.str
 
     @root_validator(pre=True)
