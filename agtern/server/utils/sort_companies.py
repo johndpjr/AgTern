@@ -15,7 +15,7 @@ def sort_companies():
     company_df = pd.read_csv(companies_csv.path)
 
     # Validate CSV contents if manually given
-    assert company_df["comnpany"].is_unique
+    assert company_df["company"].is_unique
 
     # Reformat CSV
     company_df["link"] = company_df["link"].str.strip()
