@@ -7,13 +7,16 @@ from .logger import LOG
 class AgTernAPI:
     """Wrapper for all communication to AgTern's services."""
     env = "dev"
+    LOCALHOST_URL = "http://127.0.0.1:5000"
+    SERVER_URL = "http://our-public-agtern-api.com"
 
     def __init__(self):
+        # TODO: make this env dynamic based off arguments
         if self.env == "dev":
-            self.base_url = "http://127.0.0.1:5000"
+            self.base_url = self.LOCALHOST_URL
         else:
-            # TODO: update this when we are cloud-hosted
-            self.base_url = "http://our-public-agtern-api.com"
+            # NOTE: update this when we are cloud-hosted
+            self.base_url = self.SERVER_URL
 
     def get_all_internships(self):
         """Retrieve all internships."""
@@ -22,6 +25,5 @@ class AgTernAPI:
         resp = requests.get(self.base_url + "/internships/")
         if resp.ok:
             data = resp.json()
-            LOG.info(data)
             return [InternshipBase(**iship) for iship in data]
         return []
