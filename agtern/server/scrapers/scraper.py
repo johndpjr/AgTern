@@ -1,4 +1,3 @@
-import csv
 import json
 import traceback
 from multiprocessing import Process
@@ -11,13 +10,12 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 
-from ...common import DataFile, LOG, InternshipBase
+from ...common import DataFile, LOG, InternshipBase, schemas
+from ..server import create_internship
 
 
 def scrape(headless: bool = True):
-
     """Scrapes websites for internships and (will) store them in a database."""
-    # TODO: write results to database
     driver = None
 
     # Close driver when work is finished
@@ -91,11 +89,10 @@ def scrape(headless: bool = True):
             internship_df = pd.concat([internship_df, data])
         LOG.info("Writing to database...")
 
-        # Write DataFrame info to temp data CSV
-        # TODO: Write to actual database (AWS?)
-        internships_csv = DataFile("internships.csv", is_temp=True)
-        internship_df.to_csv(internships_csv.path, index=False, quoting=csv.QUOTE_ALL)
-
+        for idx, internship in internship_df.iterrows():
+            create_internship(
+                schemas.InternshipCreate(**internship)
+            )
         LOG.info("Done!")
     except Exception as e:
         # Log any errors to stdout
