@@ -11,7 +11,7 @@ def import_companies():
     # Gets paths of companies CSV and scraping config JSON
     companies_csv = DataFile("companies.csv", default_data="name,link")
     scraping_config_json = DataFile(
-        "scraping_config.json", default_data='[{"name":null,"link":null,"scrape":null}]'
+        "scraping_config.json", default_data='[{"company":null,"link":null,"scrape":null}]'
     )
 
     # Converts readable JSON into object read in by DataFrame
@@ -25,7 +25,7 @@ def import_companies():
     # Creates new JSON object with companies from CSV
     LOG.info("Generating company info...")
     new_df = pd.DataFrame()
-    new_df["name"] = company_df["name"]
+    new_df["company"] = company_df["name"]
     new_df["link"] = company_df["link"]
 
     # Merge DataFrames to retain scrape values
