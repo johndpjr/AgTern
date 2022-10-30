@@ -7,7 +7,7 @@ from typing import Callable, List
 from pydantic import validate_arguments, BaseModel
 from pydantic.schema import schema
 
-from ....common import DataFile
+from ....common import DataFile, DataFolder
 from .models import ScrapeAction
 from ....common.data import DataFolder
 
