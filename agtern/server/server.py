@@ -34,6 +34,11 @@ async def get_all_internships(db: Session = Depends(get_db)):
     """Returns all internships from the database"""
     return crud.get_all_internships(db)
 
+@app.post("/internships/", response_model=schemas.Internship)
+async def create_internship(internship: schemas.InternshipCreate, db: Session = Depends(get_db)):
+    """Adds an Internship object to the database."""
+    return crud.create_internship(db, internship)
+
 
 def start_server(args: Namespace):
     if args.update_companies:
