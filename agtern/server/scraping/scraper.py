@@ -95,7 +95,9 @@ class WebScraper:
             while line.find("#") != -1:
                 line = line[:line.find("#")]
             if line.lower().startswith("crawl-delay:"):
-                crawl_delay = float(line[12:].strip())
+                new_crawl_delay = float(line[12:].strip())
+                if new_crawl_delay < crawl_delay:
+                    crawl_delay = new_crawl_delay
         self.goto(link)
         self.crawl_delay = crawl_delay
         procedure = parse_config(context, config["scrape"])
