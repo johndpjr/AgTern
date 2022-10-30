@@ -8,6 +8,7 @@ import pandas as pd
 from pydantic import AnyUrl
 from selenium.webdriver import ActionChains
 
+from ....common import LOG
 from .models import ScrapingContext, ScrapePropertyModel
 from .scrape_action_registry import register_action
 
@@ -57,27 +58,71 @@ def scroll_to_bottom(ctx: ScrapingContext):
 
 
 @scrape_action("scrape")
-def scrape(ctx: ScrapingContext, prop: ScrapePropertyModel):
-    if prop.value is not None:
-        ctx.data[prop.name] = prop.value
-        return
-    elements = ctx.scraper.scrape_xpath(prop.xpath)
-    # Create column with found elements and add to DataFrame
-    contents = []
-    for element in elements:
-        # Scrape off of current page
-        text = element.get_attribute(prop.html_property)
-        if prop.regex is not None:
-            # Match against regex in config
-            match = prop.regex.pattern.search(text)
-            if match is not None:
-                # Replace text with either group or format string
-                if prop.regex.format is not None:
-                    text = prop.regex.format.format(match.groupdict())
+def scrape(
+        ctx: ScrapingContext,
+        link: AnyUrl = None,
+        link_property: str = None,
+        prop: ScrapePropertyModel = None,
+        properties: List[ScrapePropertyModel] = None
+):
+    if prop is not None and properties is not None:
+        raise ValueError("Both \"prop\" and \"properties\" were specified!")
+    if link is not None and link_property is not None:
+        raise ValueError("Both \"link\" and \"link_property\" were specified!")
+
+    if link is not None:
+        ctx.scraper.goto(link)
+    elif link_property is not None:
+        links = ctx.data[link_property]
+        i = 1
+        num_links = len(links)
+        for link in links:
+            LOG.info(f"Scraping link {i}/{num_links} ({link})...")
+            scrape(ctx, link=link, prop=prop, properties=properties)
+            # Uncomment below to just scrape 3 links
+            # if i == 3:
+            #     break
+            i += 1
+    if properties is not None:
+        i = 1
+        num_props = len(properties)
+        for prop in properties:
+            LOG.info(f"Scraping property {i}/{num_props} ({prop.name})...")
+            scrape(ctx, prop=prop)
+            i += 1
+    elif prop is not None:  # If both are None, nothing executes
+        if prop.value is not None:
+            ctx.data[prop.name] = prop.value
+            return
+        elements = ctx.scraper.scrape_xpath(prop.xpath)
+        # Create column with found elements and add to DataFrame
+        contents = []
+        for element in elements:
+            # Scrape off of current page
+            text = element.get_attribute(prop.html_property)
+            if prop.regex is not None:
+                # Match against regex in config
+                match = prop.regex.pattern.search(text)
+                if match is not None:
+                    # Replace text with either group or format string
+                    if prop.regex.format is not None:
+                        text = prop.regex.format.format(match.groupdict())
+                    else:
+                        text = match.group(prop.regex.group)  # Group 0 is the whole match
                 else:
-                    text = match.group(prop.regex.group)  # Group 0 is the whole match
-            else:
-                text = prop.regex.default
-        contents.append(text)
-    ctx.data[prop.name] = pd.Series(contents, dtype=prop.store_as)
-    ctx.data["company"] = ctx.company
+                    text = prop.regex.default
+            contents.append(text)
+        new_data = pd.Series(contents, dtype=prop.store_as)
+        if prop.name in ctx.data:
+            previous_data_length = ctx.scraping_progress[prop.name]
+            previous_data = ctx.data[prop.name][:previous_data_length]
+            ctx.data.drop(columns=prop.name)
+            ctx.data[prop.name] = pd.concat([
+                previous_data,
+                new_data
+            ], ignore_index=True)
+            ctx.scraping_progress[prop.name] += len(new_data)
+        else:
+            ctx.data[prop.name] = pd.Series(contents, dtype=prop.store_as)
+            ctx.scraping_progress[prop.name] = len(new_data)
+        ctx.data["company"] = ctx.company

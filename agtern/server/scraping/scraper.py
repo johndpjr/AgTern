@@ -4,10 +4,13 @@ from __future__ import annotations  # Allow type annotations before the type is 
 
 import csv
 import json
+import time
 import traceback
+from datetime import datetime
 from multiprocessing import Process
 from threading import Thread
 from typing import Any
+from urllib.parse import urlparse
 
 import pandas as pd
 import selenium.webdriver.support.expected_conditions as condition
@@ -29,6 +32,8 @@ class WebScraper:
     def __init__(self):
         self.driver: Chrome = None
         self.wait: WebDriverWait = None
+        self.crawl_delay: float = 0
+        self.last_request_time: datetime = None
 
     def start(self, headless: bool, options: Options = None, auto_download: bool = True):
         """Starts a new Chrome instance."""
@@ -51,7 +56,14 @@ class WebScraper:
         self.wait = WebDriverWait(self.driver, 5)
 
     def goto(self, link: str):
+        if self.last_request_time is not None and self.crawl_delay > 0:
+            time_passed = (datetime.now() - self.last_request_time).total_seconds()
+            if self.crawl_delay > time_passed:
+                delay_amount = self.crawl_delay - time_passed
+                LOG.info(f"Delaying for {delay_amount:.2f} seconds...")
+                time.sleep(delay_amount)
         self.driver.get(link)
+        self.last_request_time = datetime.now()
         self.wait.until(lambda d: d.execute_script("return document.readyState") == "complete")
 
     def js(self, code: str, *args: Any) -> Any:
@@ -72,8 +84,20 @@ class WebScraper:
             )
             return data
         company_name = config["company"]
-        context = ScrapingContext(scraper=self, company=company_name, data=data)
+        self.last_request_time = None
+        self.crawl_delay = 0
+        parsed_link = urlparse(link)
+        self.goto(f"{parsed_link.scheme if len(parsed_link.scheme) > 0 else 'http'}://{parsed_link.netloc}/robots.txt")
+        context = ScrapingContext(scraper=self, company=company_name, data=data, robots_txt=self.driver.page_source)
+        crawl_delay = 0
+        for line in context.robots_txt.splitlines():
+            line = line.strip()
+            while line.find("#") != -1:
+                line = line[:line.find("#")]
+            if line.startswith("Crawl-delay:"):
+                crawl_delay = float(line[12:].strip())
         self.goto(link)
+        self.crawl_delay = crawl_delay
         procedure = parse_config(context, config["scrape"])
         action_num = 0
         for action in procedure:

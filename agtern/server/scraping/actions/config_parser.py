@@ -35,20 +35,12 @@ def parse_config(
 
         # Assign parameters and inject dependencies
         parameters_dict = {}
-        parameters_valid = True
         for parameter_name, parameter in action.parameters.items():
             annotation = parameter.annotation
             if annotation in dependencies:
                 parameters_dict[parameter_name] = dependencies[annotation]
-            elif parameter_name not in action_config:
-                LOG.error(f"Action {company_name}:{action_num} is missing required parameter "
-                          f"{parameter_name}: {parameter.annotation} Skipping!")
-                parameters_valid = False
-                break
-            else:
+            elif parameter_name in action_config:
                 parameters_dict[parameter_name] = action_config[parameter_name]
-        if not parameters_valid:
-            continue  # Skip this action
 
         def wrap_action(action, parameters_dict):
             """Returns a wrapped version of action.execute that validates parameters before executing"""
