@@ -5,7 +5,7 @@ from abc import ABCMeta
 from enum import Enum
 from inspect import Parameter
 from types import MappingProxyType
-from typing import Callable, Optional, List, Pattern, Union, ForwardRef, TYPE_CHECKING
+from typing import *
 
 import pandas as pd
 from pydantic import *
@@ -21,6 +21,8 @@ class ScrapingContext(BaseModel):
     scraper: WebScraper
     company: str
     data: pd.DataFrame = None
+    scraping_progress: Dict[str, int] = {}
+    robots_txt: str = None
 
     class Config:
         arbitrary_types_allowed = True  # Allow pd.DataFrame annotation
