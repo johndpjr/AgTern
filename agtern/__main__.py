@@ -26,10 +26,19 @@ def run_cli():
     parser.add_argument("--dev", action="store_true")
     args = parser.parse_args()
 
+    if args.dev:
+        LOG.setLevel(logging.INFO)
+    else:
+        LOG.warning("Running in production (set --dev for INFO messages)...")
+
     if args.update_companies:
-        print("INFO: Updating company info...")
-        sort_companies()
-        import_companies()
+        LOG.info("Updating company info...")
+        try:
+            sort_companies()
+            import_companies()
+        except Exception:
+            LOG.error("An exception occurred...", exc_info=True)
+        LOG.info("Closing program...")
     else:
         LOG.info("Starting program...")
         try:
