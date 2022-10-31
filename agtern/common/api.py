@@ -1,7 +1,7 @@
 import requests
 from requests.adapters import HTTPAdapter, Retry
 
-from .schemas import InternshipBase
+from .schemas import Internship, InternshipCreate
 from .logger import LOG
 
 
@@ -29,5 +29,16 @@ class AgTernAPI:
         resp = self.session.get(self.base_url + "/internships/")
         if resp.ok:
             data = resp.json()
-            return [InternshipBase(**iship) for iship in data]
+            return [Internship(**iship) for iship in data]
         return []
+
+    def create_internship(self, internship: InternshipCreate):
+        """Create an internship."""
+
+        LOG.info("Creating internship...")
+        resp = self.session.post(self.base_url + "/internships/",
+                                 data=internship.json())
+        if resp.ok:
+            data = resp.json()
+            return Internship(**data)
+        return None

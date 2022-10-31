@@ -1,9 +1,7 @@
 import tkinter as tk
 import tkinter.ttk as ttk
-from threading import Thread
-from time import sleep
 
-from .....common import LOG, DataFile, Internship, api_get_all_internships
+from .....common import LOG, Internship
 from ....styles import *
 from .scrolled import InternshipEntryFrame, VerticalScrolledFrame
 
@@ -47,22 +45,11 @@ class InternshipListFrame(tk.Frame):
         # Let the internship container expand vertically
         self.grid_rowconfigure(1, weight=1)
 
-        internships_csv = DataFile(
-            "internships.csv", is_temp=True, create_on_init=False
-        )
-
-        def check_file_existence():
-            while not internships_csv.exists():
-                sleep(5)
-            self._populate_internships()
-
-        if not internships_csv.exists():
-            Thread(target=check_file_existence, daemon=True).start()
-        else:
-            self._populate_internships()
+        self._populate_internships()
 
     def _populate_internships(self):
-        internships = api_get_all_internships()
+        # TODO: Access the frame 2 levels up more cleanly
+        internships = self.master.master.api.get_all_internships()
 
         for i in internships:
             entry = InternshipEntryFrame(self._frm_iship_list_container.interior)

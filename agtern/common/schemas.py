@@ -1,21 +1,13 @@
-from pydantic import BaseModel
+from .models import InternshipBaseModel
 
 
-# TODO: separate Database model from Client model
-class InternshipBase(BaseModel):
-    company: str = ""
-    title: str = ""
-    year: str | None = ""
-    period: str | None = ""
-    link: str | None = ""
-    location: str | None = ""
-    description: str | None = ""
-
-# Used to create new internships
-class InternshipCreate(InternshipBase):
+# Used to create new internships and specify specific data
+#   attributes only used when creating an internship
+class InternshipCreate(InternshipBaseModel):
     pass
 
-class Internship(InternshipBase):
+# The actual model the GUI Application uses
+class Internship(InternshipBaseModel):
     id: int
 
     class Config:

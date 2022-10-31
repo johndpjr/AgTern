@@ -1,8 +1,6 @@
-"""Pre-MVP: This file reads from a config file to scrape websites and save them in a json file.
-Post-MVP: This file will read configs from a database to scrape websites and save the results back into the database."""
 from __future__ import annotations  # Allow type annotations before the type is defined
 
-import csv
+from argparse import Namespace
 import json
 import traceback
 from multiprocessing import Process
@@ -18,7 +16,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 
 from .actions import ScrapingContext, parse_config, dump_schemas
-from ...common import LOG, DataFile
+from ...common import LOG, DataFile, InternshipCreate, AgTernAPI
 
 
 class WebScraper:
@@ -93,11 +91,11 @@ ScrapingContext.update_forward_refs(WebScraper=WebScraper)  # Allow ScrapingCont
 # dump_schemas()  # Export schemas as json files (currently broken)
 
 
-def scrape(headless: bool = True):
-    """Pre-MVP: This function scrapes all websites in the config and stores them in a file.
-    Post-MVP: This function will take arguments to specify how and where to scrape.
-    The results will be stored in a database."""
+def scrape(args: Namespace):
+    """Scrapes all companies in scraping config if actions are defined there.
+     Scraped internships are stored in a database."""
     scraper = None
+    api = AgTernAPI()
 
     # Close driver when work is finished
     def close_driver(signal_number=None, frame=None):
@@ -114,7 +112,7 @@ def scrape(headless: bool = True):
 
     try:
         scraper = WebScraper()
-        scraper.start(headless)
+        scraper.start(args.headless)
 
         LOG.info("Loading scraping config...")
         # Get JSON data from scraping_config.json (empty DataFrame if not exists)
@@ -139,10 +137,13 @@ def scrape(headless: bool = True):
             internship_df = pd.concat([internship_df, data])
         LOG.info("Writing to database...")
 
-        # Write DataFrame info to temp data CSV
-        # TODO: Write to actual database (AWS?)
-        internships_csv = DataFile("internships.csv", is_temp=True, create_on_init=False)
-        internship_df.to_csv(internships_csv.path, index=False, quoting=csv.QUOTE_ALL)
+        for idx, internship in internship_df.iterrows():
+            if args.save_internships:
+                api.create_internship(
+                    InternshipCreate(
+                        **{k: v for k, v in internship.items() if v is not None}
+                    )
+                )
 
         LOG.info("Done!")
     except Exception as e:
@@ -153,13 +154,14 @@ def scrape(headless: bool = True):
         close_driver()
 
 
-def start_scraper(headless=True, scrape_only=False, multiprocessing=True):
+def start_scraper(args: Namespace):
     LOG.info("Starting scraper...")
-    if scrape_only:
-        scrape(headless)
-    else:
-        worker = Process if multiprocessing else Thread
-        scraper = worker(target=scrape, args=(headless,))  # DO NOT REMOVE COMMA!!
-        # Run in background, so it doesn't block the GUI (if shown)
-        scraper.daemon = True
-        scraper.start()
+    if args.scrape_only:
+        scrape(args)
+        return
+
+    worker = Process if args.multiprocessing else Thread
+    scraper = worker(target=scrape,
+                     daemon=True,
+                     args=(args,))
+    scraper.start()

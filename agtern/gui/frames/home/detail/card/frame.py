@@ -1,5 +1,5 @@
 import tkinter as tk
-import tkinter.ttk as ttk
+from tkinter import ttk
 
 from ......common import Internship
 from .....styles import *
