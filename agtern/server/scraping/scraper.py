@@ -9,6 +9,7 @@ from typing import Any
 
 import pandas as pd
 import selenium.webdriver.support.expected_conditions as condition
+from pydantic import ValidationError
 from undetected_chromedriver import Chrome
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -139,11 +140,14 @@ def scrape(args: Namespace):
 
         for idx, internship in internship_df.iterrows():
             if args.save_internships:
-                api.create_internship(
-                    InternshipCreate(
+                try:
+                    internship = InternshipCreate(
                         **{k: v for k, v in internship.items() if v is not None}
                     )
-                )
+                    api.create_internship(internship)
+                except ValidationError as errors:
+                    LOG.error("Unable to create internship!")
+                    LOG.error(errors)
 
         LOG.info("Done!")
     except Exception as e:

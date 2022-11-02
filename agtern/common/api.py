@@ -1,4 +1,5 @@
 import requests
+from pydantic import ValidationError
 from requests.adapters import HTTPAdapter, Retry
 
 from .schemas import Internship, InternshipCreate
@@ -40,5 +41,9 @@ class AgTernAPI:
                                  data=internship.json())
         if resp.ok:
             data = resp.json()
-            return Internship(**data)
+            try:
+                return Internship(**data)
+            except ValidationError as errors:
+                LOG.error("Unable to create internship!")
+                LOG.error(errors)
         return None
