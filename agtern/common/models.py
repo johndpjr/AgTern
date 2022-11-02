@@ -26,3 +26,10 @@ class InternshipBaseModel(BaseModel):
 
     class Config:
         validate_assignment = True
+
+    @validator("period", pre=True)
+    def validate_period(cls, value):
+        if isinstance(value, str):
+            return value.capitalize()
+        else:
+            return value
