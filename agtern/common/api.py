@@ -8,8 +8,8 @@ from .logger import LOG
 class AgTernAPI:
     """Wrapper for all communication to AgTern's services."""
     env = "dev"
-    LOCALHOST_URL = "http://127.0.0.1:5000"
-    SERVER_URL = "http://our-public-agtern-api.com"
+    LOCALHOST_URL = "http://127.0.0.1:5000/api"
+    SERVER_URL = "http://our-public-agtern-api.com/api"
 
     def __init__(self):
         # TODO: make this env dynamic based off arguments

@@ -30,19 +30,19 @@ def get_db():
         db.close()
 
 
-@app.get("/internships/", response_model=List[schemas.Internship])
+@app.get("/api/internships/", response_model=List[schemas.Internship])
 async def get_all_internships(db: Session = Depends(get_db)):
     """Returns all internships from the database"""
     return crud.get_all_internships(db)
 
-@app.post("/internships/", response_model=schemas.Internship)
+@app.post("/api/internships/", response_model=schemas.Internship)
 async def create_internship(internship: schemas.InternshipCreate, db: Session = Depends(get_db)):
     """Adds an Internship object to the database."""
     return crud.create_internship(db, internship)
 
 
 def run():
-    uvicorn.run("agtern:app", port=5000, log_level="info")
+    uvicorn.run("agtern:app", host="0.0.0.0", port=5000, log_level="info")
 
 def start_server(args: Namespace):
     if args.scrape_only:
@@ -60,4 +60,6 @@ def start_server(args: Namespace):
             LOG.error(f"An exception occurred: {e}", exc_info=True)
 
     if not args.no_scrape:
+        if not args.save_internships:
+            LOG.warning("Internships won't be stored to db; use --save-internships to store to db")
         start_scraper(args)
