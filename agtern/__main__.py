@@ -18,6 +18,8 @@ def main(args: Namespace):
                 daemon=True,
                 args=(args,)
             ).start()
+    else:
+        LOG.warning("--dev not set; server is not running locally")
 
     app = Application()
     try:
