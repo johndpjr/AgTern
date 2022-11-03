@@ -9,25 +9,16 @@ from agtern.common import LOG, Internship, InternshipCreateSchema
 from .database import (
     crud,
     models,
-    engine,
-    SessionLocal
+    engine
 )
 from agtern.server import start_scraper
+from agtern.server.database import get_db
 from .utils import sort_companies, import_companies
 
 
 models.DatabaseModel.metadata.create_all(bind=engine)
 
 app = FastAPI()
-
-
-# Dependency
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 @app.get("/api/internships/", response_model=List[Internship])

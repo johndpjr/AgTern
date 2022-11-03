@@ -13,3 +13,10 @@ engine = create_engine(
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 DatabaseModel = declarative_base(name="DatabaseModel")
+
+def get_db() -> SessionLocal:
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()

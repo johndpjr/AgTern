@@ -42,6 +42,12 @@ def click(ctx: ScrapingContext, xpath: str):
     ActionChains(ctx.scraper.driver).click(ctx.scraper.scrape_xpath(xpath)[0]).perform()
 
 
+@scrape_action("type")
+def type(ctx: ScrapingContext, xpath: str, text: str):
+    # TODO: Delay in between keystrokes
+    ActionChains(ctx.scraper.driver).send_keys_to_element(ctx.scraper.scrape_xpath(xpath)[0], *text).perform()
+
+
 @scrape_action("scroll_to_bottom")
 def scroll_to_bottom(ctx: ScrapingContext):
     screen_height = ctx.scraper.js("return window.screen.height")

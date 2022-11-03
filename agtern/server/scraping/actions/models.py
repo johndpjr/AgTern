@@ -9,6 +9,7 @@ from typing import *
 
 import pandas as pd
 from pydantic import *
+from sqlalchemy.orm import Session
 
 if TYPE_CHECKING:
     from agtern.server.scraping import WebScraper
@@ -20,6 +21,7 @@ if TYPE_CHECKING:
 class ScrapingContext(BaseModel):
     scraper: WebScraper
     company: str
+    db: Session = None
     data: pd.DataFrame = None
     scraping_progress: Dict[str, int] = {}
     robots_txt: str = None
