@@ -101,6 +101,7 @@ class WebScraper:
             crawl_delay = 0
         LOG.info(f"Crawl-delay: {crawl_delay}")
         self.goto(link)
+        time.sleep(3)  # Make sure page is fully loaded
         self.crawl_delay = crawl_delay
         procedure = parse_config(context, config["scrape"])
         action_num = 0
