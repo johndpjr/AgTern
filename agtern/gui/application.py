@@ -1,8 +1,8 @@
 import configparser
 import tkinter as tk
-import tkinter.ttk as ttk
+from tkinter import ttk
 
-from ..common import DataFile
+from ..common import DataFile, AgTernAPI
 from .frames import HomeFrame, SettingsFrame, TopBarFrame
 from .styles import *
 
@@ -17,6 +17,9 @@ class Application(tk.Tk):
         self.config = configparser.ConfigParser(allow_no_value=True)
         self.dfile_config = DataFile("config.ini")
         self.config.read(self.dfile_config.path)
+
+        # This API communicates with the server
+        self.api = AgTernAPI()
 
         self.title("AgTern")
         self.set_window_size()
