@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 
-from ......common import Internship
+from ...... import Internship
 from .....styles import *
 from .apply_button import InternshipApplyButton
 

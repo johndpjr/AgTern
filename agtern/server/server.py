@@ -5,7 +5,7 @@ from typing import List
 from threading import Thread
 import uvicorn
 
-from ..common import LOG, schemas
+from ..common import LOG, Internship, InternshipCreateSchema
 from .database import (
     crud,
     models,
@@ -30,13 +30,13 @@ def get_db():
         db.close()
 
 
-@app.get("/api/internships/", response_model=List[schemas.Internship])
+@app.get("/api/internships/", response_model=List[Internship])
 async def get_all_internships(db: Session = Depends(get_db)):
     """Returns all internships from the database"""
     return crud.get_all_internships(db)
 
-@app.post("/api/internships/", response_model=schemas.Internship)
-async def create_internship(internship: schemas.InternshipCreate, db: Session = Depends(get_db)):
+@app.post("/api/internships/", response_model=Internship)
+async def create_internship(internship: InternshipCreateSchema, db: Session = Depends(get_db)):
     """Adds an Internship object to the database."""
     return crud.create_internship(db, internship)
 

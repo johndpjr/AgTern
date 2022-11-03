@@ -2,7 +2,8 @@ import requests
 from pydantic import ValidationError
 from requests.adapters import HTTPAdapter, Retry
 
-from .schemas import Internship, InternshipCreate
+from .schemas import InternshipCreateSchema
+from .models import Internship
 from .logger import LOG
 
 
@@ -33,7 +34,7 @@ class AgTernAPI:
             return [Internship(**iship) for iship in data]
         return []
 
-    def create_internship(self, internship: InternshipCreate):
+    def create_internship(self, internship: InternshipCreateSchema):
         """Create an internship."""
 
         LOG.info("Creating internship...")

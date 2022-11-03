@@ -20,7 +20,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 
 from .actions import ScrapingContext, parse_config, dump_schemas
-from ...common import LOG, DataFile, InternshipCreate, AgTernAPI
+from ...common import LOG, DataFile, InternshipCreateSchema, AgTernAPI
 
 
 class WebScraper:
@@ -171,7 +171,7 @@ def scrape(args: Namespace):
         for idx, internship in internship_df.iterrows():
             if args.save_internships:
                 try:
-                    internship = InternshipCreate(
+                    internship = InternshipCreateSchema(
                         **{k: v for k, v in internship.items() if v is not None}
                     )
                     api.create_internship(internship)

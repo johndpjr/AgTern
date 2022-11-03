@@ -13,9 +13,10 @@ class Season(str, Enum):
         return self.value
 
 
-class InternshipBaseModel(BaseModel):
+class Internship(BaseModel):
     """Models internship details."""
 
+    id: int  # Auto-incremented primary key
     company: str = ""
     title: str = ""
     link: str = ""
@@ -26,6 +27,7 @@ class InternshipBaseModel(BaseModel):
 
     class Config:
         validate_assignment = True
+        orm_mode = True
 
     @validator("period", pre=True)
     def validate_period(cls, value):

@@ -1,7 +1,7 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 
-from .....common import Internship
+from ..... import Internship
 from ....styles import *
 from .card import InternshipDetailCard
 
