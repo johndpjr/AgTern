@@ -45,6 +45,9 @@ def run():
     uvicorn.run("agtern:app", host="0.0.0.0", port=5000, log_level="info")
 
 def start_server(args: Namespace):
+    if not args.save_internships:
+        LOG.warning("Internships won't be stored to db; use --save-internships to store to db")
+
     if args.scrape_only:
         start_scraper(args)
         return
@@ -60,6 +63,4 @@ def start_server(args: Namespace):
             LOG.error(f"An exception occurred: {e}", exc_info=True)
 
     if not args.no_scrape:
-        if not args.save_internships:
-            LOG.warning("Internships won't be stored to db; use --save-internships to store to db")
         start_scraper(args)
