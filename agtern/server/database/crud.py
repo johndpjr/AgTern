@@ -1,8 +1,8 @@
 from pydantic import ValidationError
 from sqlalchemy.orm import Session
 
-from . import DatabaseInternship
-from ...common import LOG, Internship, InternshipCreateSchema
+from .models import DatabaseInternship
+from agtern.common import LOG, Internship, InternshipCreateSchema
 
 
 def get_internship(db: Session, internship_id: int) -> Internship:

@@ -2,9 +2,9 @@ from argparse import ArgumentParser, Namespace
 from threading import Thread
 import logging
 
-from .common import LOG
-from .gui import Application
-from .server import start_server
+from agtern.common import LOG
+from agtern.gui import Application
+from agtern.server import start_server
 
 
 def main(args: Namespace):

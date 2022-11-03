@@ -1,8 +1,8 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 
-from ....common import LOG
-from ...styles import *
+from agtern.common import LOG
+from agtern.gui.styles import *
 
 
 class TopBarFrame(tk.Frame):

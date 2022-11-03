@@ -20,7 +20,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 
 from .actions import ScrapingContext, parse_config, dump_schemas
-from ...common import LOG, DataFile, InternshipCreateSchema, AgTernAPI
+from agtern.common import LOG, DataFile, InternshipCreateSchema, AgTernAPI
 
 
 class WebScraper:

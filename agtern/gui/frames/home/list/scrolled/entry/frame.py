@@ -2,8 +2,8 @@ import tkinter as tk
 from datetime import datetime
 from tkinter import ttk
 
-from ....... import Internship
-from ......styles import *
+from agtern.common import Internship
+from agtern.gui.styles import *
 
 
 class InternshipEntryFrame(tk.Frame):

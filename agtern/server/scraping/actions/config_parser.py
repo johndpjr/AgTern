@@ -1,10 +1,12 @@
 from typing import Callable, List, Union, Type, Any, Dict
 
 from pydantic import validate_arguments, ValidationError
-from pydantic.decorator import ValidatedFunction
 from pydantic.main import BaseModel
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from pydantic.decorator import ValidatedFunction  # not declared in __all__
 
-from ....common import LOG
+from agtern.common import LOG
 from .scrape_action_registry import get_action
 from .models import ScrapingContext
 

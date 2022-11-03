@@ -5,14 +5,14 @@ from typing import List
 from threading import Thread
 import uvicorn
 
-from ..common import LOG, Internship, InternshipCreateSchema
+from agtern.common import LOG, Internship, InternshipCreateSchema
 from .database import (
     crud,
     models,
     engine,
     SessionLocal
 )
-from ..server import start_scraper
+from agtern.server import start_scraper
 from .utils import sort_companies, import_companies
 
 

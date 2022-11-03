@@ -11,7 +11,7 @@ import pandas as pd
 from pydantic import *
 
 if TYPE_CHECKING:
-    from ..scraper import WebScraper
+    from agtern.server.scraping import WebScraper
 
 
 # See https://pydantic-docs.helpmanual.io/usage/types/ for a complete list of Pydantic built-in type annotations

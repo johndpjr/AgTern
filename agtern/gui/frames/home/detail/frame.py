@@ -1,8 +1,8 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 
-from ..... import Internship
-from ....styles import *
+from agtern.common import Internship
+from agtern.gui.styles import *
 from .card import InternshipDetailCard
 
 

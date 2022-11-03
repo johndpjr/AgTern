@@ -2,8 +2,8 @@ import tkinter as tk
 import tkinter.ttk as ttk
 from textwrap import fill
 
-from ....styles import *
-from ...settings import SettingsFrame
+from agtern.gui.styles import *
+from agtern.gui.frames.settings import SettingsFrame
 
 
 # A dict, keyed by association

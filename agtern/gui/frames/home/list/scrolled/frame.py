@@ -4,8 +4,8 @@
 from tkinter import *
 from tkinter.ttk import *
 
-from ......common import LOG
-from .....styles import *
+from agtern.common import LOG
+from agtern.gui.styles import *
 
 
 class VerticalScrolledFrame(Frame):

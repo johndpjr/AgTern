@@ -8,7 +8,7 @@ import pandas as pd
 from pydantic import AnyUrl
 from selenium.webdriver import ActionChains
 
-from ....common import LOG
+from agtern.common import LOG
 from .models import ScrapingContext, ScrapePropertyModel
 from .scrape_action_registry import register_action
 

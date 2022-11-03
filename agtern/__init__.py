@@ -1,3 +1,3 @@
-from .common import *
-from .gui import *
-from .server import *
+from agtern.common import *
+from agtern.gui import *
+from agtern.server import *
