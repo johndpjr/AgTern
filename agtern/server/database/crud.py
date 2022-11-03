@@ -27,11 +27,11 @@ def create_internships(db: Session, *internships: InternshipCreateSchema):
         except ValidationError as errors:
             LOG.error("Could not create internship!")
             LOG.error(errors)
-            return None
 
-    db.add_all(db_internships)
-    db.commit()
-    # Maybe call db.refresh()?
+    if len(db_internships) > 0:
+        db.add_all(db_internships)
+        db.commit()
+        # Maybe call db.refresh()?
     return db_internships
 
 def create_internship(db: Session, internship: InternshipCreateSchema):
