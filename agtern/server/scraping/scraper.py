@@ -89,7 +89,7 @@ class WebScraper:
         self.crawl_delay = 0
         parsed_link = urlparse(link)
         self.goto(f"{parsed_link.scheme if len(parsed_link.scheme) > 0 else 'http'}://{parsed_link.netloc}/robots.txt")
-        context = ScrapingContext(scraper=self, company=company_name, data=data, robots_txt=self.driver.page_source)
+        context = ScrapingContext(scraper=self, company=company_name, db=db, data=data, robots_txt=self.driver.page_source)
         crawl_delay = None
         for line in context.robots_txt.splitlines():
             line = line.strip()
