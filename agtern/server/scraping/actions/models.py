@@ -9,7 +9,9 @@ from typing import *
 
 import pandas as pd
 from pydantic import *
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import sessionmaker, Session
+
+from agtern.server.database import DatabaseSession
 
 if TYPE_CHECKING:
     from agtern.server.scraping import WebScraper

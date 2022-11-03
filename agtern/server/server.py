@@ -11,7 +11,7 @@ from .database import (
     models,
     engine
 )
-from agtern.server import start_scraper
+from agtern.server.scraping import start_scraper
 from agtern.server.database import get_db
 from .utils import sort_companies, import_companies
 

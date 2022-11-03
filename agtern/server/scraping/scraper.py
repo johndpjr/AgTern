@@ -23,6 +23,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from .actions import ScrapingContext, parse_config, dump_schemas
 from agtern.common import LOG, DataFile, InternshipCreateSchema, AgTernAPI
 from agtern.server.database import get_db
+from agtern.server.database import DatabaseSession
 
 
 class WebScraper:
@@ -79,7 +80,7 @@ class WebScraper:
 
     def scrape_company(self, link: str, config: pd.Series) -> pd.DataFrame:
         data = pd.DataFrame()
-        db = get_db()
+        db = DatabaseSession()
         if "company" not in config:
             LOG.warning(
                 "One of the companies in the scraping config does not have a \"company\" property. Skipping!"
