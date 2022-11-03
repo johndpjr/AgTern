@@ -88,15 +88,18 @@ class WebScraper:
         parsed_link = urlparse(link)
         self.goto(f"{parsed_link.scheme if len(parsed_link.scheme) > 0 else 'http'}://{parsed_link.netloc}/robots.txt")
         context = ScrapingContext(scraper=self, company=company_name, data=data, robots_txt=self.driver.page_source)
-        crawl_delay = 0
+        crawl_delay = None
         for line in context.robots_txt.splitlines():
             line = line.strip()
             while line.find("#") != -1:
                 line = line[:line.find("#")]
             if line.lower().startswith("crawl-delay:"):
                 new_crawl_delay = float(line[12:].strip())
-                if new_crawl_delay < crawl_delay:
+                if crawl_delay is None or new_crawl_delay < crawl_delay:
                     crawl_delay = new_crawl_delay
+        if crawl_delay is None:
+            crawl_delay = 0
+        LOG.info(f"Crawl-delay: {crawl_delay}")
         self.goto(link)
         self.crawl_delay = crawl_delay
         procedure = parse_config(context, config["scrape"])

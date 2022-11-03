@@ -49,6 +49,7 @@ def start_server(args: Namespace):
         LOG.warning("Internships won't be stored to db; use --save-internships to store to db")
 
     if args.scrape_only:
+        args.headless = False
         start_scraper(args)
         return
 
