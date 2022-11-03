@@ -1,9 +1,9 @@
 from sqlalchemy import Column, Integer, String
 
-from .database import Base
+from .database import DatabaseModel
 
 
-class DatabaseInternship(Base):
+class DatabaseInternship(DatabaseModel):
     __tablename__ = "internships"
 
     id = Column(Integer, primary_key=True, index=True)

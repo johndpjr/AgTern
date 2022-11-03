@@ -12,4 +12,4 @@ engine = create_engine(
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-Base = declarative_base()
+DatabaseModel = declarative_base(name="DatabaseModel")

@@ -16,7 +16,7 @@ from ..server import start_scraper
 from .utils import sort_companies, import_companies
 
 
-models.Base.metadata.create_all(bind=engine)
+models.DatabaseModel.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
