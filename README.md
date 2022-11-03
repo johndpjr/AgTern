@@ -109,7 +109,7 @@ SOFTWARE.
   * Link to apply
 
 ### Images
-[![AgTern in Action][product-screenshot]]
+![AgTern in Action][product-screenshot]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -229,6 +229,8 @@ See the [open issues](https://github.com/johndpjr/AgTern/issues) for a full list
 
 <!-- CONTRIBUTING -->
 ## Contributing
+
+_Contributions are only open to students currently enrolled at Texas A&M University, as this is a club project for Aggie Coding Club._
 
 Contributions give life to the project: without them this project dies.
 
