@@ -1,5 +1,6 @@
 from __future__ import annotations  # Allow type annotations before the type is defined
 
+import signal
 from argparse import Namespace
 import json
 import time
@@ -147,7 +148,7 @@ def scrape(args: Namespace):
         exit(0)
 
     # Ensure driver is closed if interrupted:
-    # signal.signal( signal.SIGINT, close_driver )
+    signal.signal(signal.SIGINT, close_driver)
 
     try:
         scraper = WebScraper()
