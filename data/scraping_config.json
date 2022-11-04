@@ -160,7 +160,8 @@
           {
             "name": "link",
             "xpath": "//tbody/tr[@class='tds-table-row']/td[1]/a",
-            "html_property": "href"
+            "html_property": "href",
+            "unique": true
           },
           {
             "name": "category",

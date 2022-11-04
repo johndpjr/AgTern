@@ -19,22 +19,14 @@ def get_all_internships(db: Session, skip: int = 0, limit: int = 100) -> list[In
         .all()
 
 
-def create_internships(db: Session, *internships: InternshipCreateSchema):
-    db_internships = []
-    for internship in internships:
-        try:
-            db_internships.append(DatabaseInternship(**internship.dict()))
-        except ValidationError as errors:
-            LOG.error("Could not create internship!")
-            LOG.error(errors)
-
-    if len(db_internships) > 0:
-        db.add_all(db_internships)
+def create_internships(db: Session, *internships: DatabaseInternship):
+    if len(internships) > 0:
+        db.add_all(internships)
         db.commit()
         # Maybe call db.refresh()?
-    return db_internships
+    return internships
 
-def create_internship(db: Session, internship: InternshipCreateSchema):
+def create_internship(db: Session, internship: DatabaseInternship):
     """Creates an internship in the database."""
     ret = create_internships(db, internship)
     if ret is None or len(ret) == 0:

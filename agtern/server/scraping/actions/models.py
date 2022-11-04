@@ -26,6 +26,7 @@ class ScrapingContext(BaseModel):
     db: Session = None
     data: pd.DataFrame = None
     scraping_progress: Dict[str, int] = {}
+    unique_properties: List[str] = []
     robots_txt: str = None
 
     class Config:
@@ -111,6 +112,7 @@ class ScrapePropertyModel(ScrapeActionModel):
     html_property: str = "innerText"
     regex: RegexConfigModel = None
     store_as: DataType = DataType.str
+    unique: bool = False
 
     @root_validator(pre=True)
     def validate_value(cls, values):

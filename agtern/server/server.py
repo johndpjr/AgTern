@@ -9,7 +9,7 @@ from agtern.common import LOG, Internship, InternshipCreateSchema
 from .database import (
     crud,
     models,
-    engine
+    engine, DatabaseInternship
 )
 from agtern.server.scraping import start_scraper
 from agtern.server.database import get_db
@@ -29,7 +29,10 @@ async def get_all_internships(db: Session = Depends(get_db)):
 @app.post("/api/internships/", response_model=Internship)
 async def create_internship(internship: InternshipCreateSchema, db: Session = Depends(get_db)):
     """Adds an Internship object to the database."""
-    return crud.create_internship(db, internship)
+    db_internship = DatabaseInternship(
+        **internship.dict(include=DatabaseInternship.fields.keys())
+    )
+    return crud.create_internship(db, db_internship)
 
 
 def run():

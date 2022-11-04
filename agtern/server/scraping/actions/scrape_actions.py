@@ -63,6 +63,43 @@ def scroll_to_bottom(ctx: ScrapingContext):
             at_bottom = True
 
 
+def scrape_property(ctx: ScrapingContext, prop: ScrapePropertyModel):
+    if prop.unique and prop.name not in ctx.unique_properties:
+        ctx.unique_properties.append(prop.name)
+    elements = ctx.scraper.scrape_xpath(prop.xpath)
+    # Create column with found elements and add to DataFrame
+    contents = []
+    for element in elements:
+        # Scrape off of current page
+        text = element.get_attribute(prop.html_property)
+        if prop.regex is not None:
+            # Match against regex in config
+            match = prop.regex.pattern.search(text)
+            if match is not None:
+                # Replace text with either group or format string
+                if prop.regex.format is not None:
+                    text = prop.regex.format.format(match.groupdict())
+                else:
+                    text = match.group(prop.regex.group)  # Group 0 is the whole match
+            else:
+                text = prop.regex.default
+        contents.append(text)
+    new_data = pd.Series(contents, dtype=prop.store_as)
+    if prop.name in ctx.data:
+        # Append new data to the end of the column
+        previous_data_length = ctx.scraping_progress[prop.name]
+        previous_data = ctx.data[prop.name][:previous_data_length]
+        ctx.data.drop(columns=prop.name)
+        ctx.data[prop.name] = pd.concat([
+            previous_data,
+            new_data
+        ], ignore_index=True)
+        ctx.scraping_progress[prop.name] += len(new_data)
+    else:
+        ctx.data[prop.name] = pd.Series(contents, dtype=prop.store_as)
+        ctx.scraping_progress[prop.name] = len(new_data)
+
+
 @scrape_action("scrape")
 def scrape(
         ctx: ScrapingContext,
@@ -86,8 +123,9 @@ def scrape(
             LOG.info(f"Scraping link {i}/{num_links} ({link})...")
             scrape(ctx, link=link, prop=prop, properties=properties)
             # Uncomment below to just scrape 3 links
-            # if i == 3:
-            #     break
+            # TODO: Add a command-line argument to limit how many internships we scrape for testing
+            if i == 2:
+                break
             i += 1
     if properties is not None:
         i = 1
@@ -100,35 +138,5 @@ def scrape(
         if prop.value is not None:
             ctx.data[prop.name] = prop.value
             return
-        elements = ctx.scraper.scrape_xpath(prop.xpath)
-        # Create column with found elements and add to DataFrame
-        contents = []
-        for element in elements:
-            # Scrape off of current page
-            text = element.get_attribute(prop.html_property)
-            if prop.regex is not None:
-                # Match against regex in config
-                match = prop.regex.pattern.search(text)
-                if match is not None:
-                    # Replace text with either group or format string
-                    if prop.regex.format is not None:
-                        text = prop.regex.format.format(match.groupdict())
-                    else:
-                        text = match.group(prop.regex.group)  # Group 0 is the whole match
-                else:
-                    text = prop.regex.default
-            contents.append(text)
-        new_data = pd.Series(contents, dtype=prop.store_as)
-        if prop.name in ctx.data:
-            previous_data_length = ctx.scraping_progress[prop.name]
-            previous_data = ctx.data[prop.name][:previous_data_length]
-            ctx.data.drop(columns=prop.name)
-            ctx.data[prop.name] = pd.concat([
-                previous_data,
-                new_data
-            ], ignore_index=True)
-            ctx.scraping_progress[prop.name] += len(new_data)
-        else:
-            ctx.data[prop.name] = pd.Series(contents, dtype=prop.store_as)
-            ctx.scraping_progress[prop.name] = len(new_data)
+        scrape_property(ctx, prop)
         ctx.data["company"] = ctx.company

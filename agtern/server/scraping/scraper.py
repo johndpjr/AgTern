@@ -8,12 +8,13 @@ import traceback
 from datetime import datetime
 from multiprocessing import Process
 from threading import Thread
-from typing import Any
+from typing import Any, cast
 from urllib.parse import urlparse
 
 import pandas as pd
 import selenium.webdriver.support.expected_conditions as condition
 from pydantic import ValidationError
+from sqlalchemy import Table
 from undetected_chromedriver import Chrome
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -22,8 +23,9 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 from .actions import ScrapingContext, parse_config, dump_schemas
 from agtern.common import LOG, DataFile, InternshipCreateSchema, AgTernAPI
-from agtern.server.database import get_db
+from agtern.server.database import get_db, DatabaseInternship
 from agtern.server.database import DatabaseSession
+from ..database.crud import create_internship, create_internships
 
 
 class WebScraper:
@@ -31,11 +33,12 @@ class WebScraper:
 
     # Suppress warning for assigning None to class variables:
     # noinspection PyTypeChecker
-    def __init__(self):
+    def __init__(self, save_internships: bool):
         self.driver: Chrome = None
         self.wait: WebDriverWait = None
         self.crawl_delay: float = 0
         self.last_request_time: datetime = None
+        self.save_internships = save_internships
 
     def start(self, headless: bool, options: Options = None, auto_download: bool = True):
         """Starts a new Chrome instance."""
@@ -78,14 +81,47 @@ class WebScraper:
             )
         )
 
-    def scrape_company(self, link: str, config: pd.Series) -> pd.DataFrame:
-        data = pd.DataFrame()
+    def commit_internships(self, ctx: ScrapingContext) -> bool:
+        if not self.save_internships:
+            return True
+        LOG.info("Writing to database...")
+        success = True
+        internships_to_add = []
+        internships_to_update = []  # TODO: Update internships instead of ignoring duplicates
+        column_names = DatabaseInternship.__table__.columns.keys()
+        for idx, internship in ctx.data.iterrows():
+            try:
+                internship_exists = False
+                for unique_prop in ctx.unique_properties:
+                    if unique_prop in column_names \
+                        and hasattr(DatabaseInternship, unique_prop) \
+                            and hasattr(internship, unique_prop):
+                        # noinspection PyTypeChecker
+                        if ctx.db.query(getattr(DatabaseInternship, unique_prop)) \
+                            .filter(
+                                getattr(DatabaseInternship, unique_prop) == getattr(internship, unique_prop)
+                                ).count() > 0:
+                            internship_exists = True  # Skip this internship because it already exists
+                if not internship_exists:
+                    internships_to_add.append(DatabaseInternship(
+                        **{k: v for k, v in internship.items()
+                            if k in column_names and v is not None}
+                    ))
+            except ValidationError as errors:
+                LOG.error("Unable to create internship!")
+                LOG.error(f"Internship: {internship.to_dict()}")
+                LOG.error(errors)
+                success = False
+        create_internships(ctx.db, *internships_to_add)
+        return success
+
+    def scrape_company(self, link: str, config: pd.Series):
         db = DatabaseSession()
         if "company" not in config:
             LOG.warning(
                 "One of the companies in the scraping config does not have a \"company\" property. Skipping!"
             )
-            return data
+            return
         company_name = config["company"]
         self.last_request_time = None
         self.crawl_delay = 0
@@ -95,7 +131,7 @@ class WebScraper:
             scraper=self,
             company=company_name,
             db=db,
-            data=data,
+            data=pd.DataFrame(),
             robots_txt=self.driver.page_source
         )
         crawl_delay = None
@@ -118,12 +154,13 @@ class WebScraper:
         for action in procedure:
             action_num += 1
             try:
+                # noinspection PyUnresolvedReferences
                 LOG.info(f"Running Action {company_name}:{action_num} ({action.action.name})...")
                 action()
             except Exception as e:
                 LOG.error(f"ERROR: Could not execute {company_name}:{action_num}!")
                 LOG.error(traceback.format_exc())
-        return data
+        self.commit_internships(context)
 
 
 ScrapingContext.update_forward_refs(WebScraper=WebScraper)  # Allow ScrapingContext to reference WebScraper
@@ -136,7 +173,6 @@ def scrape(args: Namespace):
     """Scrapes all companies in scraping config if actions are defined there.
      Scraped internships are stored in a database."""
     scraper = None
-    api = AgTernAPI()
 
     # Close driver when work is finished
     def close_driver(signal_number=None, frame=None):
@@ -152,7 +188,7 @@ def scrape(args: Namespace):
     signal.signal(signal.SIGINT, close_driver)
 
     try:
-        scraper = WebScraper()
+        scraper = WebScraper(args.save_internships)
         scraper.start(args.headless)
 
         LOG.info("Loading scraping config...")
@@ -167,28 +203,12 @@ def scrape(args: Namespace):
         # Transform JSON data into DataFrame
         # Create new internship DataFrame to be written to database
         company_scrape_df = pd.DataFrame(config)
-        internship_df = pd.DataFrame()
 
         # Iterate through valid sources to be scraped
         company_scrape_df: pd.DataFrame = company_scrape_df.loc[company_scrape_df["scrape"].notna()]
         for idx, entry in company_scrape_df.iterrows():
             LOG.info(f"Scraping {entry['company']}...")
-            data = scraper.scrape_company(entry["link"], entry)
-            # Append company data to database DataFrame
-            internship_df = pd.concat([internship_df, data])
-        LOG.info("Writing to database...")
-
-        for idx, internship in internship_df.iterrows():
-            if args.save_internships:
-                try:
-                    internship = InternshipCreateSchema(
-                        **{k: v for k, v in internship.items() if v is not None}
-                    )
-                    api.create_internship(internship)
-                except ValidationError as errors:
-                    LOG.error("Unable to create internship!")
-                    LOG.error(errors)
-
+            scraper.scrape_company(entry["link"], entry)
         LOG.info("Done!")
     except Exception as e:
         # Log any errors to stdout
