@@ -86,7 +86,8 @@ class InternshipEntryFrame(tk.Frame):
         self._var_name.set(i.company)
         self._var_title.set(f"{i.title[:20]}{'...' if len(i.title) > 20 else ''}")
         self._var_period.set(i.period)
-        self._var_year.set(i.year)
+        if i.year != 0:
+            self._var_year.set(str(i.year))
         self._var_icon.set(i.company[0] if i.company else " ")
 
     def populate_detail_frame(self, event):

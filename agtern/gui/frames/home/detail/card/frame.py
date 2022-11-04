@@ -61,5 +61,6 @@ class InternshipDetailCard(tk.Frame):
         self._var_company.set(iship.company)
         self._var_title.set(iship.title)
         self._var_period.set(iship.period)
-        self._var_year.set(iship.year)
+        if iship.year != 0:
+            self._var_year.set(str(iship.year))
         self._btn_apply.set_apply_link(iship.link)
