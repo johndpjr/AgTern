@@ -99,6 +99,7 @@ class WebScraper:
                         # noinspection PyTypeChecker
                         if ctx.db.query(getattr(DatabaseInternship, unique_prop)) \
                             .filter(
+                                DatabaseInternship.company == ctx.company and
                                 getattr(DatabaseInternship, unique_prop) == getattr(internship, unique_prop)
                                 ).count() > 0:
                             internship_exists = True  # Skip this internship because it already exists
