@@ -29,14 +29,16 @@ async def get_all_internships(db: Session = Depends(get_db)):
 @app.post("/api/internships/", response_model=Internship)
 async def create_internship(internship: InternshipCreateSchema, db: Session = Depends(get_db)):
     """Adds an Internship object to the database."""
-    db_internship = DatabaseInternship(
-        **internship.dict(include=DatabaseInternship.fields.keys())
-    )
+    db_internship = DatabaseInternship(**{
+        k: v for k, v in internship.dict().items()
+        if k in DatabaseInternship.__table__.columns.keys()
+        and v is not None
+    })
     return crud.create_internship(db, db_internship)
 
 
 def run():
-    uvicorn.run("agtern:app", host="0.0.0.0", port=5000, log_level="info")
+    uvicorn.run("agtern.server:app", host="0.0.0.0", port=5000, log_level="info")
 
 def start_server(args: Namespace):
     if not args.save_internships:
