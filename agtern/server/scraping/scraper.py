@@ -19,13 +19,11 @@ from undetected_chromedriver import Chrome
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
-from webdriver_manager.chrome import ChromeDriverManager
+# from webdriver_manager.chrome import ChromeDriverManager
 
-from .actions import ScrapingContext, parse_config, dump_schemas
-from agtern.common import LOG, DataFile, InternshipCreateSchema, AgTernAPI
-from agtern.server.database import get_db, DatabaseInternship
-from agtern.server.database import DatabaseSession
-from ..database.crud import create_internship, create_internships
+from .actions import ScrapingContext, parse_config
+from agtern.common import LOG, DataFile
+from agtern.server.database import DatabaseSession, DatabaseInternship, create_internships
 
 
 class WebScraper:
