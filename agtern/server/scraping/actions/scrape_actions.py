@@ -81,7 +81,7 @@ def scrape_property(ctx: ScrapingContext, prop: ScrapePropertyModel):
                     text = prop.regex.format.format(match.groupdict())
                 else:
                     text = match.group(prop.regex.group)  # Group 0 is the whole match
-            else:
+            elif prop.regex.use_default_on_failure:
                 text = prop.regex.default
         contents.append(text)
     new_data = pd.Series(contents, dtype=prop.store_as)
@@ -127,6 +127,8 @@ def scrape(
             # if i == 2:
             #     return
             i += 1
+        return
+
     if properties is not None:
         i = 1
         num_props = len(properties)
@@ -134,9 +136,9 @@ def scrape(
             LOG.info(f"Scraping property {i}/{num_props} ({prop.name})...")
             scrape(ctx, prop=prop)
             i += 1
+        return
     elif prop is not None:  # If both are None, nothing executes
         if prop.value is not None:
             ctx.data[prop.name] = prop.value
-            return
         scrape_property(ctx, prop)
         ctx.data["company"] = ctx.company

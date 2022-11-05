@@ -59,6 +59,7 @@ class RegexConfigModel(BaseModel):
     group: Union[conint(ge=0, lt=100), str] = 0  # Can be 0 (whole match), 1-99 (group number), or str (group name)
     format: str = None  # Specify either format or group
     default: str = None  # String to use if the match fails
+    _use_default_on_failure: bool = False
 
     # Regex flags
     # See https://docs.python.org/3/howto/regex.html#compilation-flags
@@ -69,13 +70,18 @@ class RegexConfigModel(BaseModel):
     multiline: bool = False
     verbose: bool = False
 
-    flags: int = 0
+    _flags: int = 0
 
     @root_validator(pre=True)
     def validate_format(cls, values):
         if "group" in values and "format" in values:
             raise ValueError("Both \"group\" and \"format\" were specified. "
                              "Either specify a group id or a format string!")
+        return values
+
+    @root_validator(pre=True)
+    def validate_default(cls, values):
+        values["_use_default_on_failure"] = "default" in values
         return values
 
     @root_validator(skip_on_failure=True)
@@ -94,9 +100,17 @@ class RegexConfigModel(BaseModel):
             for flag in all_flags:
                 if flag in values:
                     flags |= all_flags[flag]
-            values["flags"] = flags
+            values["_flags"] = flags
             values["pattern"] = re.compile(values["pattern"], flags)
             return RegexConfigModel.construct(**values)
+
+    @property
+    def flags(self):
+        return self._flags
+
+    @property
+    def use_default_on_failure(self):
+        return self._use_default_on_failure
 
 
 class DataType(str, Enum):
