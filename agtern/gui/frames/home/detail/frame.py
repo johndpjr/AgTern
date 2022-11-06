@@ -46,8 +46,6 @@ class InternshipDetailFrame(tk.Frame):
     def _insert_description(self, description: str):
         """Clears the internship description textbox, inserts the description,
         and disables the textbox from modification."""
-        if not description:
-            return
         self._txtbx_iship_description.config(state=tk.NORMAL)
         self._txtbx_iship_description.delete(1.0, tk.END)
         self._txtbx_iship_description.insert(tk.END, description)
