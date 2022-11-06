@@ -2,8 +2,8 @@ import tkinter as tk
 import tkinter.ttk as ttk
 import webbrowser
 
-from .......common import LOG
-from ......styles import *
+from agtern.common import LOG
+from agtern.gui.styles import *
 
 
 class InternshipApplyButton(tk.Frame):

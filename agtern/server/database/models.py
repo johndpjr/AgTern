@@ -1,9 +1,12 @@
+
+"""This file contains SQLAlchemy and/or Pydantic models that are used ONLY on the server (ex: stored in a database)"""
+
 from sqlalchemy import Column, Integer, String
 
-from .database import Base
+from .database import DatabaseModel
 
 
-class Internship(Base):
+class DatabaseInternship(DatabaseModel):
     __tablename__ = "internships"
 
     id = Column(Integer, primary_key=True, index=True)

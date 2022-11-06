@@ -5,50 +5,47 @@ from typing import List
 from threading import Thread
 import uvicorn
 
-from ..common import LOG, schemas
+from agtern.common import LOG, Internship, InternshipCreateSchema
 from .database import (
     crud,
     models,
-    engine,
-    SessionLocal
+    engine, DatabaseInternship
 )
-from ..server import start_scraper
+from agtern.server.scraping import start_scraper
+from agtern.server.database import get_db
 from .utils import sort_companies, import_companies
 
 
-models.Base.metadata.create_all(bind=engine)
+models.DatabaseModel.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
 
-# Dependency
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
-@app.get("/api/internships/", response_model=List[schemas.Internship])
+@app.get("/api/internships/", response_model=List[Internship])
 async def get_all_internships(db: Session = Depends(get_db)):
     """Returns all internships from the database"""
     return crud.get_all_internships(db)
 
-@app.post("/api/internships/", response_model=schemas.Internship)
-async def create_internship(internship: schemas.InternshipCreate, db: Session = Depends(get_db)):
+@app.post("/api/internships/", response_model=Internship)
+async def create_internship(internship: InternshipCreateSchema, db: Session = Depends(get_db)):
     """Adds an Internship object to the database."""
-    return crud.create_internship(db, internship)
+    db_internship = DatabaseInternship(**{
+        k: v for k, v in internship.dict().items()
+        if k in DatabaseInternship.__table__.columns.keys()
+        and v is not None
+    })
+    return crud.create_internship(db, db_internship)
 
 
 def run():
-    uvicorn.run("agtern:app", host="0.0.0.0", port=5000, log_level="info")
+    uvicorn.run("agtern.server:app", host="0.0.0.0", port=5000, log_level="info")
 
 def start_server(args: Namespace):
     if not args.save_internships:
         LOG.warning("Internships won't be stored to db; use --save-internships to store to db")
 
     if args.scrape_only:
+        args.headless = False
         start_scraper(args)
         return
 

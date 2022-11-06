@@ -2,7 +2,7 @@ import json
 
 import pandas as pd
 
-from ...common import LOG, DataFile
+from agtern.common import LOG, DataFile
 
 
 def import_companies():

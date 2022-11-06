@@ -1,10 +1,12 @@
 from typing import Callable, List, Union, Type, Any, Dict
 
 from pydantic import validate_arguments, ValidationError
-from pydantic.decorator import ValidatedFunction
 from pydantic.main import BaseModel
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from pydantic.decorator import ValidatedFunction  # not declared in __all__
 
-from ....common import LOG
+from agtern.common import LOG
 from .scrape_action_registry import get_action
 from .models import ScrapingContext
 
@@ -35,20 +37,12 @@ def parse_config(
 
         # Assign parameters and inject dependencies
         parameters_dict = {}
-        parameters_valid = True
         for parameter_name, parameter in action.parameters.items():
             annotation = parameter.annotation
             if annotation in dependencies:
                 parameters_dict[parameter_name] = dependencies[annotation]
-            elif parameter_name not in action_config:
-                LOG.error(f"Action {company_name}:{action_num} is missing required parameter "
-                          f"{parameter_name}: {parameter.annotation} Skipping!")
-                parameters_valid = False
-                break
-            else:
+            elif parameter_name in action_config:
                 parameters_dict[parameter_name] = action_config[parameter_name]
-        if not parameters_valid:
-            continue  # Skip this action
 
         def wrap_action(action, parameters_dict):
             """Returns a wrapped version of action.execute that validates parameters before executing"""

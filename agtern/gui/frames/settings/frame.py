@@ -2,8 +2,8 @@ import tkinter as tk
 from datetime import datetime
 from tkinter import ttk
 
-from ....common import LOG
-from ...styles import *
+from agtern.common import LOG
+from agtern.gui.styles import *
 
 
 class SettingsFrame(tk.Frame):

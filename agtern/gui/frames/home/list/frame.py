@@ -1,8 +1,8 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 
-from .....common import LOG, Internship
-from ....styles import *
+from agtern.common import LOG, Internship
+from agtern.gui.styles import *
 from .scrolled import InternshipEntryFrame, VerticalScrolledFrame
 
 
