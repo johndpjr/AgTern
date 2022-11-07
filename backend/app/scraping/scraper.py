@@ -136,7 +136,7 @@ class WebScraper:
                 success = False
         try:
             crud.create_internships(ctx.db, *internships_to_add)
-            LOG.error("Saving to database succeeded!")
+            LOG.info("Saving to database succeeded!")
         except Exception as e:
             LOG.error("Saving to database FAILED!")
             LOG.error(e)
