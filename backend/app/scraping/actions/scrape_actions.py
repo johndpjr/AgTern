@@ -44,9 +44,11 @@ def click(ctx: ScrapingContext, xpath: str, must_exist: bool = True):
     for element in ctx.scraper.scrape_xpath(xpath):
         if must_exist:
             ctx.scraper.js("arguments[0].click()", element)
+            time.sleep(1)
         else:
             try:
                 ctx.scraper.js("arguments[0].click()", element)
+                time.sleep(1)
             except TimeoutException:
                 continue
 
@@ -100,16 +102,40 @@ def scrape_property(ctx: ScrapingContext, prop: ScrapePropertyModel):
         # Append new data to the end of the column
         previous_data_length = ctx.scraping_progress[prop.name]
         previous_data = ctx.data[prop.name][:previous_data_length]
-        ctx.data.drop(columns=prop.name)
-        ctx.data[prop.name] = pd.concat([
-            previous_data,
-            new_data
-        ], ignore_index=True)
+        # See https://stackoverflow.com/a/74250413/11827673
+        # I don't really know what this pandas code is doing
+        # But hey, it works!
+        ctx.data = pd.concat([
+            ctx.data.drop(columns=prop.name),
+            pd.concat([
+                previous_data,
+                new_data
+            ], ignore_index=True).to_frame(prop.name)
+        ], axis=1)
         ctx.scraping_progress[prop.name] += len(new_data)
     else:
         ctx.data[prop.name] = pd.Series(contents, dtype=prop.store_as)
         ctx.scraping_progress[prop.name] = len(new_data)
 
+
+def goto_next_page(ctx: ScrapingContext, next_page: str = None):
+    if next_page is None:
+        return False
+    try:
+        elements = ctx.scraper.scrape_xpath(next_page)
+        if len(elements) > 0:
+            valid = False
+            for element in elements:
+                if element.is_enabled() and element.get_attribute("aria-disabled") != "true":
+                    valid = True
+            if valid:
+                click(ctx, next_page)
+                return True
+    except NoSuchElementException:
+        pass
+    except TimeoutException:
+        pass
+    return False
 
 @scrape_action("scrape")
 def scrape(
@@ -144,19 +170,18 @@ def scrape(
     if properties is not None:
         i = 1
         num_props = len(properties)
-        for prop in properties:
-            LOG.info(f"Scraping property {i}/{num_props} ({prop.name})...")
-            scrape(ctx, prop=prop)
+        for _prop in properties:
+            LOG.info(f"Scraping property {i}/{num_props} ({_prop.name})...")
+            scrape(ctx, prop=_prop)
             i += 1
+        if next_page is not None:
+            LOG.info("Going to the next page...")
+            if goto_next_page(ctx, next_page):
+                scrape(ctx, properties=properties, next_page=next_page)
+            else:
+                LOG.info("No more pages!")
     elif prop is not None:  # If both are None, nothing executes
         if prop.value is not None:
             ctx.data[prop.name] = prop.value
         scrape_property(ctx, prop)
         ctx.data["company"] = ctx.company
-
-    if next_page is not None:
-        try:
-            click(ctx, next_page)
-            scrape(ctx, prop=prop, properties=properties, next_page=next_page)
-        except NoSuchElementException:
-            return

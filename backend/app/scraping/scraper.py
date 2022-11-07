@@ -14,6 +14,7 @@ from urllib.parse import urlparse
 import pandas as pd
 import selenium.webdriver.support.expected_conditions as condition
 from pydantic import ValidationError
+from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
@@ -79,7 +80,7 @@ class WebScraper:
     def js(self, code: str, *args: Any) -> Any:
         return self.driver.execute_script(code, *args)
 
-    def scrape_xpath(self, xpath: str) -> list:
+    def scrape_xpath(self, xpath: str) -> list[WebElement]:
         return self.wait.until(
             condition.presence_of_all_elements_located(
                 (By.XPATH, xpath)
@@ -242,6 +243,10 @@ def scrape(args: Namespace):
             company_scrape_df["scrape"].notna()
         ]
         for idx, entry in company_scrape_df.iterrows():
+            # Uncomment below to just scrape Amazon
+            # TODO: Add a command-line argument to select which company/companies to scrape
+            if entry["company"] != "Amazon":
+                continue
             LOG.info(f"Scraping {entry['company']}...")
             scraper.scrape_company(entry["link"], entry)
         LOG.info("Done!")
