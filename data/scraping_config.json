@@ -1,8 +1,68 @@
 [
   {
     "company": "AT&T",
-    "link": "https://www.att.jobs/students",
-    "scrape": null
+    "link": "https://www.att.jobs/search-jobs",
+    "scrape": [
+      {
+        "action": "click",
+        "xpath": "//button[@id='category-toggle']"
+      },
+      {
+        "action": "click",
+        "xpath": "//input[@data-display='Internships']"
+      },
+      {
+        "action": "click",
+        "xpath": "//a[@class='pagination-show-all']",
+        "must_exist": false
+      },
+      {
+        "action": "scrape",
+        "properties": [
+          {
+            "name": "title",
+            "xpath": "//section[@id='search-results-list']//li//h2"
+          },
+          {
+            "name": "location",
+            "xpath": "//section[@id='search-results-list']//li//span[@class='job-location']"
+          },
+          {
+            "name": "link",
+            "xpath": "//section[@id='search-results-list']//li/a",
+            "html_property": "href",
+            "unique": true
+          }
+        ]
+      },
+      {
+        "action": "scrape",
+        "link_property": "link",
+        "properties": [
+          {
+            "name": "description",
+            "xpath": "//div[@class='ats-description']",
+            "regex": {
+              "pattern": "[\\s\\S]+(?=\\n\\n\\n\\n\\nJob ID)",
+              "multiline": true
+            }
+          },
+          {
+            "name": "job_id",
+            "xpath": "//span[contains(@class,'job-id')]"
+          },
+          {
+            "name": "post_date",
+            "xpath": "//span[contains(@class,'job-date')]"
+          },
+          {
+            "name": "apply_link",
+            "xpath": "//div[@id='anchor-navigation']//a[@data-selector-name='job-apply-link']",
+            "html_property": "href"
+          }
+        ]
+      }
+    ]
   },
   {
     "company": "Allstate",
@@ -182,7 +242,7 @@
             "xpath": "//div[@class='careers-width-constraint']/div/div[2]"
           },
           {
-            "name": "req_id",
+            "name": "job_id",
             "xpath": "//tbody/tr[@class='tds-table-row'][3]/td[1]"
           },
           {
