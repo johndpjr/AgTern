@@ -40,7 +40,8 @@ def sleep(ms: float):
 
 @scrape_action("click")
 def click(ctx: ScrapingContext, xpath: str):
-    ActionChains(ctx.scraper.driver).click(ctx.scraper.scrape_xpath(xpath)[0]).perform()
+    for element in ctx.scraper.scrape_xpath(xpath):
+        ActionChains(ctx.scraper.driver).click(element).perform()
 
 
 @scrape_action("type")
