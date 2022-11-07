@@ -6,7 +6,7 @@ from typing import Callable, List
 
 import pandas as pd
 from pydantic import AnyUrl
-from selenium.common import NoSuchElementException
+from selenium.common import NoSuchElementException, TimeoutException
 from selenium.webdriver import ActionChains
 
 from backend.app.utils import LOG
@@ -40,9 +40,15 @@ def sleep(ms: float):
 
 
 @scrape_action("click")
-def click(ctx: ScrapingContext, xpath: str):
+def click(ctx: ScrapingContext, xpath: str, must_exist: bool = True):
     for element in ctx.scraper.scrape_xpath(xpath):
-        ActionChains(ctx.scraper.driver).click(element).perform()
+        if must_exist:
+            ctx.scraper.js("arguments[0].click()", element)
+        else:
+            try:
+                ctx.scraper.js("arguments[0].click()", element)
+            except TimeoutException:
+                continue
 
 
 @scrape_action("type")
