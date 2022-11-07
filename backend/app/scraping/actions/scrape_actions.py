@@ -6,6 +6,7 @@ from typing import Callable, List
 
 import pandas as pd
 from pydantic import AnyUrl
+from selenium.common import NoSuchElementException
 from selenium.webdriver import ActionChains
 
 from backend.app.utils import LOG
@@ -94,7 +95,10 @@ def scrape_property(ctx: ScrapingContext, prop: ScrapePropertyModel):
         previous_data_length = ctx.scraping_progress[prop.name]
         previous_data = ctx.data[prop.name][:previous_data_length]
         ctx.data.drop(columns=prop.name)
-        ctx.data[prop.name] = pd.concat([previous_data, new_data], ignore_index=True)
+        ctx.data[prop.name] = pd.concat([
+            previous_data,
+            new_data
+        ], ignore_index=True)
         ctx.scraping_progress[prop.name] += len(new_data)
     else:
         ctx.data[prop.name] = pd.Series(contents, dtype=prop.store_as)
@@ -103,11 +107,12 @@ def scrape_property(ctx: ScrapingContext, prop: ScrapePropertyModel):
 
 @scrape_action("scrape")
 def scrape(
-    ctx: ScrapingContext,
-    link: AnyUrl = None,
-    link_property: str = None,
-    prop: ScrapePropertyModel = None,
-    properties: List[ScrapePropertyModel] = None,
+        ctx: ScrapingContext,
+        link: AnyUrl = None,
+        link_property: str = None,
+        prop: ScrapePropertyModel = None,
+        properties: List[ScrapePropertyModel] = None,
+        next_page: str = None
 ):
     if prop is not None and properties is not None:
         raise ValueError('Both "prop" and "properties" were specified!')
@@ -122,7 +127,7 @@ def scrape(
         num_links = len(links)
         for link in links:
             LOG.info(f"Scraping link {i}/{num_links} ({link})...")
-            scrape(ctx, link=link, prop=prop, properties=properties)
+            scrape(ctx, link=link, prop=prop, properties=properties, next_page=next_page)
             # Uncomment below to just scrape 3 links
             # TODO: Add a command-line argument to limit how many internships we scrape for testing
             # if i == 2:
@@ -137,9 +142,15 @@ def scrape(
             LOG.info(f"Scraping property {i}/{num_props} ({prop.name})...")
             scrape(ctx, prop=prop)
             i += 1
-        return
     elif prop is not None:  # If both are None, nothing executes
         if prop.value is not None:
             ctx.data[prop.name] = prop.value
         scrape_property(ctx, prop)
         ctx.data["company"] = ctx.company
+
+    if next_page is not None:
+        try:
+            click(ctx, next_page)
+            scrape(ctx, prop=prop, properties=properties, next_page=next_page)
+        except NoSuchElementException:
+            return
