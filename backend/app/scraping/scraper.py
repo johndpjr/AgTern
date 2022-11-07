@@ -173,7 +173,7 @@ class WebScraper:
                 if crawl_delay is None or new_crawl_delay < crawl_delay:
                     crawl_delay = new_crawl_delay
         if crawl_delay is None:
-            crawl_delay = 0
+            crawl_delay = 1
         LOG.info(f"Crawl-delay: {crawl_delay}")
         self.goto(link)
         time.sleep(3)  # Make sure page is fully loaded
