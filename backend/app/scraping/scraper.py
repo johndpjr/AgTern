@@ -81,7 +81,9 @@ class WebScraper:
 
     def scrape_xpath(self, xpath: str) -> list:
         return self.wait.until(
-            condition.presence_of_all_elements_located((By.XPATH, xpath))
+            condition.presence_of_all_elements_located(
+                (By.XPATH, xpath)
+            )
         )
 
     def commit_internships(self, ctx: ScrapingContext) -> bool:
@@ -132,7 +134,12 @@ class WebScraper:
                 LOG.error(f"Internship: {internship.to_dict()}")
                 LOG.error(errors)
                 success = False
-        crud.create_internships(ctx.db, *internships_to_add)
+        try:
+            crud.create_internships(ctx.db, *internships_to_add)
+            LOG.error("Saving to database succeeded!")
+        except Exception as e:
+            LOG.error("Saving to database FAILED!")
+            LOG.error(e)
         return success
 
     def scrape_company(self, link: str, config: pd.Series):
