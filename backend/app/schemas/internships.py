@@ -19,11 +19,15 @@ class InternshipBase(BaseModel):
     id: Union[
         int, None
     ] = None  # Auto-incremented primary key, leave None for automatic id
+    job_id: str = ""
     company: str = ""
     title: str = ""
+    category: str = ""
     link: str = ""
+    apply_link: str = ""
     period: Season = Season.unknown
     year: int = 0
+    post_date: str = ""  # See models.py on why this is a string
     location: str = ""
     description: str = ""
 

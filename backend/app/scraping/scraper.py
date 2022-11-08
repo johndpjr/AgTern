@@ -12,8 +12,10 @@ from typing import Any
 from urllib.parse import urlparse
 
 import pandas as pd
+import requests
 import selenium.webdriver.support.expected_conditions as condition
 from pydantic import ValidationError
+from selenium.common import InvalidArgumentException
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -71,7 +73,10 @@ class WebScraper:
                 delay_amount = self.crawl_delay - time_passed
                 LOG.info(f"Delaying for {delay_amount:.2f} seconds...")
                 time.sleep(delay_amount)
-        self.driver.get(link)
+        try:
+            self.driver.get(link)
+        except InvalidArgumentException as e:
+            LOG.exception(f"Could not navigate to link: {link}", e)
         self.last_request_time = datetime.now()
         self.wait.until(
             lambda d: d.execute_script("return document.readyState") == "complete"
@@ -154,25 +159,27 @@ class WebScraper:
         self.last_request_time = None
         self.crawl_delay = 0
         parsed_link = urlparse(link)
-        self.goto(
+        robots_txt_response = requests.get(
             f"{parsed_link.scheme if len(parsed_link.scheme) > 0 else 'http'}://{parsed_link.netloc}/robots.txt"
         )
+        robots_txt = None if robots_txt_response.status_code != 200 else robots_txt_response.text
         context = ScrapingContext(
             scraper=self,
             company=company_name,
             db=db,
             data=pd.DataFrame(),
-            robots_txt=self.driver.page_source,
+            robots_txt=robots_txt
         )
         crawl_delay = None
-        for line in context.robots_txt.splitlines():
-            line = line.strip()
-            while line.find("#") != -1:
-                line = line[: line.find("#")]
-            if line.lower().startswith("crawl-delay:"):
-                new_crawl_delay = float(line[12:].strip())
-                if crawl_delay is None or new_crawl_delay < crawl_delay:
-                    crawl_delay = new_crawl_delay
+        if robots_txt is not None:
+            for line in context.robots_txt.splitlines():
+                line = line.strip()
+                while line.find("#") != -1:
+                    line = line[:line.find("#")]
+                if line.lower().startswith("crawl-delay:"):
+                    new_crawl_delay = float(line[12:].strip())
+                    if crawl_delay is None or new_crawl_delay < crawl_delay:
+                        crawl_delay = new_crawl_delay
         if crawl_delay is None:
             crawl_delay = 1
         LOG.info(f"Crawl-delay: {crawl_delay}")

@@ -79,7 +79,13 @@ def scroll_to_bottom(ctx: ScrapingContext):
 def scrape_property(ctx: ScrapingContext, prop: ScrapePropertyModel):
     if prop.unique and prop.name not in ctx.unique_properties:
         ctx.unique_properties.append(prop.name)
-    elements = ctx.scraper.scrape_xpath(prop.xpath)
+    try:
+        elements = ctx.scraper.scrape_xpath(prop.xpath)
+    except TimeoutException:
+        LOG.error(f"Unable to find {prop.name}! ({prop.xpath})")
+        LOG.error(f"Assuming 1 element wasn't found.")
+        ctx.scraping_progress[prop.name] += 1
+        return
     # Create column with found elements and add to DataFrame
     contents = []
     for element in elements:
