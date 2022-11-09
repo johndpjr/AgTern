@@ -309,7 +309,63 @@
   {
     "company": "Cigna",
     "link": "https://jobs.cigna.com/us/en/search-results?keywords=Intern",
-    "scrape": null
+    "scrape": [
+      {
+        "action": "scrape",
+        "next_page": "//a[contains(@class,'next-btn')]",
+        "properties": [
+          {
+            "name": "title",
+            "xpath": "//div[@class='job-title']"
+          },
+          {
+            "name": "link",
+            "xpath": "//a[@ph-tevent='job_click']",
+            "html_property": "href",
+            "unique": true
+          },
+          {
+            "name": "category",
+            "xpath": "//span[contains(@class,'category')]",
+            "regex": {
+              "pattern": "(Category\\n)(.*)",
+              "group": 2
+            }
+          },
+          {
+            "name": "post_date",
+            "xpath": "//span[@class='job-postdate']",
+            "regex": {
+              "pattern": "(Posted Date\\n)(.*)",
+              "group": 2
+            }
+          }
+        ]
+      },
+      {
+        "action": "scrape",
+        "link_property": "link",
+        "properties": [
+          {
+            "name": "job_id",
+            "xpath": "//span[contains(@class,'jobId')]",
+            "regex": {
+              "pattern": "(Job Id\\n)(.*)",
+              "group": 2
+            }
+          },
+          {
+            "name": "apply_link",
+            "xpath": "(//a[@ph-tevent='apply_click'])[1]",
+            "html_property": "href"
+          },
+          {
+            "name": "description",
+            "xpath": "//section[@class='job-description']"
+          }
+        ]
+      }
+    ]
   },
   {
     "company": "Comcast",
