@@ -127,6 +127,7 @@ class DataType(str, Enum):
 class ScrapePropertyModel(ScrapeActionModel):
     xpath: str = None
     value: str = None  # Constant string to use as a column value
+    loading_text: str = None
     html_property: str = "innerText"
     regex: RegexConfigModel = None
     store_as: DataType = DataType.str

@@ -91,6 +91,11 @@ def scrape_property(ctx: ScrapingContext, prop: ScrapePropertyModel):
     for element in elements:
         # Scrape off of current page
         text = element.get_attribute(prop.html_property)
+        if prop.loading_text is not None and text == prop.loading_text:
+            LOG.info("Element is loading...")
+            time.sleep(1)
+            scrape_property(ctx, prop)
+            return
         if prop.regex is not None:
             # Match against regex in config
             match = prop.regex.pattern.search(text)
@@ -129,10 +134,14 @@ def goto_next_page(ctx: ScrapingContext, next_page: str = None):
         return False
     try:
         elements = ctx.scraper.scrape_xpath(next_page)
+        cursors = ctx.scraper.scrape_css(next_page, "cursor")
         if len(elements) > 0:
             valid = False
-            for element in elements:
-                if element.is_enabled() and element.is_displayed() and element.get_attribute("aria-disabled") != "true":
+            for element, cursor in zip(elements, cursors):
+                if element.is_enabled() and \
+                   element.is_displayed() and \
+                   element.get_attribute("aria-disabled") != "true" and \
+                   cursor != "default":
                     valid = True
             if valid:
                 click(ctx, next_page)
@@ -189,5 +198,6 @@ def scrape(
     elif prop is not None:  # If both are None, nothing executes
         if prop.value is not None:
             ctx.data[prop.name] = prop.value
-        scrape_property(ctx, prop)
+        else:
+            scrape_property(ctx, prop)
         ctx.data["company"] = ctx.company
