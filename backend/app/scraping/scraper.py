@@ -51,6 +51,7 @@ class WebScraper:
         if options is None:
             options = Options()
         options.headless = headless
+        options.add_argument("--start-maximized")
         # if auto_download:
         #     driver_manager = ChromeDriverManager()
         #     driver_exists = driver_manager.driver_cache.find_driver(driver_manager.driver)
@@ -91,6 +92,16 @@ class WebScraper:
                 (By.XPATH, xpath)
             )
         )
+
+    def scrape_css(self, xpath: str, property_value: str) -> list[dict]:
+        return [
+            self.js(
+                "return window.getComputedStyle(arguments[0]).getPropertyValue(arguments[1])",
+                element,
+                property_value
+            )
+            for element in self.scrape_xpath(xpath)
+        ]
 
     def commit_internships(self, ctx: ScrapingContext) -> bool:
         if not self.save_internships:
@@ -252,7 +263,7 @@ def scrape(args: Namespace):
         for idx, entry in company_scrape_df.iterrows():
             # Uncomment below to just scrape Amazon
             # TODO: Add a command-line argument to select which company/companies to scrape
-            if entry["company"] != "Boeing":
+            if entry["company"] != "Cigna":
                 continue
             LOG.info(f"Scraping {entry['company']}...")
             scraper.scrape_company(entry["link"], entry)
