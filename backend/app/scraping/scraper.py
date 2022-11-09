@@ -74,11 +74,11 @@ class WebScraper:
                 delay_amount = self.crawl_delay - time_passed
                 LOG.info(f"Delaying for {delay_amount:.2f} seconds...")
                 time.sleep(delay_amount)
+        self.last_request_time = datetime.now()
         try:
             self.driver.get(link)
         except InvalidArgumentException as e:
             LOG.exception(f"Could not navigate to link: {link}", e)
-        self.last_request_time = datetime.now()
         self.wait.until(
             lambda d: d.execute_script("return document.readyState") == "complete"
         )
