@@ -132,7 +132,7 @@ def goto_next_page(ctx: ScrapingContext, next_page: str = None):
         if len(elements) > 0:
             valid = False
             for element in elements:
-                if element.is_enabled() and element.get_attribute("aria-disabled") != "true":
+                if element.is_enabled() and element.is_displayed() and element.get_attribute("aria-disabled") != "true":
                     valid = True
             if valid:
                 click(ctx, next_page)
