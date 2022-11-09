@@ -68,6 +68,7 @@ def type(ctx: ScrapingContext, xpath: str, text: str):
 
 @scrape_action("scroll_to_bottom")
 def scroll_to_bottom(ctx: ScrapingContext):
+    LOG.info("Scrolling to the bottom of the page...")
     screen_height = ctx.scraper.js("return window.screen.height")
     at_bottom = False
     num_scrolls = 0
@@ -164,7 +165,8 @@ def scrape(
         link_property: str = None,
         prop: ScrapePropertyModel = None,
         properties: List[ScrapePropertyModel] = None,
-        next_page: str = None
+        next_page: str = None,
+        scroll: bool = False
 ):
     if prop is not None and properties is not None:
         raise ValueError('Both "prop" and "properties" were specified!')
@@ -173,19 +175,21 @@ def scrape(
 
     if link is not None:
         ctx.scraper.goto(link)
-    elif link_property is not None:
+    if scroll:
+        scroll_to_bottom(ctx)
+    if link_property is not None:
         links = ctx.data[link_property]
         i = 1
         num_links = len(links)
         for link in links:
             LOG.info(f"Scraping link {i}/{num_links} ({link})...")
-            scrape(ctx, link=link, prop=prop, properties=properties, next_page=next_page)
+            scrape(ctx, link=link, prop=prop, properties=properties, next_page=next_page, scroll=scroll)
             # Uncomment below to just scrape 3 links
             # TODO: Add a command-line argument to limit how many internships we scrape for testing
             # Need to coordinate with scrape_property or all of the info on the first page for the other internships
             # will be scraped
-            # if i == 3:
-            #     return
+            if i == 3:
+                return
             i += 1
         return
 
@@ -199,10 +203,10 @@ def scrape(
         if next_page is not None:
             LOG.info("Going to the next page...")
             if goto_next_page(ctx, next_page):
-                scrape(ctx, properties=properties, next_page=next_page)
+                scrape(ctx, properties=properties, next_page=next_page, scroll=scroll)
             else:
                 LOG.info("No more pages!")
-    elif prop is not None:  # If both are None, nothing executes
+    if prop is not None:
         if prop.value is not None:
             ctx.data[prop.name] = prop.value
         else:
