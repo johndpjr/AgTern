@@ -182,7 +182,9 @@ def scrape(
             scrape(ctx, link=link, prop=prop, properties=properties, next_page=next_page)
             # Uncomment below to just scrape 3 links
             # TODO: Add a command-line argument to limit how many internships we scrape for testing
-            # if i == 2:
+            # Need to coordinate with scrape_property or all of the info on the first page for the other internships
+            # will be scraped
+            # if i == 3:
             #     return
             i += 1
         return
