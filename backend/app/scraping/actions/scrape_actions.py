@@ -41,16 +41,21 @@ def sleep(ms: float):
 
 @scrape_action("click")
 def click(ctx: ScrapingContext, xpath: str, must_exist: bool = True):
-    for element in ctx.scraper.scrape_xpath(xpath):
+    elements = ctx.scraper.scrape_xpath(xpath)
+    i = 0
+    for element in elements:
+        i += 1
+        LOG.info(f"Clicking element {i}/{len(elements)}...")
         if must_exist:
             ctx.scraper.js("arguments[0].click()", element)
-            time.sleep(1)
+            time.sleep(0.25)
         else:
             try:
                 ctx.scraper.js("arguments[0].click()", element)
-                time.sleep(1)
+                time.sleep(0.25)
             except TimeoutException:
                 continue
+    time.sleep(1)
 
 
 @scrape_action("type")
