@@ -110,11 +110,7 @@
           },
           {
             "name": "description",
-            "xpath": "//div[@id='gtm-jobdetail-desc']",
-            "regex": {
-              "pattern": "[\\s\\S]+(?=\\n\\nGood Work. Good Life. Good Hands)",
-              "multiline": true
-            }
+            "xpath": "//div[@id='gtm-jobdetail-desc']"
           }
         ]
       }
@@ -418,7 +414,11 @@
           },
           {
             "name": "description",
-            "xpath": "//div[@id='section-job-description']"
+            "xpath": "//div[@id='section-job-description']",
+            "regex": {
+              "pattern": "(Job Summary:\n\n)([\\s\\S]*)",
+              "multiline": true
+            }
           }
         ]
       }
@@ -478,8 +478,56 @@
   },
   {
     "company": "Ecolab",
-    "link": "https://jobs.ecolab.com/job-search-results/?keyword=intern",
-    "scrape": null
+    "link": "https://jobs.ecolab.com/job-search-results/?category[]=Internship",
+    "scrape": [
+      {
+        "action": "scrape",
+        "next_page": "//li[@class='pagination-li']/a[text()='>']",
+        "properties": [
+          {
+            "name": "title",
+            "xpath": "//div[@class='jobTitle']"
+          },
+          {
+            "name": "link",
+            "xpath": "//div[@class='jobTitle']/a",
+            "html_property": "href",
+            "unique": true
+          },
+          {
+            "name": "location",
+            "xpath": "//li[contains(@class,'city_state')]"
+          },
+          {
+            "name": "post_date",
+            "xpath": "//li[contains(@class,'open_date')]"
+          }
+        ]
+      },
+      {
+        "action": "scrape",
+        "link_property": "link",
+        "properties": [
+          {
+            "name": "job_id",
+            "xpath": "//span[@id='gtm-jobdetail-id']"
+          },
+          {
+            "name": "apply_link",
+            "xpath": "(//a[contains(@class,'apply-btn')])[1]",
+            "html_property": "href"
+          },
+          {
+            "name": "description",
+            "xpath": "//div[@id='gtm-jobdetail-desc']//div[contains(@class,'panel-default')]",
+            "regex": {
+              "pattern": "(Job Description\n\n)([\\s\\S]*)",
+              "multiline": true
+            }
+          }
+        ]
+      }
+    ]
   },
   {
     "company": "ExxonMobil",
