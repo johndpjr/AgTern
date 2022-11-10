@@ -7,7 +7,7 @@ from typing import Callable, List
 import pandas as pd
 from pydantic import AnyUrl
 from selenium.common import NoSuchElementException, TimeoutException
-from selenium.webdriver import ActionChains
+from selenium.webdriver import ActionChains, Keys
 
 from backend.app.utils import LOG
 
@@ -61,9 +61,9 @@ def click(ctx: ScrapingContext, xpath: str, must_exist: bool = True):
 @scrape_action("type")
 def type(ctx: ScrapingContext, xpath: str, text: str):
     # TODO: Delay in between keystrokes
-    ActionChains(ctx.scraper.driver).send_keys_to_element(
-        ctx.scraper.scrape_xpath(xpath)[0], *text
-    ).perform()
+    ActionChains(ctx.scraper.driver)\
+        .send_keys_to_element(ctx.scraper.scrape_xpath(xpath)[0], *text, Keys.ENTER)\
+        .perform()
 
 
 @scrape_action("scroll_to_bottom")
