@@ -188,8 +188,8 @@ def scrape(
             # TODO: Add a command-line argument to limit how many internships we scrape for testing
             # Need to coordinate with scrape_property or all of the info on the first page for the other internships
             # will be scraped
-            if i == 3:
-                return
+            # if i == 3:
+            #     return
             i += 1
         return
 
