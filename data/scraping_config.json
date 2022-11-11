@@ -43,7 +43,7 @@
             "name": "description",
             "xpath": "//div[@class='ats-description']",
             "regex": {
-              "pattern": "(Job Overview\\n\\n)([\\s\\S]+)(\\n\\n\\n\\n\\nJob ID)",
+              "pattern": "(Job Overview\\n*)([\\s\\S]+)(\\n*Job ID)",
               "group": 2,
               "multiline": true
             }
@@ -305,7 +305,12 @@
           },
           {
             "name": "description",
-            "xpath": "//div[contains(@class,'job-description-wrap')]"
+            "xpath": "//div[contains(@class,'job-description-wrap')]",
+            "regex": {
+              "pattern": "(\\n*Job Description\\n*)([\\s\\S]+)(\\n*)",
+              "group": 2,
+              "multiline": true
+            }
           }
         ]
       }
@@ -530,7 +535,8 @@
             "name": "description",
             "xpath": "//div[@id='gtm-jobdetail-desc']//div[contains(@class,'panel-default')]",
             "regex": {
-              "pattern": "(Job Description\\n\\n)([\\s\\S]*)",
+              "pattern": "(Job Description\\n*)([\\s\\S]*)",
+              "group": 2,
               "multiline": true
             }
           }
@@ -706,6 +712,7 @@
     "scrape": [
       {
         "action": "scrape",
+        "next_page": "//a[contains(@class,'next-btn')]",
         "properties": [
           {
             "name": "title",
