@@ -20,3 +20,10 @@ class Internship(DatabaseModel):
     description = Column(String)
     # TODO: Add tags to the model, see https://docs.sqlalchemy.org/en/20/core/type_basics.html#sqlalchemy.types.ARRAY
     # (we would have to use the PostgreSQL backend)
+
+    def __str__(self):
+        return str({
+            column: getattr(self, column)
+            for column in DatabaseInternship.__table__.columns.keys()
+            if hasattr(self, column)
+        })
