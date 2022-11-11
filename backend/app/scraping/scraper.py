@@ -74,11 +74,11 @@ class WebScraper:
                 delay_amount = self.crawl_delay - time_passed
                 LOG.info(f"Delaying for {delay_amount:.2f} seconds...")
                 time.sleep(delay_amount)
-        self.last_request_time = datetime.now()
         try:
             self.driver.get(link)
         except InvalidArgumentException as e:
             LOG.exception(f"Could not navigate to link: {link}", e)
+        self.last_request_time = datetime.now()
         self.wait.until(
             lambda d: d.execute_script("return document.readyState") == "complete"
         )
@@ -191,6 +191,8 @@ class WebScraper:
                     new_crawl_delay = float(line[12:].strip())
                     if crawl_delay is None or new_crawl_delay < crawl_delay:
                         crawl_delay = new_crawl_delay
+        else:
+            LOG.info("No robots.txt was found!")
         if crawl_delay is None:
             crawl_delay = 1
         LOG.info(f"Crawl-delay: {crawl_delay}")
