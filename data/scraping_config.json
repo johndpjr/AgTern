@@ -43,17 +43,26 @@
             "name": "description",
             "xpath": "//div[@class='ats-description']",
             "regex": {
-              "pattern": "[\\s\\S]+(?=\\n\\n\\n\\n\\nJob ID)",
+              "pattern": "(Job Overview\\n\\n)([\\s\\S]+)(\\n\\n\\n\\n\\nJob ID)",
+              "group": 2,
               "multiline": true
             }
           },
           {
             "name": "job_id",
-            "xpath": "//span[contains(@class,'job-id')]"
+            "xpath": "//span[contains(@class,'job-id')]",
+            "regex": {
+              "pattern": "(Job ID )(.*)",
+              "group": 2
+            }
           },
           {
             "name": "post_date",
-            "xpath": "//span[contains(@class,'job-date')]"
+            "xpath": "//span[contains(@class,'job-date')]",
+            "regex": {
+              "pattern": "(Date posted )(.*)",
+              "group": 2
+            }
           },
           {
             "name": "apply_link",
