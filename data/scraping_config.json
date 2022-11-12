@@ -843,7 +843,7 @@
             "xpath": "//tbody/tr[@class='tds-table-row']/td[1]",
             "regex": {
               "pattern": "\\d{4}",
-              "default": null
+              "default": ""
             }
           },
           {
@@ -852,7 +852,7 @@
             "regex": {
               "pattern": "summer|spring|fall|winter",
               "ignore_case": true,
-              "default": null
+              "default": ""
             }
           },
           {
