@@ -11,7 +11,8 @@ def import_companies():
     # Gets paths of companies CSV and scraping config JSON
     companies_csv = DataFile("companies.csv", default_data="name,link")
     scraping_config_json = DataFile(
-        "scraping_config.json", default_data='[{"company":null,"link":null,"scrape":null}]'
+        "scraping_config.json",
+        default_data='[{"company":null,"link":null,"scrape":null}]',
     )
 
     # Converts readable JSON into object read in by DataFrame

@@ -1,10 +1,10 @@
 from __future__ import annotations  # Allow type annotations before the type is defined
 
-import signal
-from argparse import Namespace
 import json
+import signal
 import time
 import traceback
+from argparse import Namespace
 from datetime import datetime
 from multiprocessing import Process
 from threading import Thread
@@ -14,16 +14,22 @@ from urllib.parse import urlparse
 import pandas as pd
 import selenium.webdriver.support.expected_conditions as condition
 from pydantic import ValidationError
-from sqlalchemy import Table
-from undetected_chromedriver import Chrome
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
-# from webdriver_manager.chrome import ChromeDriverManager
+from sqlalchemy import Table
+from undetected_chromedriver import Chrome
+
+from agtern.common import LOG, DataFile
+from agtern.server.database import (
+    DatabaseInternship,
+    DatabaseSession,
+    create_internships,
+)
 
 from .actions import ScrapingContext, parse_config
-from agtern.common import LOG, DataFile
-from agtern.server.database import DatabaseSession, DatabaseInternship, create_internships
+
+# from webdriver_manager.chrome import ChromeDriverManager
 
 
 class WebScraper:
@@ -38,7 +44,9 @@ class WebScraper:
         self.last_request_time: datetime = None
         self.save_internships = save_internships
 
-    def start(self, headless: bool, options: Options = None, auto_download: bool = True):
+    def start(
+        self, headless: bool, options: Options = None, auto_download: bool = True
+    ):
         """Starts a new Chrome instance."""
         if options is None:
             options = Options()
@@ -67,16 +75,16 @@ class WebScraper:
                 time.sleep(delay_amount)
         self.driver.get(link)
         self.last_request_time = datetime.now()
-        self.wait.until(lambda d: d.execute_script("return document.readyState") == "complete")
+        self.wait.until(
+            lambda d: d.execute_script("return document.readyState") == "complete"
+        )
 
     def js(self, code: str, *args: Any) -> Any:
         return self.driver.execute_script(code, *args)
 
     def scrape_xpath(self, xpath: str) -> list:
         return self.wait.until(
-            condition.presence_of_all_elements_located(
-                (By.XPATH, xpath)
-            )
+            condition.presence_of_all_elements_located((By.XPATH, xpath))
         )
 
     def commit_internships(self, ctx: ScrapingContext) -> bool:
@@ -85,27 +93,43 @@ class WebScraper:
         LOG.info("Writing to database...")
         success = True
         internships_to_add = []
-        internships_to_update = []  # TODO: Update internships instead of ignoring duplicates
+        internships_to_update = (
+            []
+        )  # TODO: Update internships instead of ignoring duplicates
         column_names = DatabaseInternship.__table__.columns.keys()
         for idx, internship in ctx.data.iterrows():
             try:
                 internship_exists = False
                 for unique_prop in ctx.unique_properties:
-                    if unique_prop in column_names \
-                        and hasattr(DatabaseInternship, unique_prop) \
-                            and hasattr(internship, unique_prop):
+                    if (
+                        unique_prop in column_names
+                        and hasattr(DatabaseInternship, unique_prop)
+                        and hasattr(internship, unique_prop)
+                    ):
                         # noinspection PyTypeChecker
-                        if ctx.db.query(getattr(DatabaseInternship, unique_prop)) \
+                        if (
+                            ctx.db.query(getattr(DatabaseInternship, unique_prop))
                             .filter(
-                                DatabaseInternship.company == ctx.company and
-                                getattr(DatabaseInternship, unique_prop) == getattr(internship, unique_prop)
-                                ).count() > 0:
-                            internship_exists = True  # Skip this internship because it already exists
+                                DatabaseInternship.company == ctx.company
+                                and getattr(DatabaseInternship, unique_prop)
+                                == getattr(internship, unique_prop)
+                            )
+                            .count()
+                            > 0
+                        ):
+                            internship_exists = (
+                                True  # Skip this internship because it already exists
+                            )
                 if not internship_exists:
-                    internships_to_add.append(DatabaseInternship(
-                        **{k: v for k, v in internship.items()
-                            if k in column_names and v is not None}
-                    ))
+                    internships_to_add.append(
+                        DatabaseInternship(
+                            **{
+                                k: v
+                                for k, v in internship.items()
+                                if k in column_names and v is not None
+                            }
+                        )
+                    )
             except ValidationError as errors:
                 LOG.error("Unable to create internship!")
                 LOG.error(f"Internship: {internship.to_dict()}")
@@ -118,26 +142,28 @@ class WebScraper:
         db = DatabaseSession()
         if "company" not in config:
             LOG.warning(
-                "One of the companies in the scraping config does not have a \"company\" property. Skipping!"
+                'One of the companies in the scraping config does not have a "company" property. Skipping!'
             )
             return
         company_name = config["company"]
         self.last_request_time = None
         self.crawl_delay = 0
         parsed_link = urlparse(link)
-        self.goto(f"{parsed_link.scheme if len(parsed_link.scheme) > 0 else 'http'}://{parsed_link.netloc}/robots.txt")
+        self.goto(
+            f"{parsed_link.scheme if len(parsed_link.scheme) > 0 else 'http'}://{parsed_link.netloc}/robots.txt"
+        )
         context = ScrapingContext(
             scraper=self,
             company=company_name,
             db=db,
             data=pd.DataFrame(),
-            robots_txt=self.driver.page_source
+            robots_txt=self.driver.page_source,
         )
         crawl_delay = None
         for line in context.robots_txt.splitlines():
             line = line.strip()
             while line.find("#") != -1:
-                line = line[:line.find("#")]
+                line = line[: line.find("#")]
             if line.lower().startswith("crawl-delay:"):
                 new_crawl_delay = float(line[12:].strip())
                 if crawl_delay is None or new_crawl_delay < crawl_delay:
@@ -154,7 +180,9 @@ class WebScraper:
             action_num += 1
             try:
                 # noinspection PyUnresolvedReferences
-                LOG.info(f"Running Action {company_name}:{action_num} ({action.action.name})...")
+                LOG.info(
+                    f"Running Action {company_name}:{action_num} ({action.action.name})..."
+                )
                 action()
             except Exception as e:
                 LOG.error(f"ERROR: Could not execute {company_name}:{action_num}!")
@@ -162,7 +190,9 @@ class WebScraper:
         self.commit_internships(context)
 
 
-ScrapingContext.update_forward_refs(WebScraper=WebScraper)  # Allow ScrapingContext to reference WebScraper
+ScrapingContext.update_forward_refs(
+    WebScraper=WebScraper
+)  # Allow ScrapingContext to reference WebScraper
 
 
 # dump_schemas()  # Export schemas as json files (currently broken)
@@ -170,7 +200,7 @@ ScrapingContext.update_forward_refs(WebScraper=WebScraper)  # Allow ScrapingCont
 
 def scrape(args: Namespace):
     """Scrapes all companies in scraping config if actions are defined there.
-     Scraped internships are stored in a database."""
+    Scraped internships are stored in a database."""
     scraper = None
 
     # Close driver when work is finished
@@ -204,7 +234,9 @@ def scrape(args: Namespace):
         company_scrape_df = pd.DataFrame(config)
 
         # Iterate through valid sources to be scraped
-        company_scrape_df: pd.DataFrame = company_scrape_df.loc[company_scrape_df["scrape"].notna()]
+        company_scrape_df: pd.DataFrame = company_scrape_df.loc[
+            company_scrape_df["scrape"].notna()
+        ]
         for idx, entry in company_scrape_df.iterrows():
             LOG.info(f"Scraping {entry['company']}...")
             scraper.scrape_company(entry["link"], entry)
@@ -224,7 +256,5 @@ def start_scraper(args: Namespace):
         return
 
     worker = Process if args.multiprocessing else Thread
-    scraper = worker(target=scrape,
-                     daemon=True,
-                     args=(args,))
+    scraper = worker(target=scrape, daemon=True, args=(args,))
     scraper.start()

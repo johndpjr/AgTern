@@ -1,4 +1,3 @@
-
 """This file contains SQLAlchemy and/or Pydantic models that are used ONLY on the server (ex: stored in a database)"""
 
 from sqlalchemy import Column, Integer, String
