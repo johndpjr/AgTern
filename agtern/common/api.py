@@ -2,13 +2,14 @@ import requests
 from pydantic import ValidationError
 from requests.adapters import HTTPAdapter, Retry
 
-from .schemas import InternshipCreateSchema
-from .models import Internship
 from .logger import LOG
+from .models import Internship
+from .schemas import InternshipCreateSchema
 
 
 class AgTernAPI:
     """Wrapper for all communication to AgTern's services."""
+
     env = "dev"
     LOCALHOST_URL = "http://127.0.0.1:5000/api"
     SERVER_URL = "http://our-public-agtern-api.com/api"
@@ -38,8 +39,9 @@ class AgTernAPI:
         """Create an internship."""
 
         LOG.info("Creating internship...")
-        resp = self.session.post(self.base_url + "/internships/",
-                                 data=internship.json())
+        resp = self.session.post(
+            self.base_url + "/internships/", data=internship.json()
+        )
         if resp.ok:
             data = resp.json()
             try:

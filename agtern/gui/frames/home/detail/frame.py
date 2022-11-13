@@ -3,6 +3,7 @@ import tkinter.ttk as ttk
 
 from agtern.common import Internship
 from agtern.gui.styles import *
+
 from .card import InternshipDetailCard
 
 

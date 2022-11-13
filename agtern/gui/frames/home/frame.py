@@ -3,6 +3,7 @@ import tkinter as tk
 import tkinter.ttk as ttk
 
 from agtern.gui.styles import *
+
 from .detail import InternshipDetailFrame
 from .list import InternshipListFrame
 from .search import InternshipSearchFrame

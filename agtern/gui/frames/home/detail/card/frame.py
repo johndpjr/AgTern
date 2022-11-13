@@ -3,6 +3,7 @@ from tkinter import ttk
 
 from agtern.common import Internship
 from agtern.gui.styles import *
+
 from .apply_button import InternshipApplyButton
 
 

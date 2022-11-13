@@ -1,6 +1,6 @@
+import logging
 from argparse import ArgumentParser, Namespace
 from threading import Thread
-import logging
 
 from agtern.common import LOG
 from agtern.gui import Application
@@ -13,11 +13,7 @@ def main(args: Namespace):
             start_server(args)
             return
         else:
-            Thread(
-                target=start_server,
-                daemon=True,
-                args=(args,)
-            ).start()
+            Thread(target=start_server, daemon=True, args=(args,)).start()
     else:
         LOG.warning("--dev not set; server is not running locally")
 
@@ -35,8 +31,7 @@ def run_cli():
     parser.add_argument("--no-scrape", action="store_true")
     parser.add_argument("--scrape-only", action="store_true")
     parser.add_argument("--save-internships", action="store_true")
-    parser.add_argument("--run-as-proc", dest="multiprocessing",
-                        action="store_true")
+    parser.add_argument("--run-as-proc", dest="multiprocessing", action="store_true")
     parser.add_argument("--dev", action="store_true")
     args = parser.parse_args()
 

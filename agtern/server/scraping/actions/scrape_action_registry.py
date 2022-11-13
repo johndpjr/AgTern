@@ -4,10 +4,11 @@ import json
 from inspect import signature
 from typing import Callable, List
 
-from pydantic import validate_arguments, BaseModel
+from pydantic import BaseModel, validate_arguments
 from pydantic.schema import schema
 
 from agtern.common import DataFile, DataFolder
+
 from .models import ScrapeAction
 
 registry: dict[str, ScrapeAction] = {}
@@ -15,7 +16,7 @@ registry: dict[str, ScrapeAction] = {}
 
 def register_action(name: str, function: Callable):
     if name.lower() in registry.keys():
-        raise Exception(f"The action name \"{name}\" has already been assigned!")
+        raise Exception(f'The action name "{name}" has already been assigned!')
     # The following returns a dict-like object mapping the name of the parameter to a parameter object
     function_signature = signature(function)
     # noinspection PyUnresolvedReferences
@@ -23,7 +24,7 @@ def register_action(name: str, function: Callable):
         name=name.lower(),
         parameters=function_signature.parameters,
         model=validate_arguments(function).model,
-        execute=function
+        execute=function,
     )
 
 
@@ -43,5 +44,9 @@ def dump_schemas() -> None:
     DataFolder("models", is_temp=True, create_on_init=True).clean()
     for name, action in registry.items():
         model: BaseModel = action.model
-        DataFile("models", f"{name}.json", is_temp=True,
-                 default_data=model.schema_json(indent=2))
+        DataFile(
+            "models",
+            f"{name}.json",
+            is_temp=True,
+            default_data=model.schema_json(indent=2),
+        )
