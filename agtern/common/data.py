@@ -1,5 +1,5 @@
 from os import makedirs, remove
-from os.path import isfile, isdir
+from os.path import isdir, isfile
 from pathlib import Path
 from shutil import rmtree
 from typing import Union
@@ -7,11 +7,11 @@ from typing import Union
 
 class DataFile:
     def __init__(
-            self,
-            *path: str,
-            is_temp: bool = False,
-            default_data: Union[str, None] = None,
-            create_on_init: bool = True
+        self,
+        *path: str,
+        is_temp: bool = False,
+        default_data: Union[str, None] = None,
+        create_on_init: bool = True
     ):
         self.name = path[-1]
         self.is_temp = is_temp
@@ -19,7 +19,9 @@ class DataFile:
             self.path = Path.cwd().joinpath("data", "temp", *path)
         else:
             self.path = Path.cwd().joinpath("data", *path)
-        self.folder = DataFolder(*(path[:-1]), is_temp=is_temp, create_on_init=create_on_init)
+        self.folder = DataFolder(
+            *(path[:-1]), is_temp=is_temp, create_on_init=create_on_init
+        )
 
         if create_on_init:
             assert self.create(default_data)
@@ -54,12 +56,7 @@ class DataFile:
 
 
 class DataFolder:
-    def __init__(
-            self,
-            *path: str,
-            is_temp: bool = False,
-            create_on_init: bool = True
-    ):
+    def __init__(self, *path: str, is_temp: bool = False, create_on_init: bool = True):
         self.is_temp = is_temp
         if is_temp:
             self.path = Path.cwd().joinpath("data", "temp", *path)

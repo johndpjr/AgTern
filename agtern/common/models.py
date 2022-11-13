@@ -1,4 +1,3 @@
-
 """This file contains Pydantic models that are SHARED between the client and the server (ex: returned by the API)"""
 
 from enum import Enum
@@ -21,7 +20,9 @@ class Season(str, Enum):
 class Internship(BaseModel):
     """Models internship details."""
 
-    id: Union[int, None] = None  # Auto-incremented primary key, leave None for automatic id
+    id: Union[
+        int, None
+    ] = None  # Auto-incremented primary key, leave None for automatic id
     company: str = ""
     title: str = ""
     link: str = ""

@@ -2,7 +2,8 @@ import configparser
 import tkinter as tk
 from tkinter import ttk
 
-from agtern.common import DataFile, AgTernAPI
+from agtern.common import AgTernAPI, DataFile
+
 from .frames import HomeFrame, SettingsFrame, TopBarFrame
 from .styles import *
 

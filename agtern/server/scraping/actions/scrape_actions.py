@@ -9,7 +9,8 @@ from pydantic import AnyUrl
 from selenium.webdriver import ActionChains
 
 from agtern.common import LOG
-from .models import ScrapingContext, ScrapePropertyModel
+
+from .models import ScrapePropertyModel, ScrapingContext
 from .scrape_action_registry import register_action
 
 
@@ -45,7 +46,9 @@ def click(ctx: ScrapingContext, xpath: str):
 @scrape_action("type")
 def type(ctx: ScrapingContext, xpath: str, text: str):
     # TODO: Delay in between keystrokes
-    ActionChains(ctx.scraper.driver).send_keys_to_element(ctx.scraper.scrape_xpath(xpath)[0], *text).perform()
+    ActionChains(ctx.scraper.driver).send_keys_to_element(
+        ctx.scraper.scrape_xpath(xpath)[0], *text
+    ).perform()
 
 
 @scrape_action("scroll_to_bottom")
@@ -90,10 +93,7 @@ def scrape_property(ctx: ScrapingContext, prop: ScrapePropertyModel):
         previous_data_length = ctx.scraping_progress[prop.name]
         previous_data = ctx.data[prop.name][:previous_data_length]
         ctx.data.drop(columns=prop.name)
-        ctx.data[prop.name] = pd.concat([
-            previous_data,
-            new_data
-        ], ignore_index=True)
+        ctx.data[prop.name] = pd.concat([previous_data, new_data], ignore_index=True)
         ctx.scraping_progress[prop.name] += len(new_data)
     else:
         ctx.data[prop.name] = pd.Series(contents, dtype=prop.store_as)
@@ -102,16 +102,16 @@ def scrape_property(ctx: ScrapingContext, prop: ScrapePropertyModel):
 
 @scrape_action("scrape")
 def scrape(
-        ctx: ScrapingContext,
-        link: AnyUrl = None,
-        link_property: str = None,
-        prop: ScrapePropertyModel = None,
-        properties: List[ScrapePropertyModel] = None
+    ctx: ScrapingContext,
+    link: AnyUrl = None,
+    link_property: str = None,
+    prop: ScrapePropertyModel = None,
+    properties: List[ScrapePropertyModel] = None,
 ):
     if prop is not None and properties is not None:
-        raise ValueError("Both \"prop\" and \"properties\" were specified!")
+        raise ValueError('Both "prop" and "properties" were specified!')
     if link is not None and link_property is not None:
-        raise ValueError("Both \"link\" and \"link_property\" were specified!")
+        raise ValueError('Both "link" and "link_property" were specified!')
 
     if link is not None:
         ctx.scraper.goto(link)

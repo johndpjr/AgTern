@@ -9,7 +9,7 @@ from typing import *
 
 import pandas as pd
 from pydantic import *
-from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.orm import Session, sessionmaker
 
 from agtern.server.database import DatabaseSession
 
@@ -44,10 +44,12 @@ class ScrapeAction(BaseModel):
 
     @validator("model", pre=True)
     def validate_model(cls, value):
-        if isinstance(value, BaseModel) or \
-                str(type(value)).find("pydantic.main.ModelMetaclass") != -1:  # Need this because we can't import it
+        if (
+            isinstance(value, BaseModel)
+            or str(type(value)).find("pydantic.main.ModelMetaclass") != -1
+        ):  # Need this because we can't import it
             return value
-        raise ValueError("\"model\" is not a Pydantic model!")
+        raise ValueError('"model" is not a Pydantic model!')
 
 
 class ScrapeActionModel(BaseModel):
@@ -56,7 +58,9 @@ class ScrapeActionModel(BaseModel):
 
 class RegexConfigModel(BaseModel):
     pattern: Pattern  # Automatically compiles regex
-    group: Union[conint(ge=0, lt=100), str] = 0  # Can be 0 (whole match), 1-99 (group number), or str (group name)
+    group: Union[
+        conint(ge=0, lt=100), str
+    ] = 0  # Can be 0 (whole match), 1-99 (group number), or str (group name)
     format: str = None  # Specify either format or group
     default: str = None  # String to use if the match fails
     _use_default_on_failure: bool = False
@@ -75,8 +79,10 @@ class RegexConfigModel(BaseModel):
     @root_validator(pre=True)
     def validate_format(cls, values):
         if "group" in values and "format" in values:
-            raise ValueError("Both \"group\" and \"format\" were specified. "
-                             "Either specify a group id or a format string!")
+            raise ValueError(
+                'Both "group" and "format" were specified. '
+                "Either specify a group id or a format string!"
+            )
         return values
 
     @root_validator(pre=True)
@@ -95,7 +101,7 @@ class RegexConfigModel(BaseModel):
                 "ignore_case": re.IGNORECASE,
                 "locale": re.LOCALE,
                 "multiline": re.MULTILINE,
-                "verbose": re.VERBOSE
+                "verbose": re.VERBOSE,
             }
             for flag in all_flags:
                 if flag in values:
@@ -131,7 +137,9 @@ class ScrapePropertyModel(ScrapeActionModel):
     @root_validator(pre=True)
     def validate_value(cls, values):
         if "value" in values and len(values.keys()) > 1:
-            raise ValueError("Property \"value\" cannot be used with additional properties!")
+            raise ValueError(
+                'Property "value" cannot be used with additional properties!'
+            )
         return values
 
 
