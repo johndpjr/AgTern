@@ -10,13 +10,13 @@ from ..deps import get_db
 router = APIRouter()
 
 
-@router.get("/internships/", response_model=List[schemas.Internship])
+@router.get("/", response_model=List[schemas.Internship])
 async def get_all_internships(db: Session = Depends(get_db)):
     """Returns all internships from the database"""
     return crud.get_all_internships(db)
 
 
-@router.post("/internships/", response_model=schemas.Internship)
+@router.post("/", response_model=schemas.Internship)
 async def create_internship(
     internship: schemas.InternshipCreate, db: Session = Depends(get_db)
 ):
@@ -31,14 +31,14 @@ async def create_internship(
     return crud.create_internship(db, db_internship)
 
 
-# @router.delete("/internships/")
+# @router.delete("/")
 # def delete_internship(internship_id: int, db: Session = Depends(get_db)):
 #     if not crud.internship_exists(db, internship_id):
 #         raise HTTPException(status_code=400, detail="Internship not found")
 #     crud.delete_internship(db=db, internship_id=internship_id)
 #
 #
-# @router.put("/internships/")
+# @router.put("/")
 # def update_internship(internship: schemas.Internship, db: Session = Depends(get_db)):
 #     if not crud.internship_exists(db, internship.id):
 #         raise HTTPException(status_code=400, detail="Internship not found")
