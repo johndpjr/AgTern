@@ -83,11 +83,6 @@ class RegexConfigModel(BaseModel):
             )
         return values
 
-    @root_validator(pre=True)
-    def validate_default(cls, values):
-        values["_use_default_on_failure"] = "default" in values
-        return values
-
     @root_validator(skip_on_failure=True)
     def validate(cls, values):
         if "pattern" in values:
@@ -105,6 +100,7 @@ class RegexConfigModel(BaseModel):
                 if flag in values:
                     flags |= all_flags[flag]
             values["_flags"] = flags
+            values["_use_default_on_failure"] = "default" in values
             values["pattern"] = re.compile(values["pattern"], flags)
             return RegexConfigModel.construct(**values)
 
@@ -127,6 +123,7 @@ class DataType(str, Enum):
 class ScrapePropertyModel(ScrapeActionModel):
     xpath: str = None
     value: str = None  # Constant string to use as a column value
+    loading_text: str = None
     html_property: str = "innerText"
     regex: RegexConfigModel = None
     store_as: DataType = DataType.str
