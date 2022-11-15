@@ -2,7 +2,8 @@ import json
 
 import pandas as pd
 
-from backend.app.utils import LOG, DataFile
+from .data import DataFile
+from .logger import LOG
 
 
 def import_companies():

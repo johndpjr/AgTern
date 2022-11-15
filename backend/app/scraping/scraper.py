@@ -19,8 +19,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from undetected_chromedriver import Chrome
 
-from backend.app import crud, models
+from backend.app.crud import crud
 from backend.app.database import DatabaseSession
+from backend.app.models import Internship as InternshipModel
 from backend.app.utils import LOG, DataFile
 
 from .actions import ScrapingContext, parse_config
@@ -92,22 +93,22 @@ class WebScraper:
         internships_to_update = (
             []
         )  # TODO: Update internships instead of ignoring duplicates
-        column_names = models.Internship.__table__.columns.keys()
+        column_names = InternshipModel.__table__.columns.keys()
         for idx, internship in ctx.data.iterrows():
             try:
                 internship_exists = False
                 for unique_prop in ctx.unique_properties:
                     if (
                         unique_prop in column_names
-                        and hasattr(models.Internship, unique_prop)
+                        and hasattr(InternshipModel, unique_prop)
                         and hasattr(internship, unique_prop)
                     ):
                         # noinspection PyTypeChecker
                         if (
-                            ctx.db.query(getattr(models.Internship, unique_prop))
+                            ctx.db.query(getattr(InternshipModel, unique_prop))
                             .filter(
-                                models.Internship.company == ctx.company
-                                and getattr(models.Internship, unique_prop)
+                                InternshipModel.company == ctx.company
+                                and getattr(InternshipModel, unique_prop)
                                 == getattr(internship, unique_prop)
                             )
                             .count()
@@ -118,7 +119,7 @@ class WebScraper:
                             )
                 if not internship_exists:
                     internships_to_add.append(
-                        models.Internship(
+                        InternshipModel(
                             **{
                                 k: v
                                 for k, v in internship.items()
