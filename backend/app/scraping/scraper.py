@@ -16,9 +16,9 @@ import requests
 import selenium.webdriver.support.expected_conditions as condition
 from pydantic import ValidationError
 from selenium.common import InvalidArgumentException
-from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.wait import WebDriverWait
 from undetected_chromedriver import Chrome
 
@@ -88,9 +88,7 @@ class WebScraper:
 
     def scrape_xpath(self, xpath: str) -> list[WebElement]:
         return self.wait.until(
-            condition.presence_of_all_elements_located(
-                (By.XPATH, xpath)
-            )
+            condition.presence_of_all_elements_located((By.XPATH, xpath))
         )
 
     def scrape_css(self, xpath: str, property_value: str) -> list[dict]:
@@ -98,7 +96,7 @@ class WebScraper:
             self.js(
                 "return window.getComputedStyle(arguments[0]).getPropertyValue(arguments[1])",
                 element,
-                property_value
+                property_value,
             )
             for element in self.scrape_xpath(xpath)
         ]
@@ -173,20 +171,22 @@ class WebScraper:
         robots_txt_response = requests.get(
             f"{parsed_link.scheme if len(parsed_link.scheme) > 0 else 'http'}://{parsed_link.netloc}/robots.txt"
         )
-        robots_txt = None if robots_txt_response.status_code != 200 else robots_txt_response.text
+        robots_txt = (
+            None if robots_txt_response.status_code != 200 else robots_txt_response.text
+        )
         context = ScrapingContext(
             scraper=self,
             company=company_name,
             db=db,
             data=pd.DataFrame(),
-            robots_txt=robots_txt
+            robots_txt=robots_txt,
         )
         crawl_delay = None
         if robots_txt is not None:
             for line in context.robots_txt.splitlines():
                 line = line.strip()
                 while line.find("#") != -1:
-                    line = line[:line.find("#")]
+                    line = line[: line.find("#")]
                 if line.lower().startswith("crawl-delay:"):
                     new_crawl_delay = float(line[12:].strip())
                     if crawl_delay is None or new_crawl_delay < crawl_delay:

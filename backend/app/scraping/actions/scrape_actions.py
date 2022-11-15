@@ -61,9 +61,9 @@ def click(ctx: ScrapingContext, xpath: str, must_exist: bool = True):
 @scrape_action("type")
 def type(ctx: ScrapingContext, xpath: str, text: str):
     # TODO: Delay in between keystrokes
-    ActionChains(ctx.scraper.driver)\
-        .send_keys_to_element(ctx.scraper.scrape_xpath(xpath)[0], *text, Keys.ENTER)\
-        .perform()
+    ActionChains(ctx.scraper.driver).send_keys_to_element(
+        ctx.scraper.scrape_xpath(xpath)[0], *text, Keys.ENTER
+    ).perform()
 
 
 @scrape_action("scroll_to_bottom")
@@ -122,13 +122,15 @@ def scrape_property(ctx: ScrapingContext, prop: ScrapePropertyModel):
         # See https://stackoverflow.com/a/74250413/11827673
         # I don't really know what this pandas code is doing
         # But hey, it works!
-        ctx.data = pd.concat([
-            ctx.data.drop(columns=prop.name),
-            pd.concat([
-                previous_data,
-                new_data
-            ], ignore_index=True).to_frame(prop.name)
-        ], axis=1)
+        ctx.data = pd.concat(
+            [
+                ctx.data.drop(columns=prop.name),
+                pd.concat([previous_data, new_data], ignore_index=True).to_frame(
+                    prop.name
+                ),
+            ],
+            axis=1,
+        )
         ctx.scraping_progress[prop.name] += len(new_data)
     else:
         ctx.data[prop.name] = pd.Series(contents, dtype=prop.store_as)
@@ -144,10 +146,12 @@ def goto_next_page(ctx: ScrapingContext, next_page: str = None):
         if len(elements) > 0:
             valid = False
             for element, cursor in zip(elements, cursors):
-                if element.is_enabled() and \
-                   element.is_displayed() and \
-                   element.get_attribute("aria-disabled") != "true" and \
-                   cursor != "default":
+                if (
+                    element.is_enabled()
+                    and element.is_displayed()
+                    and element.get_attribute("aria-disabled") != "true"
+                    and cursor != "default"
+                ):
                     valid = True
             if valid:
                 click(ctx, next_page)
@@ -158,15 +162,16 @@ def goto_next_page(ctx: ScrapingContext, next_page: str = None):
         pass
     return False
 
+
 @scrape_action("scrape")
 def scrape(
-        ctx: ScrapingContext,
-        link: AnyUrl = None,
-        link_property: str = None,
-        prop: ScrapePropertyModel = None,
-        properties: List[ScrapePropertyModel] = None,
-        next_page: str = None,
-        scroll: bool = False
+    ctx: ScrapingContext,
+    link: AnyUrl = None,
+    link_property: str = None,
+    prop: ScrapePropertyModel = None,
+    properties: List[ScrapePropertyModel] = None,
+    next_page: str = None,
+    scroll: bool = False,
 ):
     if prop is not None and properties is not None:
         raise ValueError('Both "prop" and "properties" were specified!')
@@ -183,7 +188,14 @@ def scrape(
         num_links = len(links)
         for link in links:
             LOG.info(f"Scraping link {i}/{num_links} ({link})...")
-            scrape(ctx, link=link, prop=prop, properties=properties, next_page=next_page, scroll=scroll)
+            scrape(
+                ctx,
+                link=link,
+                prop=prop,
+                properties=properties,
+                next_page=next_page,
+                scroll=scroll,
+            )
             # Uncomment below to just scrape 3 links
             # TODO: Add a command-line argument to limit how many internships we scrape for testing
             # Need to coordinate with scrape_property or all of the info on the first page for the other internships
