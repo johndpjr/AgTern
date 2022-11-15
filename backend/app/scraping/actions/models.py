@@ -105,6 +105,7 @@ class RegexConfigModel(BaseModel):
                 if flag in values:
                     flags |= all_flags[flag]
             values["_flags"] = flags
+            values["_use_default_on_failure"] = "default" in values
             values["pattern"] = re.compile(values["pattern"], flags)
             return RegexConfigModel.construct(**values)
 
