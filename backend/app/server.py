@@ -3,11 +3,13 @@ from threading import Thread
 
 import uvicorn
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 
 from .api import api_router
 from .core import settings
 from .database import DatabaseModel, engine
 from .scraping import start_scraper
+from .spa.spa import SinglePageApplication
 from .utils import LOG, import_companies, sort_companies
 
 DatabaseModel.metadata.create_all(bind=engine)
@@ -15,6 +17,7 @@ DatabaseModel.metadata.create_all(bind=engine)
 app = FastAPI(title="AgTern")
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
+app.mount("/", SinglePageApplication(directory="./frontend/dist/agtern-client", html=True), name="AgTern")
 
 
 def run():
@@ -34,7 +37,7 @@ def start_server(args: Namespace):
         start_scraper(args)
         return
 
-    Thread(target=run, daemon=True).start()
+    Thread(target=run).start()
 
     if args.update_companies:
         LOG.info("Updating company info...")
