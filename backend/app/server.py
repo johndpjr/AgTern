@@ -9,7 +9,7 @@ from .api import api_router
 from .core import settings
 from .database import DatabaseModel, engine
 from .scraping import start_scraper
-from .spa.spa import SinglePageApplication
+from .spa import SinglePageApplication
 from .utils import LOG, import_companies, sort_companies
 
 DatabaseModel.metadata.create_all(bind=engine)
