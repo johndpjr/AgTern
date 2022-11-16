@@ -1,0 +1,25 @@
+@use "@angular/material" as mat;
+
+.internship-card {
+    margin: 2em;
+    cursor: pointer;
+    @include mat.elevation(1);
+
+    div.icon {
+        padding-left: 8px;
+        font-family: "Roboto Slab", serif;
+        font-size: 50px;
+        line-height: 50px;
+        text-align: center;
+    }
+
+    &:hover {
+        @include mat.elevation(16);
+        z-index: 999;
+    }
+
+    @media (max-width: 900px) {
+        margin: 0;
+        border-radius: 0;
+    }
+}
