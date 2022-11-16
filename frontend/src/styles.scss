@@ -3,14 +3,11 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-.agtern-title {
-    font-family: "Roboto Slab", serif;
-    font-variant: small-caps;
-    letter-spacing: 5px;
-    font-size: 32px;
-    margin-left: 2ch;
-}
-
 mat-form-field .mat-form-field-flex {
     cursor: text;
+}
+
+mat-card-subtitle {
+    font-family: "Roboto Slab", serif;
+    font-variant: small-caps;
 }

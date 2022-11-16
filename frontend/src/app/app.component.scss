@@ -5,76 +5,9 @@
     flex-direction: column;
 }
 
-.toolbar {
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    flex-shrink: 0;
-    height: 80px;
-}
-
-.sidebar {
-    position: sticky;
-    top: 80px;
-    align-self: flex-start;
-    height: calc( 100vh - 80px );
-
-    h1 {
-        font-family: "Roboto Slab", serif;
-        font-variant: small-caps;
-    }
-}
-
 .content {
     display: grid;
     grid-template-columns: minmax(225px, 0.5fr) minmax(225px, 0.75fr) minmax(300px, 1fr);
     grid-template-rows: 1fr;
     flex-grow: 1;
-}
-
-.internship-card {
-    margin: 2em;
-    cursor: pointer;
-    @include mat.elevation(1);
-
-    div.icon {
-        padding-left: 8px;
-        font-family: "Roboto Slab", serif;
-        font-size: 50px;
-        line-height: 50px;
-        text-align: center;
-    }
-
-    &:hover {
-        @include mat.elevation(16);
-        z-index: 999;
-    }
-
-    @media (max-width: 900px) {
-        margin: 0;
-        border-radius: 0;
-    }
-}
-
-.internship-details {
-    margin: 2em 2em 2em 0;
-    height: max-content;
-    @include mat.elevation(8);
-
-    @media (max-width: 900px) {
-        margin: 0;
-    }
-}
-
-mat-card-subtitle {
-    font-family: "Roboto Slab", serif;
-    font-variant: small-caps;
-}
-
-.apply-now {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 0.75em;
-    padding: 0.5ch 2ch 0.5ch 2ch;
 }

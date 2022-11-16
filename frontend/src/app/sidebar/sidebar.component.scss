@@ -1,0 +1,16 @@
+:host, .sidebar-wrapper {
+    position: sticky;
+    top: 80px;
+    align-self: flex-start;
+    height: calc( 100vh - 80px );
+
+    .sidebar {
+        margin: 2em;
+        display: flex;
+        flex-direction: column;
+        h1 {
+            font-family: "Roboto Slab", serif;
+            font-variant: small-caps;
+        }
+    }
+}
