@@ -1,0 +1,40 @@
+<h1 mat-dialog-title>Profile Information</h1>
+<mat-dialog-content style="display: flex; flex-direction: column">
+    <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input matInput type="text">
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Major</mat-label>
+        <mat-select [(value)]="major">
+            <mat-option value="cpsc">Computer Science & Engineering</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Graduation Month</mat-label>
+        <mat-select [(value)]="graduation_month">
+            <mat-option value="1">January</mat-option>
+            <mat-option value="2">February</mat-option>
+            <mat-option value="3">March</mat-option>
+            <mat-option value="4">April</mat-option>
+            <mat-option value="5">May</mat-option>
+            <mat-option value="6">June</mat-option>
+            <mat-option value="7">July</mat-option>
+            <mat-option value="8">August</mat-option>
+            <mat-option value="9">September</mat-option>
+            <mat-option value="10">October</mat-option>
+            <mat-option value="11">November</mat-option>
+            <mat-option value="12">December</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Graduation Year</mat-label>
+        <mat-select [(value)]="graduation_year">
+            <mat-option value="2022">2022</mat-option>
+            <mat-option value="2023">2023</mat-option>
+            <mat-option value="2024">2024</mat-option>
+            <mat-option value="2025">2025</mat-option>
+            <mat-option value="2026">2026</mat-option>
+        </mat-select>
+    </mat-form-field>
+</mat-dialog-content>

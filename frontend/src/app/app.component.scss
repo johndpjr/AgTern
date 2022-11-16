@@ -1,0 +1,13 @@
+@use "@angular/material" as mat;
+
+:host {
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    display: grid;
+    grid-template-columns: minmax(225px, 0.5fr) minmax(225px, 0.75fr) minmax(300px, 1fr);
+    grid-template-rows: 1fr;
+    flex-grow: 1;
+}

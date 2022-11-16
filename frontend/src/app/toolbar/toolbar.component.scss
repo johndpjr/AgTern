@@ -1,0 +1,15 @@
+:host, .toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    flex-shrink: 0;
+    height: 80px;
+}
+
+.agtern-title {
+    font-family: "Roboto Slab", serif;
+    font-variant: small-caps;
+    letter-spacing: 5px;
+    font-size: 32px;
+    margin-left: 2ch;
+}
