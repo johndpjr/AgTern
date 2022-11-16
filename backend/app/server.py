@@ -17,7 +17,11 @@ DatabaseModel.metadata.create_all(bind=engine)
 app = FastAPI(title="AgTern")
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
-app.mount("/", SinglePageApplication(directory="./frontend/dist/agtern-client", html=True), name="AgTern")
+app.mount(
+    "/",
+    SinglePageApplication(directory="./frontend/dist/agtern-client", html=True),
+    name="AgTern",
+)
 
 
 def run():
