@@ -1,6 +1,6 @@
 from fastapi import HTTPException
-from fastapi.staticfiles import StaticFiles
 from fastapi.responses import Response
+from fastapi.staticfiles import StaticFiles
 
 
 class SinglePageApplication(StaticFiles):
