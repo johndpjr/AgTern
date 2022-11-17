@@ -26,7 +26,7 @@ export class InternshipsService {
     /**
      * Create Internship
      * Adds an Internship object to the database.
-     * @param requestBody 
+     * @param requestBody
      * @returns Internship Successful Response
      * @throws ApiError
      */
