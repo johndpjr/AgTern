@@ -1,5 +1,5 @@
 from argparse import Namespace
-from os import system, makedirs
+from os import makedirs, system
 from shutil import rmtree
 from threading import Thread
 from time import sleep
@@ -33,7 +33,10 @@ app.mount(
 
 def run_server():
     uvicorn.run(
-        "backend.app.server:app", host="0.0.0.0", port=settings.PORT, log_level="info",
+        "backend.app.server:app",
+        host="0.0.0.0",
+        port=settings.PORT,
+        log_level="info",
     )
 
 
@@ -41,6 +44,7 @@ def generate_client():
     sleep(1)
     rmtree("./frontend/src/_generated", ignore_errors=True)
     system("cd frontend && npm run update-api-client")
+
 
 def start_server(args: Namespace):
     if not args.save_internships:
