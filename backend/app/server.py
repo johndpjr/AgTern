@@ -1,5 +1,5 @@
 from argparse import Namespace
-from os import system
+from os import system, makedirs
 from shutil import rmtree
 from threading import Thread
 from time import sleep
@@ -21,9 +21,12 @@ DatabaseModel.metadata.create_all(bind=engine)
 app = FastAPI(title="AgTern", generate_unique_id_function=lambda route: route.name)
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
+
+client_dir = "./frontend/dist/agtern-client"
+makedirs(client_dir)
 app.mount(
     "/",
-    SinglePageApplication(directory="./frontend/dist/agtern-client", html=True),
+    SinglePageApplication(directory=client_dir, html=True),
     name="AgTern",
 )
 
