@@ -3,8 +3,8 @@
 
 <div class="content">
     <app-sidebar></app-sidebar>
-    <app-internship-list [internships]="internships"></app-internship-list>
+    <app-internship-list *ngIf="internships" [internships]="internships" (internshipClicked)="onInternshipClicked($event)"></app-internship-list>
     <div style="height: 100%">
-        <app-internship-details name="Example Internship" company="Tesla" [description]="lorem"></app-internship-details>
+        <app-internship-details *ngIf="selectedInternship" [internship]="selectedInternship"></app-internship-details>
     </div>
 </div>

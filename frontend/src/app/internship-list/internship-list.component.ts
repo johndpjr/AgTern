@@ -1,5 +1,10 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Internship} from "../../_generated/api";
+
+export type InternshipClickedEvent = {
+  index: number
+  internship: Internship
+}
 
 @Component({
   selector: 'app-internship-list',
@@ -7,5 +12,13 @@ import {Internship} from "../../_generated/api";
   styleUrls: ['./internship-list.component.scss']
 })
 export class InternshipListComponent {
-    @Input() internships: Internship[] = []
+  @Input() internships: Internship[] = []
+  @Output() internshipClicked: EventEmitter<InternshipClickedEvent> = new EventEmitter()
+
+  onInternshipClicked(index: number) {
+    this.internshipClicked.emit({
+      index: index,
+      internship: this.internships[index]
+    })
+  }
 }
