@@ -50,7 +50,8 @@ def start_server(args: Namespace):
         start_scraper(args)
         return
 
-    Thread(target=generate_client, daemon=True).start()
+    if args.dev:
+        Thread(target=generate_client, daemon=True).start()
     Thread(target=run_server).start()
 
     if args.update_companies:
