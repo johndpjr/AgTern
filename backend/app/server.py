@@ -23,7 +23,7 @@ app = FastAPI(title="AgTern", generate_unique_id_function=lambda route: route.na
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
 client_dir = "./frontend/dist/agtern-client"
-makedirs(client_dir)
+makedirs(client_dir, exist_ok=True)
 app.mount(
     "/",
     SinglePageApplication(directory=client_dir, html=True),
