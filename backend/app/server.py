@@ -36,7 +36,7 @@ def run_server():
 
 def generate_client():
     sleep(1)
-    rmtree("./frontend/src/_generated")
+    rmtree("./frontend/src/_generated", ignore_errors=True)
     system("cd frontend && npm run update-api-client")
 
 def start_server(args: Namespace):
