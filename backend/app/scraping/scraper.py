@@ -233,7 +233,7 @@ def scrape(args: Namespace):
         # Make sure driver exists
         if scraper is not None and scraper.driver is not None:
             LOG.info("Closing driver...")
-            scraper.driver.close()
+            scraper.driver.quit()
             LOG.info("Done!")
         # Close Process
         exit(0)
