@@ -1,6 +1,5 @@
 import logging
 from argparse import ArgumentParser, Namespace
-from threading import Thread
 
 from .app.server import start_server
 from .app.utils import LOG
@@ -8,11 +7,7 @@ from .app.utils import LOG
 
 def main(args: Namespace):
     if args.dev:
-        if args.scrape_only:
-            start_server(args)
-            return
-        else:
-            Thread(target=start_server, daemon=True, args=(args,)).start()
+        start_server(args)
     else:
         LOG.warning("--dev not set; server is not running locally")
 
