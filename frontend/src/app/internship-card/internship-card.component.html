@@ -1,6 +1,6 @@
 <mat-card class="internship-card">
     <mat-card-header>
-        <div mat-card-avatar class="icon">{{internship.company.charAt(0).toUpperCase()}}</div>
+        <div mat-card-avatar class="icon">{{internship.company?.charAt(0)?.toUpperCase() ?? "?"}}</div>
         <mat-card-title>
             {{internship.title}}
         </mat-card-title>
@@ -9,12 +9,15 @@
         </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-        {{internship.description}}
-        <!-- TODO: Truncate description (this should be a preview) -->
-        <br/>
+        <div style="white-space: pre-wrap">{{
+          internship.description !== undefined && internship.description.length > 497
+            ? internship.description.substring( 0, 497 ) + "..."
+            : internship.description
+          }}</div>
         <br/>
         <mat-chip-list>
-            <mat-chip *ngFor="let tag of internship.tags">{{tag}}</mat-chip>
+            <mat-chip color="accent" selected *ngFor="let n of [ 1, 2, 3, 4, 5, 6, 7, 8 ]">Tag {{n}}</mat-chip>
+            <!-- TODO: Replace this with iteration over tags (once they're in the Internship model)-->
         </mat-chip-list>
     </mat-card-content>
 </mat-card>

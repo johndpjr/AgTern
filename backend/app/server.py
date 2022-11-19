@@ -1,8 +1,12 @@
 from argparse import Namespace
+from os import makedirs, system
+from shutil import rmtree
 from threading import Thread
+from time import sleep
 
 import uvicorn
 from fastapi import FastAPI
+from fastapi.routing import APIRoute
 from fastapi.staticfiles import StaticFiles
 
 from .api import api_router
@@ -14,20 +18,32 @@ from .utils import LOG, import_companies, sort_companies
 
 DatabaseModel.metadata.create_all(bind=engine)
 
-app = FastAPI(title="AgTern")
+app = FastAPI(title="AgTern", generate_unique_id_function=lambda route: route.name)
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
+
+client_dir = "./frontend/dist/agtern-client"
+makedirs(client_dir, exist_ok=True)
 app.mount(
     "/",
-    SinglePageApplication(directory="./frontend/dist/agtern-client", html=True),
+    SinglePageApplication(directory=client_dir, html=True),
     name="AgTern",
 )
 
 
-def run():
+def run_server():
     uvicorn.run(
-        "backend.app.server:app", host="0.0.0.0", port=settings.PORT, log_level="info"
+        "backend.app.server:app",
+        host="0.0.0.0",
+        port=settings.PORT,
+        log_level="info",
     )
+
+
+def generate_client():
+    sleep(1)
+    rmtree("./frontend/src/_generated", ignore_errors=True)
+    system("cd frontend && npm run update-api-client")
 
 
 def start_server(args: Namespace):
@@ -41,7 +57,9 @@ def start_server(args: Namespace):
         start_scraper(args)
         return
 
-    Thread(target=run).start()
+    if args.dev:
+        Thread(target=generate_client, daemon=True).start()
+    Thread(target=run_server).start()
 
     if args.update_companies:
         LOG.info("Updating company info...")
