@@ -1,16 +1,21 @@
 <mat-card class="internship-details">
     <mat-card-title-group>
         <mat-card-title>
-            {{name}}
+            {{internship.title}}
         </mat-card-title>
         <mat-card-subtitle>
-            {{company}}
+            {{internship.company}}
         </mat-card-subtitle>
-        <a mat-flat-button color="accent" class="apply-now">
+        <a
+          mat-flat-button
+          color="accent"
+          class="apply-now"
+          [href]="internship.apply_link"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
             <span>Apply Now!</span>&nbsp;&nbsp;&nbsp;&nbsp;<mat-icon matSuffix class="apply-now-icon">open_in_new</mat-icon>
         </a>
     </mat-card-title-group>
-    <mat-card-content>
-        {{description}}
-    </mat-card-content>
+    <mat-card-content style="white-space: pre-wrap">{{internship.description}}</mat-card-content>
 </mat-card>
