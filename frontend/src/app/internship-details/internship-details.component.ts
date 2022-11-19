@@ -1,4 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {Internship} from "../../_generated/api";
 
 @Component({
   selector: 'app-internship-details',
@@ -6,7 +7,5 @@ import {Component, Input, OnInit} from '@angular/core';
   styleUrls: ['./internship-details.component.scss']
 })
 export class InternshipDetailsComponent {
-    @Input() public name: string = ""
-    @Input() public company: string = ""
-    @Input() public description: string = ""
+  @Input() public internship!: Internship
 }
