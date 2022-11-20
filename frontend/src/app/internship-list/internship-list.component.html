@@ -1,1 +1,3 @@
-<app-internship-card *ngFor="let internship of internships; let i = index" [internship]="internship" (click)="onInternshipClicked(i)"></app-internship-card>
+<div @enterLeave>
+  <app-internship-card *ngFor="let internship of internships; let i = index" [internship]="internship" (click)="onInternshipClicked(i)"></app-internship-card>
+</div>
