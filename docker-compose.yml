@@ -7,9 +7,11 @@ services:
       dockerfile: ../docker/frontend/Dockerfile
     ports:
       - "4200:80"
-#  backend:
-#    build:
-#      context: ./
-#      dockerfile: docker/backend/Dockerfile
-#    ports:
-#      - "8080:8080"
+    links:
+      - backend
+  backend:
+    build:
+      context: .
+      dockerfile: docker/backend/Dockerfile
+    ports:
+      - "8000:8000"
