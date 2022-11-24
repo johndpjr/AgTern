@@ -20,6 +20,9 @@ import {SidebarComponent} from './sidebar/sidebar.component';
 import {InternshipListComponent} from './internship-list/internship-list.component';
 import {InternshipDetailsComponent} from './internship-details/internship-details.component';
 import {InternshipCardComponent} from './internship-card/internship-card.component';
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
 
 @NgModule({
   declarations: [
@@ -34,6 +37,8 @@ import {InternshipCardComponent} from './internship-card/internship-card.compone
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    FormsModule,
+    ReactiveFormsModule,
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
@@ -43,7 +48,9 @@ import {InternshipCardComponent} from './internship-card/internship-card.compone
     MatInputModule,
     MatSelectModule,
     MatDividerModule,
-    MatDialogModule
+    MatDialogModule,
+    MatProgressSpinnerModule,
+    MatSnackBarModule
   ],
   providers: [
     {
