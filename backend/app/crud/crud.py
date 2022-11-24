@@ -1,6 +1,7 @@
 from typing import List
 
 from pydantic import ValidationError
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
 from backend.app.models import Internship as InternshipModel
@@ -70,3 +71,39 @@ def create_internship(db: Session, internship: InternshipModel) -> InternshipSch
     """Creates an internship in the database."""
     ret = create_internships(db, internship)
     return ret[0]
+
+
+def search_internships(db: Session, q: str = None, skip: int = 0, limit: int = 1000):
+    terms = q.lower().strip().split()
+    conditions = []
+    for column in ["job_id", "company", "title", "category", "location"]:
+        for term in terms:
+            # Test if the column contains a word that starts with the term
+            conditions.append(getattr(InternshipModel, column).ilike(f"%{term}%"))
+    results = (
+        db.query(InternshipModel)
+        .filter(or_(*conditions))
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
+    if len(results) < limit:
+        conditions = []
+        for term in terms:
+            # Test if the column contains a word that starts with the term
+            conditions.append(InternshipModel.description.ilike(f"%{term}%"))
+        description_results = (
+            db.query(InternshipModel)
+            .filter(or_(*conditions))
+            .limit(limit - len(results))
+            .all()
+        )
+        for dresult in description_results:
+            found = False
+            for result in results:
+                if result.id == dresult.id:
+                    found = True
+                    break
+            if not found:
+                results.append(dresult)
+    return convert_internships(*results)

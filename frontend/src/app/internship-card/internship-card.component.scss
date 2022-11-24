@@ -3,6 +3,8 @@
 .internship-card {
     margin: 2em;
     cursor: pointer;
+    transition: 150ms ease-in-out;
+    user-select: none;
     @include mat.elevation(1);
 
     div.icon {
@@ -15,6 +17,14 @@
 
     &:hover {
         @include mat.elevation(16);
+        transform: scale(1.025);
+        z-index: 999;
+    }
+
+    &:active {
+        transition: 80ms ease-in-out;
+        @include mat.elevation(1);
+        transform: scale(0.975);
         z-index: 999;
     }
 

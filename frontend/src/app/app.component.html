@@ -2,9 +2,10 @@
 <app-toolbar></app-toolbar>
 
 <div class="content">
-    <app-sidebar></app-sidebar>
-    <app-internship-list *ngIf="internships" [internships]="internships" (internshipClicked)="onInternshipClicked($event)"></app-internship-list>
+    <app-sidebar (searchChanged)="doSearch($event)"></app-sidebar>
+    <mat-spinner *ngIf="loading" mode="indeterminate"></mat-spinner>
+    <app-internship-list *ngIf="!loading && internships" [internships]="internships" (internshipClicked)="onInternshipClicked($event)"></app-internship-list>
     <div style="height: 100%">
-        <app-internship-details *ngIf="selectedInternship" [internship]="selectedInternship"></app-internship-details>
+        <app-internship-details *ngIf="!loading && selectedInternship" [internship]="selectedInternship"></app-internship-details>
     </div>
 </div>
