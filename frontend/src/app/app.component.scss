@@ -16,3 +16,27 @@ mat-spinner {
   grid-column: 2 / -1;
   margin: 5em auto;
 }
+
+.internship-list-content-container {
+    height: 100%;
+
+    .internship-list-items {
+        height: 100vh;
+        position: relative;
+        overflow-y: auto;
+    }
+
+    .internship-list-paginator {
+      position: absolute;
+      bottom: 0;
+    }
+}
+
+.internship-details-container {
+    overflow-y: auto;
+}
+
+//.tasklist-tasks {
+//    display: block;
+//    overflow: hidden;
+//}
