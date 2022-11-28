@@ -120,7 +120,7 @@ SOFTWARE.
 * [![Python][Python]][Python-url]
 * [![FastAPI][FastAPI]][FastAPI-url]
 * [![SQLite][SQLite]][SQLite-url]
-* [![Tkinter][Tkinter]][Tkinter-url]
+* [![Angular][Angular.io]][Angular-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -290,6 +290,5 @@ Project Link: [https://github.com/johndpjr/AgTern](https://github.com/johndpjr/A
 [SQLite-url]: https://www.sqlite.org/index.html
 [Tkinter]: https://img.shields.io/badge/tkinter-ffffcc?style=for-the-badge
 [Tkinter-url]: https://docs.python.org/3/library/tkinter.html
-
-[//]: # ([Angular.io]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white)
-[//]: # ([Angular-url]: https://angular.io/)
+[Angular.io]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white
+[Angular-url]: https://angular.io/
