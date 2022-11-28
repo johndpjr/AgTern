@@ -121,6 +121,7 @@ SOFTWARE.
 * [![FastAPI][FastAPI]][FastAPI-url]
 * [![SQLite][SQLite]][SQLite-url]
 * [![Angular][Angular.io]][Angular-url]
+* [![DigitalOcean][DigitalOcean]][DigitalOcean-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -292,3 +293,5 @@ Project Link: [https://github.com/johndpjr/AgTern](https://github.com/johndpjr/A
 [Tkinter-url]: https://docs.python.org/3/library/tkinter.html
 [Angular.io]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white
 [Angular-url]: https://angular.io/
+[DigitalOcean]: https://img.shields.io/badge/DigitalOcean-%230167ff.svg?style=for-the-badge&logo=digitalOcean&logoColor=white
+[DigitalOcean-url]: https://www.digitalocean.com/
