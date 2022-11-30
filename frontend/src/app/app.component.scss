@@ -19,6 +19,8 @@ mat-spinner {
 
 .internship-list-content-container {
     height: 100%;
+    display: flex;
+    flex-direction: column;
 
     .internship-list-items {
         height: 100vh;
@@ -27,16 +29,11 @@ mat-spinner {
     }
 
     .internship-list-paginator {
-      position: absolute;
-      bottom: 0;
+      position: fixed;
+      bottom: 0px;
     }
 }
 
 .internship-details-container {
     overflow-y: auto;
 }
-
-//.tasklist-tasks {
-//    display: block;
-//    overflow: hidden;
-//}
