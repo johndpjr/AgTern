@@ -5,13 +5,6 @@
     flex-direction: column;
 }
 
-.content {
-    display: grid;
-    grid-template-columns: minmax(225px, 0.5fr) minmax(225px, 0.75fr) minmax(300px, 1fr);
-    grid-template-rows: 1fr;
-    flex-grow: 1;
-}
-
 mat-spinner {
   grid-column: 2 / -1;
   margin: 5em auto;
@@ -28,12 +21,14 @@ mat-spinner {
         overflow-y: auto;
     }
 
-    .internship-list-paginator {
-      position: fixed;
-      bottom: 0px;
-    }
+  .internship-list-paginator {
+    position: fixed;
+    bottom: 0px;
+    z-index: 1000;
+  }
 }
 
 .internship-details-container {
+    height: 100vh;
     overflow-y: auto;
 }

@@ -1,26 +1,22 @@
-<div class="columns is-gapless">
-  <div class="column">
-    <app-toolbar></app-toolbar>
-    <div class="columns is-gapless">
-      <div class="column is-one-fifth">
-        <app-sidebar (searchChanged)="doSearch($event)"></app-sidebar>
+<app-toolbar></app-toolbar>
+<div class="columns">
+  <div class="column is-one-fifth">
+    <app-sidebar (searchChanged)="doSearch($event)"></app-sidebar>
+  </div>
+  <div class="column is-two-fifths">
+    <div class="internship-list-content-container">
+      <mat-spinner *ngIf="loading" mode="indeterminate"></mat-spinner>
+      <div class="internship-list-items">
+        <app-internship-list *ngIf="!loading && internships" [internships]="internships" (internshipClicked)="onInternshipClicked($event)"></app-internship-list>
       </div>
-      <div class="column is-two-fifths">
-        <div class="internship-list-content-container">
-          <mat-spinner *ngIf="loading" mode="indeterminate"></mat-spinner>
-          <div class="internship-list-items">
-            <app-internship-list *ngIf="!loading && internships" [internships]="internships" (internshipClicked)="onInternshipClicked($event)"></app-internship-list>
-            <div class="internship-list-paginator" [hidden]="loading">
-              <mat-paginator #paginator [length]=1000 [pageSize]="10" [pageSizeOptions]="[10, 25, 50, 100]" (page)="pageChange($event)"></mat-paginator>
-            </div>
-          </div>
-        </div>
+      <div class="internship-list-paginator" [hidden]="loading">
+        <mat-paginator #paginator [showFirstLastButtons]="true" [length]=9999 [pageSize]="10" [pageSizeOptions]="[10, 25, 50, 100]" (page)="onPageChange($event)"></mat-paginator>
       </div>
-      <div class="column is-two-fifths">
-        <div class="internship-details-container">
-          <app-internship-details *ngIf="!loading && selectedInternship" [internship]="selectedInternship"></app-internship-details>
-        </div>
-      </div>
+    </div>
+  </div>
+  <div class="column is-two-fifths">
+    <div class="internship-details-container">
+      <app-internship-details *ngIf="!loading && selectedInternship" [internship]="selectedInternship"></app-internship-details>
     </div>
   </div>
 </div>
