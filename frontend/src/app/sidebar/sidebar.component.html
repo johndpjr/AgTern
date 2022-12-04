@@ -1,0 +1,63 @@
+<mat-drawer mode="side" class="sidebar-wrapper" opened>
+    <div class="sidebar">
+        <h1>Search</h1>
+        <mat-form-field>
+            <input matInput type="text" placeholder="Search Internships..." [formControl]="search">
+            <button matSuffix mat-icon-button aria-label="Search">
+                <mat-icon>search</mat-icon>
+            </button>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Sort</mat-label>
+            <mat-select [formControl]="sort">
+                <mat-option value="relevance">Relevance</mat-option>
+                <mat-option value="date">Date</mat-option>
+                <mat-option value="alpha">Alphabetical</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-divider style="margin-bottom: 1em"></mat-divider>
+        <h1>Filters</h1>
+        <mat-form-field>
+            <mat-label>Major</mat-label>
+            <mat-select [formControl]="major">
+                <mat-option value="aero">Aerospace Engineering</mat-option>
+                <mat-option value="aren">Architectural Engineering</mat-option>
+                <mat-option value="baen">Biological & Agricultural Engineering</mat-option>
+                <mat-option value="bmen">Biomedical Engineering</mat-option>
+                <mat-option value="chen">Chemical Engineering</mat-option>
+                <mat-option value="cven">Civil & Environmental Engineering</mat-option>
+                <mat-option value="cpen">Computer Science & Engineering</mat-option>
+                <mat-option value="elen">Electrical & Computer Engineering</mat-option>
+                <mat-option value="eset">Electronic Systems Engineering Technology</mat-option>
+                <mat-option value="inen">Industrial & Systems Engineering</mat-option>
+                <mat-option value="msen">Materials Science & Engineering</mat-option>
+                <mat-option value="meen">Mechanical Engineering</mat-option>
+                <mat-option value="mxet">Multidisciplinary Engineering</mat-option>
+                <mat-option value="nuen">Nuclear Engineering</mat-option>
+                <mat-option value="ocen">Ocean Engineering</mat-option>
+                <mat-option value="pete">Petroleum Engineering</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <div style="display: flex; flex-direction: row; justify-content: space-between;">
+            <mat-form-field style="width: 48%">
+                <mat-label>Season</mat-label>
+                <mat-select [formControl]="season">
+                    <mat-option value="summer">Summer</mat-option>
+                    <mat-option value="fall">Fall</mat-option>
+                    <mat-option value="spring">Spring</mat-option>
+                    <mat-option value="winter">Winter</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field style="width: 48%">
+                <mat-label>Year</mat-label>
+                <mat-select [formControl]="year">
+                    <mat-option value="2022">2022</mat-option>
+                    <mat-option value="2023">2023</mat-option>
+                    <mat-option value="2024">2024</mat-option>
+                    <mat-option value="2025">2025</mat-option>
+                    <mat-option value="2026">2026</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+</mat-drawer>

@@ -1,0 +1,35 @@
+{
+  "name": "agtern-client",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng build --watch --configuration development",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "update-api-client": "openapi --input http://localhost:8000/openapi.json --output src/_generated/api --client axios --useUnionTypes"
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/animations": "^14.2.0",
+    "@angular/cdk": "^14.2.6",
+    "@angular/common": "^14.2.0",
+    "@angular/compiler": "^14.2.0",
+    "@angular/core": "^14.2.0",
+    "@angular/forms": "^14.2.0",
+    "@angular/material": "^14.2.6",
+    "@angular/platform-browser": "^14.2.0",
+    "@angular/platform-browser-dynamic": "^14.2.0",
+    "@angular/router": "^14.2.0",
+    "axios": "^1.1.3",
+    "openapi-typescript-codegen": "^0.23.0",
+    "rxjs": "~7.5.0",
+    "tslib": "^2.3.0",
+    "zone.js": "~0.11.4"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^14.2.8",
+    "@angular/cli": "~14.2.8",
+    "@angular/compiler-cli": "^14.2.0",
+    "typescript": "~4.7.2"
+  }
+}
