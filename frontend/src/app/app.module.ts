@@ -1,15 +1,4 @@
 import {NgModule} from '@angular/core';
-import {MatButtonModule} from "@angular/material/button"
-import {MatCardModule} from "@angular/material/card"
-import {MatChipsModule} from "@angular/material/chips"
-import {MatDialogModule} from "@angular/material/dialog"
-import {MatDividerModule} from "@angular/material/divider"
-import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from "@angular/material/form-field"
-import {MatIconModule} from "@angular/material/icon"
-import {MatInputModule} from "@angular/material/input"
-import {MatSelectModule} from "@angular/material/select"
-import {MatSidenavModule} from "@angular/material/sidenav"
-import {MatToolbarModule} from "@angular/material/toolbar"
 import {BrowserModule} from '@angular/platform-browser';
 
 import {AppComponent} from './app.component';
@@ -20,37 +9,26 @@ import {SidebarComponent} from './sidebar/sidebar.component';
 import {InternshipListComponent} from './internship-list/internship-list.component';
 import {InternshipDetailsComponent} from './internship-details/internship-details.component';
 import {InternshipCardComponent} from './internship-card/internship-card.component';
-import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {MatSnackBarModule} from "@angular/material/snack-bar";
+import {MaterialModule} from "./modules/material/material.module";
+import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from "@angular/material/form-field";
 
 @NgModule({
   declarations: [
     AppComponent,
-    ProfileDialogComponent,
-    ToolbarComponent,
-    SidebarComponent,
-    InternshipListComponent,
+    InternshipCardComponent,
     InternshipDetailsComponent,
-    InternshipCardComponent
+    InternshipListComponent,
+    ProfileDialogComponent,
+    SidebarComponent,
+    ToolbarComponent,
   ],
   imports: [
-    BrowserModule,
     BrowserAnimationsModule,
+    BrowserModule,
     FormsModule,
+    MaterialModule,
     ReactiveFormsModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatIconModule,
-    MatSidenavModule,
-    MatCardModule,
-    MatChipsModule,
-    MatInputModule,
-    MatSelectModule,
-    MatDividerModule,
-    MatDialogModule,
-    MatProgressSpinnerModule,
-    MatSnackBarModule
   ],
   providers: [
     {
