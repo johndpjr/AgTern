@@ -19,9 +19,9 @@ export class InternshipsService {
      * @throws ApiError
      */
     public static getInternships(
-skip?: number,
-limit: number = 100,
-): CancelablePromise<Array<Internship>> {
+        skip?: number,
+        limit: number = 100,
+    ): CancelablePromise<Array<Internship>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/internships/',
@@ -43,8 +43,8 @@ limit: number = 100,
      * @throws ApiError
      */
     public static createInternship(
-requestBody: InternshipCreate,
-): CancelablePromise<Internship> {
+        requestBody: InternshipCreate,
+    ): CancelablePromise<Internship> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/v1/internships/',
@@ -66,10 +66,10 @@ requestBody: InternshipCreate,
      * @throws ApiError
      */
     public static searchInternships(
-q?: string,
-skip?: number,
-limit: number = 100,
-): CancelablePromise<Array<Internship>> {
+        q?: string,
+        skip?: number,
+        limit: number = 100,
+    ): CancelablePromise<Array<Internship>> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/v1/internships/search',
