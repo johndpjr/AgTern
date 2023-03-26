@@ -59,7 +59,7 @@ SOFTWARE.
     <a href="https://github.com/johndpjr/AgTern/wiki"><strong>Read the wiki »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/johndpjr/AgTern">View Demo (TODO)</a>
+    <a href="https://www.youtube.com/watch?v=QtYvDcYtCVM">View Demo</a>
     ·
     <a href="https://github.com/johndpjr/AgTern/issues">Report Bug</a>
     ·
@@ -101,7 +101,7 @@ SOFTWARE.
 ## About The Project
 
 ### Current Features
-* Scrapes and displays all Tesla internships
+* Scrapes and displays over 1500 internships.
 * Displays relevant information about found internships
   * Company
   * Title
@@ -120,7 +120,8 @@ SOFTWARE.
 * [![Python][Python]][Python-url]
 * [![FastAPI][FastAPI]][FastAPI-url]
 * [![SQLite][SQLite]][SQLite-url]
-* [![Tkinter][Tkinter]][Tkinter-url]
+* [![Angular][Angular.io]][Angular-url]
+* [![DigitalOcean][DigitalOcean]][DigitalOcean-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -151,15 +152,28 @@ To set up your project locally and get it running, follow these simple steps.
    pip install -r requirements.txt
    ```
 
+4. Install [npm](https://www.npmjs.com/) and build the frontend
+  ```sh
+  npm run build
+  ```
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Running
+
+#### Option 1: Normal Run
 
 If you are using PyCharm, run configurations are already defined in the `.idea` folder.
 
 If you are running the program for the first time, you should populate the database with internships by running command (2) below:
 
+Prestep: Go into `frontend` directory and start the frontend (this will watch for changes)
+  ```sh
+  npm run start
+  ```
+
 Common commands to run the program (make sure you're in the `AgTern` directory):
+
 1. Starts a server and a scraping instance in a separate thread and enters the GUI:
 
 `python3 -m agtern --dev`
@@ -171,6 +185,14 @@ Common commands to run the program (make sure you're in the `AgTern` directory):
 3. Run the GUI without scraping
 
 `python3 -m agtern --dev --no-scrape`
+
+#### Option 2: Docker Run
+
+Docker is easy!
+
+Install [Docker](https://www.docker.com/) and run `docker-compose up` to start
+the project. Right now, the container won't auto-reload (detect changes and
+rebuild), but this is planned!
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -188,38 +210,25 @@ Common commands to run the program (make sure you're in the `AgTern` directory):
 <!-- ROADMAP -->
 ## Roadmap
 
-- [x] Minimum Viable Product (MVP)
-  - [x] Store student profile in configuration file
-  - [x] Create a minimal Graphical User Interface (GUI)
-  - [x] Scrape one company for internships and store in `.csv` file
-- [x] Improve the GUI look
-- [x] Move to client-server architecture
-  - [x] Develop an API server and API class
-  - [x] Store internships into a database
-  - [x] Integrate changes with GUI and scraping algorithm
-- [ ] Scrape multiple companies
-  - [x] Develop extendable algorithm for scraping
-  - [ ] Apply algorithm to multiple companies
-- [ ] Categorize internships and map them to major(s)
-- [ ] Extend the API
-    - [ ] Filter internships that are relevant to the student (i.e. matches their profile)
+- [ ] Development
+  - [X] Configure Docker
+  - [ ] Mirror `main` and `dev` branches to DigitalOcean instance
+- [ ] Documentation
+  - [X] Update README
+  - [ ] Create Wiki (describes overall concepts and project structure)
+  - [ ] Create documentation
+- [ ] Job description text analysis
+  - [ ] Display keywords as tags
 - [ ] Scape and extract more from internships
   - [ ] Qualifications
   - [ ] Duties
-  - [ ] Deadline for applications
-- [ ] Secure the program
+  - [ ] Keywords
+- [ ] Security
   - [ ] Communicate over HTTPS
   - [ ] Enable authenticated API requests
-  - [ ] Store sensitive keys securely (don't have sensitive keys yet)
-- [ ] Move the server to AWS EC2 instance
-- [ ] Enable students to interact with internships (instead of passively viewing them)
-  - [ ] Save internships
-  - [ ] Track internship status
-  - [ ] Autofill application information
-- [ ] Migrate GUI framework `tkinter` to Web Framework Angular
-  - [ ] Retire the native GUI
-  - [ ] Wireframe and make mockups for website
-  - [ ] Develop Angular application and deploy (backend already built)
+  - [ ] Central Authentication System (CAS) authentication
+- [ ] Advanced search
+- [ ] Track internships
 
 See the [open issues](https://github.com/johndpjr/AgTern/issues) for a full list of proposed features (and known issues).
 
@@ -252,7 +261,7 @@ create a pull request completing the task.
 <!-- CONTACT -->
 ## Contact
 
-Project Manager - John Powell - johndpowell02@gmail.com
+Project Manager - John Powell - [Email](mailto:johndpowell02@gmail.com)
 
 Project Link: [https://github.com/johndpjr/AgTern](https://github.com/johndpjr/AgTern)
 
@@ -288,8 +297,7 @@ Project Link: [https://github.com/johndpjr/AgTern](https://github.com/johndpjr/A
 [FastAPI-url]: https://fastapi.tiangolo.com/
 [SQLite]: https://img.shields.io/badge/sqlite-44a2d4?style=for-the-badge&logo=sqlite&logoColor=white
 [SQLite-url]: https://www.sqlite.org/index.html
-[Tkinter]: https://img.shields.io/badge/tkinter-ffffcc?style=for-the-badge
-[Tkinter-url]: https://docs.python.org/3/library/tkinter.html
-
-[//]: # ([Angular.io]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white)
-[//]: # ([Angular-url]: https://angular.io/)
+[Angular.io]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white
+[Angular-url]: https://angular.io/
+[DigitalOcean]: https://img.shields.io/badge/DigitalOcean-%230167ff.svg?style=for-the-badge&logo=digitalOcean&logoColor=white
+[DigitalOcean-url]: https://www.digitalocean.com/
