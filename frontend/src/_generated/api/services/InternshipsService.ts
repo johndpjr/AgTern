@@ -13,15 +13,15 @@ export class InternshipsService {
     /**
      * Get Internships
      * Returns all internships from the database
-     * @param skip
-     * @param limit
+     * @param skip 
+     * @param limit 
      * @returns Internship Successful Response
      * @throws ApiError
      */
     public static getInternships(
-        skip?: number,
-        limit: number = 100,
-    ): CancelablePromise<Array<Internship>> {
+skip?: number,
+limit: number = 100,
+): CancelablePromise<Array<Internship>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/internships/',
@@ -38,13 +38,13 @@ export class InternshipsService {
     /**
      * Create Internship
      * Adds an Internship object to the database.
-     * @param requestBody
+     * @param requestBody 
      * @returns Internship Successful Response
      * @throws ApiError
      */
     public static createInternship(
-        requestBody: InternshipCreate,
-    ): CancelablePromise<Internship> {
+requestBody: InternshipCreate,
+): CancelablePromise<Internship> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/v1/internships/',
@@ -59,17 +59,17 @@ export class InternshipsService {
     /**
      * Search Internships
      * Searches the database for internships
-     * @param q
-     * @param skip
-     * @param limit
+     * @param q 
+     * @param skip 
+     * @param limit 
      * @returns Internship Successful Response
      * @throws ApiError
      */
     public static searchInternships(
-        q?: string,
-        skip?: number,
-        limit: number = 100,
-    ): CancelablePromise<Array<Internship>> {
+q?: string,
+skip?: number,
+limit: number = 100,
+): CancelablePromise<Array<Internship>> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/v1/internships/search',

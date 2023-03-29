@@ -1,7 +1,7 @@
 :host, .toolbar {
-    position: sticky;
+    position: relative;
     top: 0;
-    z-index: 1000;
+    z-index: 5;
     flex-shrink: 0;
     height: 80px;
 }
