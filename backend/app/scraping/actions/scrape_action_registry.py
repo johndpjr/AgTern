@@ -3,9 +3,7 @@ from __future__ import annotations
 from inspect import signature
 from typing import Callable, List
 
-from pydantic import BaseModel, validate_arguments
-
-from backend.app.utils import DataFile, DataFolder
+from pydantic import validate_arguments
 
 from .models import ScrapeAction
 
