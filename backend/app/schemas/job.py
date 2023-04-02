@@ -15,29 +15,29 @@ class Season(str, Enum):
         return self.value if self.value is not None else ""
 
 
-class InternshipBase(BaseModel):
-    id: Union[
-        int, None
-    ] = None  # Auto-incremented primary key, leave None for automatic id
-    job_id: str = ""
+class JobBase(BaseModel):
+    id: Union[int, None] = None  # Auto-incremented primary key is None
+    company_job_id: str = ""
     company: str = ""
     title: str = ""
+    type: str = ""
     category: str = ""
-    link: str = ""
+    posting_link: str = ""
     apply_link: str = ""
     period: Season = Season.unknown
     year: int = 0
-    post_date: str = ""  # See models.py on why this is a string
+    post_date: str = ""
     location: str = ""
     description: str = ""
+    tags: str = ""
 
 
-class InternshipCreate(InternshipBase):
+class JobCreate(JobBase):
     pass
 
 
-class Internship(InternshipBase):
-    """Models internship details."""
+class Job(JobBase):
+    """Models job details."""
 
     class Config:
         validate_assignment = True

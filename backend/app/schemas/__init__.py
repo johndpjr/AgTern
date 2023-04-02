@@ -1,1 +1,1 @@
-from .internships import Internship, InternshipCreate, Season
+from .job import Job, JobCreate, Season

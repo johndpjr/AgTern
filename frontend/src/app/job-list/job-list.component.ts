@@ -1,16 +1,16 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Internship} from "../../_generated/api";
+import {Job} from "../../_generated/api";
 import {animate, style, transition, trigger} from "@angular/animations";
 
-export type InternshipClickedEvent = {
+export type JobClickedEvent = {
   index: number
-  internship: Internship
+  job: Job
 }
 
 @Component({
-  selector: 'app-internship-list',
-  templateUrl: './internship-list.component.html',
-  styleUrls: ['./internship-list.component.scss'],
+  selector: 'app-job-list',
+  templateUrl: './job-list.component.html',
+  styleUrls: ['./job-list.component.scss'],
   animations: [
     trigger('enterLeave', [
       transition(':enter', [
@@ -27,14 +27,14 @@ export type InternshipClickedEvent = {
     ])
   ]
 })
-export class InternshipListComponent {
-  @Input() internships: Internship[] = []
-  @Output() internshipClicked: EventEmitter<InternshipClickedEvent> = new EventEmitter()
+export class JobListComponent {
+  @Input() jobs: Job[] = []
+  @Output() jobClicked: EventEmitter<JobClickedEvent> = new EventEmitter()
 
-  onInternshipClicked(index: number) {
-    this.internshipClicked.emit({
+  onJobClicked(index: number) {
+    this.jobClicked.emit({
       index: index,
-      internship: this.internships[index]
+      job: this.jobs[index]
     })
   }
 }

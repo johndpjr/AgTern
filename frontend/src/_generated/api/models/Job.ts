@@ -5,19 +5,21 @@
 import type { Season } from './Season';
 
 /**
- * Models internship details.
+ * Models job details.
  */
-export type Internship = {
+export type Job = {
     id?: number;
-    job_id?: string;
+    company_job_id?: string;
     company?: string;
     title?: string;
+    type?: string;
     category?: string;
-    link?: string;
+    posting_link?: string;
     apply_link?: string;
     period?: Season;
     year?: number;
     post_date?: string;
     location?: string;
     description?: string;
+    tags?: string;
 };

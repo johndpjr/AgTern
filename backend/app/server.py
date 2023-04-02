@@ -1,13 +1,10 @@
 from argparse import Namespace
 from os import makedirs, system
-from shutil import rmtree
 from threading import Thread
 from time import sleep
 
 import uvicorn
 from fastapi import FastAPI
-from fastapi.routing import APIRoute
-from fastapi.staticfiles import StaticFiles
 
 from .api import api_router
 from .core import settings
@@ -48,10 +45,8 @@ def generate_client():
 
 
 def start_server(args: Namespace):
-    if not args.save_internships:
-        LOG.warning(
-            "Internships won't be stored to db; use --save-internships to store to db"
-        )
+    if not args.save_jobs:
+        LOG.warning("Jobs won't be stored to db; use --save-jobs to store to db")
 
     if args.scrape_only:
         args.headless = False

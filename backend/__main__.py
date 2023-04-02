@@ -18,7 +18,7 @@ def run_cli():
     parser.add_argument("--show-scraper", dest="headless", action="store_false")
     parser.add_argument("--no-scrape", action="store_true")
     parser.add_argument("--scrape-only", action="store_true")
-    parser.add_argument("--save-internships", action="store_true")
+    parser.add_argument("--save-jobs", action="store_true")
     parser.add_argument("--run-as-proc", dest="multiprocessing", action="store_true")
     parser.add_argument("--dev", action="store_true")
     args = parser.parse_args()

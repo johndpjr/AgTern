@@ -1,11 +1,11 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Internship} from "../../_generated/api";
+import {Job} from "../../_generated/api";
 import {animate, style, transition, trigger} from "@angular/animations";
 
 @Component({
-  selector: 'app-internship-details',
-  templateUrl: './internship-details.component.html',
-  styleUrls: ['./internship-details.component.scss'],
+  selector: 'app-job-details',
+  templateUrl: './job-details.component.html',
+  styleUrls: ['./job-details.component.scss'],
   animations: [
     trigger('enterLeave', [
       transition(':enter', [
@@ -22,6 +22,6 @@ import {animate, style, transition, trigger} from "@angular/animations";
     ])
   ]
 })
-export class InternshipDetailsComponent {
-  @Input() public internship!: Internship
+export class JobDetailsComponent {
+  @Input() public job!: Job
 }

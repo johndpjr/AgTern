@@ -35,16 +35,3 @@ def get_action(name: str) -> ScrapeAction | None:
 
 def get_action_names() -> List[str]:
     return [key for key in registry.keys()]
-
-
-def dump_schemas() -> None:
-    # TODO: Figure out why this isn't working
-    DataFolder("models", is_temp=True, create_on_init=True).clean()
-    for name, action in registry.items():
-        model: BaseModel = action.model
-        DataFile(
-            "models",
-            f"{name}.json",
-            is_temp=True,
-            default_data=model.schema_json(indent=2),
-        )

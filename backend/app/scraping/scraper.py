@@ -21,15 +21,14 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.wait import WebDriverWait
 from undetected_chromedriver import Chrome
+from webdriver_manager.chrome import ChromeDriverManager
 
 from backend.app.crud import crud
 from backend.app.database import DatabaseSession
-from backend.app.models import Internship as InternshipModel
+from backend.app.models import Job as JobModel
 from backend.app.utils import LOG, DataFile
 
 from .actions import ScrapingContext, parse_config
-
-# from webdriver_manager.chrome import ChromeDriverManager
 
 
 class WebScraper:
@@ -37,12 +36,12 @@ class WebScraper:
 
     # Suppress warning for assigning None to class variables:
     # noinspection PyTypeChecker
-    def __init__(self, save_internships: bool):
+    def __init__(self, save_jobs: bool):
         self.driver: Chrome = None
         self.wait: WebDriverWait = None
         self.crawl_delay: float = 0
         self.last_request_time: datetime = None
-        self.save_internships = save_internships
+        self.save_jobs = save_jobs
 
     def start(
         self, headless: bool, options: Options = None, auto_download: bool = True
@@ -52,19 +51,21 @@ class WebScraper:
             options = Options()
         options.headless = headless
         options.add_argument("--start-maximized")
-        # if auto_download:
-        #     driver_manager = ChromeDriverManager()
-        #     driver_exists = driver_manager.driver_cache.find_driver(driver_manager.driver)
-        #     if not driver_exists:
-        #         LOG.info("Chrome WebDriver does not exist! Downloading...")
-        #     driver_path = ChromeDriverManager().install()
-        #     if not driver_exists:
-        #         LOG.info("Done downloading Chrome WebDriver!")
-        #     LOG.info("Starting Chrome WebDriver...")
-        #     self.driver = Chrome(driver_path, options=options)
-        # else:
-        #     self.driver = Chrome(options=options)
-        self.driver = Chrome(options=options)
+        if auto_download:
+            driver_manager = ChromeDriverManager()
+            driver_exists = driver_manager.driver_cache.find_driver(
+                driver_manager.driver
+            )
+            if not driver_exists:
+                LOG.info("Chrome WebDriver does not exist! Downloading...")
+            driver_path = ChromeDriverManager().install()
+            if not driver_exists:
+                LOG.info("Done downloading Chrome WebDriver!")
+            LOG.info("Starting Chrome WebDriver...")
+            self.driver = Chrome(driver_executable_path=driver_path, options=options)
+        else:
+            self.driver = Chrome(options=options)
+        # self.driver = Chrome(options=options)
         self.wait = WebDriverWait(self.driver, 5)
 
     def goto(self, link: str):
@@ -101,56 +102,51 @@ class WebScraper:
             for element in self.scrape_xpath(xpath)
         ]
 
-    def commit_internships(self, ctx: ScrapingContext) -> bool:
-        if not self.save_internships:
+    def commit_jobs(self, ctx: ScrapingContext) -> bool:
+        if not self.save_jobs:
             return True
         LOG.info("Writing to database...")
         success = True
-        internships_to_add = []
-        internships_to_update = (
-            []
-        )  # TODO: Update internships instead of ignoring duplicates
-        column_names = InternshipModel.__table__.columns.keys()
-        for idx, internship in ctx.data.iterrows():
+        jobs_to_add = []
+        column_names = JobModel.__table__.columns.keys()
+        for idx, job in ctx.data.iterrows():
             try:
-                internship_exists = False
+                job_exists = False
                 for unique_prop in ctx.unique_properties:
                     if (
                         unique_prop in column_names
-                        and hasattr(InternshipModel, unique_prop)
-                        and hasattr(internship, unique_prop)
+                        and hasattr(JobModel, unique_prop)
+                        and hasattr(job, unique_prop)
                     ):
                         # noinspection PyTypeChecker
                         if (
-                            ctx.db.query(getattr(InternshipModel, unique_prop))
+                            ctx.db.query(getattr(JobModel, unique_prop))
                             .filter(
-                                InternshipModel.company == ctx.company
-                                and getattr(InternshipModel, unique_prop)
-                                == getattr(internship, unique_prop)
+                                JobModel.company == ctx.company
+                                and getattr(JobModel, unique_prop)
+                                == getattr(job, unique_prop)
                             )
                             .count()
                             > 0
                         ):
-                            internship_exists = (
-                                True  # Skip this internship because it already exists
-                            )
-                if not internship_exists:
-                    internships_to_add.append(
-                        InternshipModel(
+                            job_exists = True  # Skip this job because it already exists
+                if not job_exists:
+                    jobs_to_add.append(
+                        JobModel(
                             **{
                                 k: v
-                                for k, v in internship.items()
+                                for k, v in job.items()
                                 if k in column_names and v is not None
                             }
                         )
                     )
             except ValidationError as errors:
-                LOG.error("Unable to create internship!")
-                LOG.error(f"Internship: {internship.to_dict()}")
+                LOG.error("Unable to create job!")
+                LOG.error(f"Job: {job.to_dict()}")
                 LOG.error(errors)
                 success = False
         try:
-            crud.create_internships(ctx.db, *internships_to_add)
+            crud.create_jobs(ctx.db, *jobs_to_add)
             LOG.info("Saving to database succeeded!")
         except Exception as e:
             LOG.error("Saving to database FAILED!")
@@ -212,7 +208,7 @@ class WebScraper:
             except Exception as e:
                 LOG.error(f"ERROR: Could not execute {company_name}:{action_num}!")
                 LOG.error(traceback.format_exc())
-        self.commit_internships(context)
+        self.commit_jobs(context)
 
 
 ScrapingContext.update_forward_refs(
@@ -220,12 +216,9 @@ ScrapingContext.update_forward_refs(
 )  # Allow ScrapingContext to reference WebScraper
 
 
-# dump_schemas()  # Export schemas as json files (currently broken)
-
-
 def scrape(args: Namespace):
     """Scrapes all companies in scraping config if actions are defined there.
-    Scraped internships are stored in a database."""
+    Scraped jobs are stored in a database."""
     scraper = None
 
     # Close driver when work is finished
@@ -242,7 +235,7 @@ def scrape(args: Namespace):
     signal.signal(signal.SIGINT, close_driver)
 
     try:
-        scraper = WebScraper(args.save_internships)
+        scraper = WebScraper(args.save_jobs)
         scraper.start(args.headless)
 
         LOG.info("Loading scraping config...")
@@ -255,7 +248,7 @@ def scrape(args: Namespace):
             config = json.load(f)
 
         # Transform JSON data into DataFrame
-        # Create new internship DataFrame to be written to database
+        # Create new job DataFrame to be written to database
         company_scrape_df = pd.DataFrame(config)
 
         # Iterate through valid sources to be scraped
@@ -263,10 +256,9 @@ def scrape(args: Namespace):
             company_scrape_df["scrape"].notna()
         ]
         for idx, entry in company_scrape_df.iterrows():
-            # Uncomment below to just scrape Amazon
             # TODO: Add a command-line argument to select which company/companies to scrape
-            # if entry["company"] != "Amazon":
-            #     continue
+            if entry["company"] != "Amazon":
+                continue
             LOG.info(f"Scraping {entry['company']}...")
             scraper.scrape_company(entry["link"], entry)
         LOG.info("Done!")
