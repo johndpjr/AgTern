@@ -257,8 +257,8 @@ def scrape(args: Namespace):
         ]
         for idx, entry in company_scrape_df.iterrows():
             # TODO: Add a command-line argument to select which company/companies to scrape
-            if entry["company"] != "Amazon":
-                continue
+            # if entry["company"] != "Allstate":
+            #     continue
             LOG.info(f"Scraping {entry['company']}...")
             scraper.scrape_company(entry["link"], entry)
         LOG.info("Done!")
