@@ -1,1 +1,1 @@
-from .internships import router as internships
+from .jobs import router as jobs

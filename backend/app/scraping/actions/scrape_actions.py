@@ -197,8 +197,8 @@ def scrape(
                 scroll=scroll,
             )
             # Uncomment below to just scrape 3 links
-            # TODO: Add a command-line argument to limit how many internships we scrape for testing
-            # Need to coordinate with scrape_property or all of the info on the first page for the other internships
+            # TODO: Add a command-line argument to limit how many jobs we scrape for testing
+            # Need to coordinate with scrape_property or all of the info on the first page for the other jobs
             # will be scraped
             # if i == 3:
             #     return

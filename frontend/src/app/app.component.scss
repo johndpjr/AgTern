@@ -10,25 +10,25 @@ mat-spinner {
   margin: 5em auto;
 }
 
-.internship-list-content-container {
+.job-list-content-container {
     height: 100%;
     display: flex;
     flex-direction: column;
 
-    .internship-list-items {
+    .job-list-items {
         height: 100vh;
         position: relative;
         overflow-y: auto;
     }
 
-  .internship-list-paginator {
+  .job-list-paginator {
     position: fixed;
     bottom: 0px;
     z-index: 1000;
   }
 }
 
-.internship-details-container {
+.job-details-container {
     height: 100vh;
     overflow-y: auto;
 }

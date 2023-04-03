@@ -1,1 +1,1 @@
-from .internships import *
+from .job import *

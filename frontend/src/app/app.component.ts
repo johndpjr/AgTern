@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, Component, OnInit, AfterViewInit, ViewChild} from '@angular/core'
-import {Internship, InternshipsService} from "../_generated/api";
-import {InternshipClickedEvent} from "./internship-list/internship-list.component";
+import {Job, JobsService} from "../_generated/api";
+import {JobClickedEvent} from "./job-list/job-list.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatPaginator, MatPaginatorIntl, PageEvent} from "@angular/material/paginator";
 
@@ -16,8 +16,8 @@ enum PaginationContext {
 })
 export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('paginator', { static: false }) paginator: MatPaginator = new MatPaginator(new MatPaginatorIntl(), ChangeDetectorRef.prototype)
-  internships: Internship[] = []
-  selectedInternship!: Internship
+  jobs: Job[] = []
+  selectedJob!: Job
   loading: boolean = true
   paginationContext: PaginationContext = PaginationContext.NonSearch
   search: string = ""
@@ -26,21 +26,21 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.updateInternships = this.updateInternships.bind(this)
+    this.updateJobs = this.updateJobs.bind(this)
   }
 
   ngAfterViewInit() {
-    InternshipsService.getInternships(this.paginator.pageIndex * this.paginator.pageSize, this.paginator.pageSize).then(this.updateInternships)
+    JobsService.getJobs(this.paginator.pageIndex * this.paginator.pageSize, this.paginator.pageSize).then(this.updateJobs)
   }
 
-  onInternshipClicked(event: InternshipClickedEvent) {
-    this.selectedInternship = event.internship
+  onJobClicked(event: JobClickedEvent) {
+    this.selectedJob = event.job
     window.scroll( { top: 0, left: 0, behavior: "smooth" } )
   }
 
   doSearch( search: string ) {
     this.search = search
-    this.internships = []
+    this.jobs = []
     this.loading = true
 
     if (search === "") {
@@ -48,40 +48,40 @@ export class AppComponent implements OnInit, AfterViewInit {
     } else {
       this.paginationContext = PaginationContext.Search;
     }
-    let internshipsResp = this.ctxGetInternships(this.paginator.pageIndex * this.paginator.pageSize, this.paginator.pageSize)
+    let jobsResp = this.ctxGetJobs(this.paginator.pageIndex * this.paginator.pageSize, this.paginator.pageSize)
     if (this.paginationContext === PaginationContext.Search) {
-      internshipsResp.then(internships => {
-        // TODO: we have no current way to retrieve the internship count from a search if we want to paginate
+      jobsResp.then(jobs => {
+        // TODO: we have no current way to retrieve the job count from a search if we want to paginate
         //  since we are limiting our result set (intentionally)
         // this.snackBar.open(
-        //   internships.length + (internships.length === 100 ? " or more" : "" ) + " internships found",
+        //   jobs.length + (jobs.length === 100 ? " or more" : "" ) + " jobs found",
         //   undefined,
         //   {
         //     verticalPosition: "bottom",
         //     duration: 2000
         // });
-        this.updateInternships(internships);
+        this.updateJobs(jobs);
       });
     } else {
-      internshipsResp.then(this.updateInternships);
+      jobsResp.then(this.updateJobs);
     }
   }
 
-  ctxGetInternships(skip: number, limit: number) {
+  ctxGetJobs(skip: number, limit: number) {
     if (this.paginationContext === PaginationContext.Search) {
-      return InternshipsService.searchInternships(this.search, skip, limit);
+      return JobsService.searchJobs(this.search, skip, limit);
     } else {
-      return InternshipsService.getInternships(skip, limit);
+      return JobsService.getJobs(skip, limit);
     }
   }
 
-  updateInternships( internships: Internship[] ) {
-    this.internships = internships
-    this.selectedInternship = this.internships[0]
+  updateJobs(jobs: Job[] ) {
+    this.jobs = jobs
+    this.selectedJob = this.jobs[0]
     this.loading = false
   }
 
   onPageChange(event: PageEvent) {
-    this.ctxGetInternships(event.pageIndex * event.pageSize, event.pageSize).then(this.updateInternships);
+    this.ctxGetJobs(event.pageIndex * event.pageSize, event.pageSize).then(this.updateJobs);
   }
 }

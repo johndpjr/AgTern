@@ -178,9 +178,9 @@ Common commands to run the program (make sure you're in the `AgTern` directory):
 
 `python3 -m agtern --dev`
 
-2. Only scrape and save the internships to the database:
+2. Only scrape and save the jobs to the database:
 
-`python3 -m agtern --dev --scrape-only --save-internships`
+`python3 -m agtern --dev --scrape-only --save-jobs`
 
 3. Run the GUI without scraping
 

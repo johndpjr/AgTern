@@ -4,17 +4,19 @@
 
 import type { Season } from './Season';
 
-export type InternshipCreate = {
+export type JobCreate = {
     id?: number;
-    job_id?: string;
+    company_job_id?: string;
     company?: string;
     title?: string;
+    type?: string;
     category?: string;
-    link?: string;
+    posting_link?: string;
     apply_link?: string;
     period?: Season;
     year?: number;
     post_date?: string;
     location?: string;
     description?: string;
+    tags?: string;
 };

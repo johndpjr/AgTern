@@ -49,7 +49,7 @@
             }
           },
           {
-            "name": "job_id",
+            "name": "company_job_id",
             "xpath": "//span[contains(@class,'job-id')]",
             "regex": {
               "pattern": "(Job ID )(.*)",
@@ -109,7 +109,7 @@
         "link_property": "link",
         "properties": [
           {
-            "name": "job_id",
+            "name": "company_job_id",
             "xpath": "//span[@id='gtm-jobdetail-id']"
           },
           {
@@ -151,7 +151,7 @@
             }
           },
           {
-            "name": "job_id",
+            "name": "company_job_id",
             "xpath": "//p[@class='location-and-id']",
             "regex": {
               "pattern": "(?<=\\| Job ID: )[\\s\\S]+"
@@ -225,7 +225,7 @@
             "xpath": "//div[@itemprop='address']"
           },
           {
-            "name": "job_id",
+            "name": "company_job_id",
             "xpath": "//strong[@id='jobNumber']"
           },
           {
@@ -296,7 +296,7 @@
             "html_property": "href"
           },
           {
-            "name": "job_id",
+            "name": "company_job_id",
             "xpath": "//span[contains(@class,'job-id')]",
             "regex": {
               "pattern": "(Job ID )(.*)",
@@ -357,7 +357,7 @@
         "link_property": "link",
         "properties": [
           {
-            "name": "job_id",
+            "name": "company_job_id",
             "xpath": "//span[contains(@class,'jobId')]",
             "regex": {
               "pattern": "(Job Id\\n)(.*)",
@@ -414,7 +414,7 @@
         "link_property": "link",
         "properties": [
           {
-            "name": "job_id",
+            "name": "company_job_id",
             "xpath": "//span[contains(@class,'req-id')]"
           },
           {
@@ -479,7 +479,7 @@
             "xpath": "//div[@class='ats-description']"
           },
           {
-            "name": "job_id",
+            "name": "company_job_id",
             "xpath": "//div[@class='ats-description']/following-sibling::p",
             "regex": {
               "pattern": "(Job ID:\\s)(.*)",
@@ -523,7 +523,7 @@
         "link_property": "link",
         "properties": [
           {
-            "name": "job_id",
+            "name": "company_job_id",
             "xpath": "//span[@id='gtm-jobdetail-id']"
           },
           {
@@ -585,7 +585,7 @@
             "xpath": "//li[@class='jobs-list-item']//span[@class='job-postdate']"
           },
           {
-            "name": "job_id",
+            "name": "company_job_id",
             "xpath": "//li[@class='jobs-list-item']//span[contains(@class,'jobId')]"
           }
         ]
@@ -626,7 +626,7 @@
             "unique": true
           },
           {
-            "name": "job_id",
+            "name": "company_job_id",
             "xpath": "//div[@id='js-job-search-results']//div[contains(@class,'js-job')]",
             "html_property": "data-id"
           },
@@ -738,7 +738,7 @@
             }
           },
           {
-            "name": "job_id",
+            "name": "company_job_id",
             "xpath": "//li[@class='jobs-list-item']//p[@class='job-info']/span[5]",
             "regex": {
               "pattern": "(Job Id\\n)(.*)",
@@ -880,7 +880,7 @@
             "xpath": "//div[@class='careers-width-constraint']/div/div[2]"
           },
           {
-            "name": "job_id",
+            "name": "company_job_id",
             "xpath": "//tbody/tr[@class='tds-table-row'][3]/td[1]"
           },
           {

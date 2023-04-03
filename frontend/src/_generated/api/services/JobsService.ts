@@ -1,30 +1,30 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { Internship } from '../models/Internship';
-import type { InternshipCreate } from '../models/InternshipCreate';
+import type { Job } from '../models/Job';
+import type { JobCreate } from '../models/JobCreate';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 
-export class InternshipsService {
+export class JobsService {
 
     /**
-     * Get Internships
-     * Returns all internships from the database
+     * Get Jobs
+     * Returns all jobs from the database.
      * @param skip
      * @param limit
-     * @returns Internship Successful Response
+     * @returns Job Successful Response
      * @throws ApiError
      */
-    public static getInternships(
+    public static getJobs(
         skip?: number,
         limit: number = 100,
-    ): CancelablePromise<Array<Internship>> {
+    ): CancelablePromise<Array<Job>> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/api/v1/internships/',
+            url: '/api/v1/jobs/',
             query: {
                 'skip': skip,
                 'limit': limit,
@@ -36,18 +36,18 @@ export class InternshipsService {
     }
 
     /**
-     * Create Internship
-     * Adds an Internship object to the database.
+     * Create Job
+     * Adds a Job object to the database.
      * @param requestBody
-     * @returns Internship Successful Response
+     * @returns Job Successful Response
      * @throws ApiError
      */
-    public static createInternship(
-        requestBody: InternshipCreate,
-    ): CancelablePromise<Internship> {
+    public static createJob(
+        requestBody: JobCreate,
+    ): CancelablePromise<Job> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/api/v1/internships/',
+            url: '/api/v1/jobs/',
             body: requestBody,
             mediaType: 'application/json',
             errors: {
@@ -57,22 +57,22 @@ export class InternshipsService {
     }
 
     /**
-     * Search Internships
-     * Searches the database for internships
+     * Search Jobs
+     * Searches the database for jobs.
      * @param q
      * @param skip
      * @param limit
-     * @returns Internship Successful Response
+     * @returns Job Successful Response
      * @throws ApiError
      */
-    public static searchInternships(
+    public static searchJobs(
         q?: string,
         skip?: number,
         limit: number = 100,
-    ): CancelablePromise<Array<Internship>> {
+    ): CancelablePromise<Array<Job>> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/api/v1/internships/search',
+            url: '/api/v1/jobs/search',
             query: {
                 'q': q,
                 'skip': skip,

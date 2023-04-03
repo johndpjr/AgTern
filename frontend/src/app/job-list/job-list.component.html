@@ -1,0 +1,3 @@
+<div @enterLeave>
+  <app-job-card *ngFor="let job of jobs; let i = index" [job]="job" (click)="onJobClicked(i)"></app-job-card>
+</div>

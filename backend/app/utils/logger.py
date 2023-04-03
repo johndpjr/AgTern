@@ -11,18 +11,18 @@ def setup_logger(name):
     format = "%(asctime)s [%(levelname)s] %(message)s"
 
     # setup handlers and formatters
-    rotateHandler = logging.handlers.TimedRotatingFileHandler(
+    rotate_handler = logging.handlers.TimedRotatingFileHandler(
         file, when="midnight", interval=1, backupCount=7
     )
-    consoleHandler = logging.StreamHandler()
-    logFormatter = logging.Formatter(format)
+    console_handler = logging.StreamHandler()
+    log_formatter = logging.Formatter(format)
 
     # attach handlers to logger
     logger = logging.getLogger(name)
-    consoleHandler.setFormatter(logFormatter)
-    rotateHandler.setFormatter(logFormatter)
-    logger.addHandler(consoleHandler)
-    logger.addHandler(rotateHandler)
+    console_handler.setFormatter(log_formatter)
+    rotate_handler.setFormatter(log_formatter)
+    logger.addHandler(console_handler)
+    logger.addHandler(rotate_handler)
 
     return logger
 

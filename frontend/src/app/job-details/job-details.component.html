@@ -1,17 +1,17 @@
-<mat-card class="internship-details" [@enterLeave]="internship">
+<mat-card class="job-details" [@enterLeave]="job">
     <mat-card-title-group>
         <mat-card-title>
-            {{internship.title}}
+            {{job.title}}
         </mat-card-title>
         <mat-card-subtitle>
-            {{internship.company}}
+            {{job.company}}
         </mat-card-subtitle>
         <div>
             <a
               mat-flat-button
               color="accent"
               class="apply-now"
-              [href]="internship.link"
+              [href]="job.apply_link"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -19,5 +19,5 @@
             </a>
         </div>
     </mat-card-title-group>
-    <mat-card-content style="white-space: pre-wrap">{{internship.description}}</mat-card-content>
+    <mat-card-content style="white-space: pre-wrap">{{job.description}}</mat-card-content>
 </mat-card>
