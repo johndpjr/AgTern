@@ -30,6 +30,9 @@ from backend.app.utils import LOG, DataFile
 
 from .actions import ScrapingContext, parse_config
 
+from os import listdir, walk, fsencode, fsdecode, getcwd, pardir
+from os.path import isfile, join, abspath
+
 
 class WebScraper:
     """Manages a Chrome instance. Provides convenience methods for web scraping."""
@@ -51,6 +54,7 @@ class WebScraper:
             options = Options()
         options.headless = headless
         options.add_argument("--start-maximized")
+        LOG.info("Making driver...")
         if auto_download:
             driver_manager = ChromeDriverManager()
             driver_exists = driver_manager.driver_cache.find_driver(
@@ -62,10 +66,12 @@ class WebScraper:
             if not driver_exists:
                 LOG.info("Done downloading Chrome WebDriver!")
             LOG.info("Starting Chrome WebDriver...")
-            self.driver = Chrome(driver_executable_path=driver_path, options=options)
+            self.driver = Chrome(driver_executable_path = driver_path, options=options)
         else:
             self.driver = Chrome(options=options)
+
         # self.driver = Chrome(options=options)
+        LOG.info("driver made...")
         self.wait = WebDriverWait(self.driver, 5)
 
     def goto(self, link: str):
@@ -240,21 +246,49 @@ def scrape(args: Namespace):
 
         LOG.info("Loading scraping config...")
         # Get JSON data from scraping_config.json (empty DataFrame if not exists)
-        scraping_config_json = DataFile(
-            "scraping_config.json",
+        path = getcwd()
+        doneFirst = False
+        directory = abspath(join(__file__, pardir)) + "/../../../data/companies"
+        for file in listdir(directory):
+            filename = fsdecode(file)
+            # print(filename)
+            file_dir_path = join(directory, filename)
+            file_scrape_config_json = DataFile(
+            "{}".format(file_dir_path),
             default_data='[{"company":null,"link":null,"scrape":null}]',
-        )
-        with open(scraping_config_json.path, "r") as f:
-            config = json.load(f)
+            )
+            
+            # open the file
+            with open(file_scrape_config_json.path, "r") as f:
+                # print("the path is:", file_scrape_config_json.path)
+                # print("fileLines:", f.readlines())
+                if not doneFirst:
+                    config = json.load(f)
+                    doneFirst = True
+                else:
+                    # extend the json otherwise
+                    # print("config is currently", config)
+                    config.extend(json.load(f))
+    
+        # print("config:", config)                
+        # scraping_config_json = DataFile(
+        #     "scraping_config.json",
+        #     default_data='[{"company":null,"link":null,"scrape":null}]',
+        # )
+        # with open(scraping_config_json.path, "r") as f:
+        #     config = json.load(f)
+            
 
         # Transform JSON data into DataFrame
         # Create new job DataFrame to be written to database
         company_scrape_df = pd.DataFrame(config)
-
-        # Iterate through valid sources to be scraped
+        LOG.info("Making pd.DataFrame iterator")
+        # Iterate through valid sources to be scraped   
         company_scrape_df: pd.DataFrame = company_scrape_df.loc[
             company_scrape_df["scrape"].notna()
         ]
+        LOG.info("Scraping Loop")
+        # print(company_scrape_df)
         for idx, entry in company_scrape_df.iterrows():
             # TODO: Add a command-line argument to select which company/companies to scrape
             # if entry["company"] != "Allstate":

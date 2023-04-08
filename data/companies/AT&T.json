@@ -1,0 +1,74 @@
+[{
+"company": "AT&T",
+"link": "https://www.att.jobs/search-jobs",
+"scrape": [
+    {
+    "action": "click",
+    "xpath": "//button[@id='category-toggle']"
+    },
+    {
+    "action": "click",
+    "xpath": "//input[@data-display='Internships']"
+    },
+    {
+    "action": "click",
+    "xpath": "//a[@class='pagination-show-all']",
+    "must_exist": false
+    },
+    {
+    "action": "scrape",
+    "properties": [
+        {
+        "name": "title",
+        "xpath": "//section[@id='search-results-list']//li//h2"
+        },
+        {
+        "name": "location",
+        "xpath": "//section[@id='search-results-list']//li//span[@class='job-location']"
+        },
+        {
+        "name": "link",
+        "xpath": "//section[@id='search-results-list']//li/a",
+        "html_property": "href",
+        "unique": true
+        }
+    ]
+    },
+    {
+    "action": "scrape",
+    "link_property": "link",
+    "properties": [
+        {
+        "name": "description",
+        "xpath": "//div[@class='ats-description']",
+        "regex": {
+            "pattern": "(Job Overview\\n*)([\\s\\S]+)(\\n*Job ID)",
+            "group": 2,
+            "multiline": true
+        }
+        },
+        {
+        "name": "company_job_id",
+        "xpath": "//span[contains(@class,'job-id')]",
+        "regex": {
+            "pattern": "(Job ID )(.*)",
+            "group": 2
+        }
+        },
+        {
+        "name": "post_date",
+        "xpath": "//span[contains(@class,'job-date')]",
+        "regex": {
+            "pattern": "(Date posted )(.*)",
+            "group": 2
+        }
+        },
+        {
+        "name": "apply_link",
+        "xpath": "//div[@id='anchor-navigation']//a[@data-selector-name='job-apply-link']",
+        "html_property": "href"
+        }
+    ]
+    }
+]
+}]

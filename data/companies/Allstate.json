@@ -1,0 +1,52 @@
+[{
+"company": "Allstate",
+"link": "https://www.allstate.jobs/job-search-results/?level[]=Intern",
+"scrape": [
+    {
+    "action": "scrape",
+    "properties": [
+        {
+        "name": "title",
+        "xpath": "//div[@class='jobTitle']"
+        },
+        {
+        "name": "link",
+        "xpath": "//div[@class='jobTitle']/a",
+        "html_property": "href",
+        "unique": true
+        },
+        {
+        "name": "category",
+        "xpath": "//div[@class='jobCategory']"
+        },
+        {
+        "name": "location",
+        "xpath": "//div[contains(@class,'joblist-location')]"
+        },
+        {
+        "name": "post_date",
+        "xpath": "//div[contains(@class,'joblist-posdate')]"
+        }
+    ]
+    },
+    {
+    "action": "scrape",
+    "link_property": "link",
+    "properties": [
+        {
+        "name": "company_job_id",
+        "xpath": "//span[@id='gtm-jobdetail-id']"
+        },
+        {
+        "name": "apply_link",
+        "xpath": "//a[contains(@class,'apply-btn')]",
+        "html_property": "href"
+        },
+        {
+        "name": "description",
+        "xpath": "//div[@id='gtm-jobdetail-desc']"
+        }
+    ]
+    }
+]
+}]
