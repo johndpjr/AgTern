@@ -289,12 +289,17 @@ def scrape(args: Namespace):
         ]
         LOG.info("Scraping Loop")
         # print(company_scrape_df)
+        company_scrape_df = company_scrape_df.sort_values(by=['company'], ascending = True)
         for idx, entry in company_scrape_df.iterrows():
             # TODO: Add a command-line argument to select which company/companies to scrape
             # if entry["company"] != "Allstate":
             #     continue
             LOG.info(f"Scraping {entry['company']}...")
-            scraper.scrape_company(entry["link"], entry)
+            try:
+                scraper.scrape_company(entry["link"], entry)
+            except Exception as ex:
+                LOG.info(ex)
+                
         LOG.info("Done!")
     except Exception as e:
         # Log any errors to stdout

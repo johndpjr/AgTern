@@ -1,0 +1,41 @@
+[{
+"company": "Google",
+"link": "https://careers.google.com/jobs/results/?employment_type=INTERN",
+"scrape": [
+    {
+    "action": "scrape",
+    "next_page": "//a[@data-gtm-ref='search-results-next-click']",
+    "properties": [
+        {
+        "name": "title",
+        "xpath": "//a[@class='gc-card']//h2[contains(@class,'gc-card__title')]"
+        },
+        {
+        "name": "link",
+        "xpath": "//a[@class='gc-card']",
+        "html_property": "href",
+        "unique": true
+        }
+    ]
+    },
+    {
+    "action": "scrape",
+    "link_property": "link",
+    "properties": [
+        {
+        "name": "apply_link",
+        "xpath": "//div[contains(@class,'gc-job-detail__meta')]/a",
+        "html_property": "href"
+        },
+        {
+        "name": "description",
+        "xpath": "//div[contains(@class,'gc-card__content')]"
+        },
+        {
+        "name": "post_date",
+        "xpath": "//span[@itemprop='datePosted']"
+        }
+    ]
+    }
+]
+}]
