@@ -20,4 +20,3 @@ export type JobCreate = {
     description?: string;
     tags?: string;
 };
-

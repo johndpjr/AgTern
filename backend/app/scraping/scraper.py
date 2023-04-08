@@ -7,6 +7,8 @@ import traceback
 from argparse import Namespace
 from datetime import datetime
 from multiprocessing import Process
+from os import fsdecode, fsencode, getcwd, listdir, pardir, walk
+from os.path import abspath, isfile, join
 from threading import Thread
 from typing import Any
 from urllib.parse import urlparse
@@ -29,9 +31,6 @@ from backend.app.models import Job as JobModel
 from backend.app.utils import LOG, DataFile
 
 from .actions import ScrapingContext, parse_config
-
-from os import listdir, walk, fsencode, fsdecode, getcwd, pardir
-from os.path import isfile, join, abspath
 
 
 class WebScraper:
@@ -66,7 +65,7 @@ class WebScraper:
             if not driver_exists:
                 LOG.info("Done downloading Chrome WebDriver!")
             LOG.info("Starting Chrome WebDriver...")
-            self.driver = Chrome(driver_executable_path = driver_path, options=options)
+            self.driver = Chrome(driver_executable_path=driver_path, options=options)
         else:
             self.driver = Chrome(options=options)
 
@@ -254,10 +253,10 @@ def scrape(args: Namespace):
             # print(filename)
             file_dir_path = join(directory, filename)
             file_scrape_config_json = DataFile(
-            "{}".format(file_dir_path),
-            default_data='[{"company":null,"link":null,"scrape":null}]',
+                "{}".format(file_dir_path),
+                default_data='[{"company":null,"link":null,"scrape":null}]',
             )
-            
+
             # open the file
             with open(file_scrape_config_json.path, "r") as f:
                 # print("the path is:", file_scrape_config_json.path)
@@ -269,27 +268,28 @@ def scrape(args: Namespace):
                     # extend the json otherwise
                     # print("config is currently", config)
                     config.extend(json.load(f))
-    
-        # print("config:", config)                
+
+        # print("config:", config)
         # scraping_config_json = DataFile(
         #     "scraping_config.json",
         #     default_data='[{"company":null,"link":null,"scrape":null}]',
         # )
         # with open(scraping_config_json.path, "r") as f:
         #     config = json.load(f)
-            
 
         # Transform JSON data into DataFrame
         # Create new job DataFrame to be written to database
         company_scrape_df = pd.DataFrame(config)
         LOG.info("Making pd.DataFrame iterator")
-        # Iterate through valid sources to be scraped   
+        # Iterate through valid sources to be scraped
         company_scrape_df: pd.DataFrame = company_scrape_df.loc[
             company_scrape_df["scrape"].notna()
         ]
         LOG.info("Scraping Loop")
         # print(company_scrape_df)
-        company_scrape_df = company_scrape_df.sort_values(by=['company'], ascending = True)
+        company_scrape_df = company_scrape_df.sort_values(
+            by=["company"], ascending=True
+        )
         for idx, entry in company_scrape_df.iterrows():
             # TODO: Add a command-line argument to select which company/companies to scrape
             # if entry["company"] != "Allstate":
@@ -299,7 +299,7 @@ def scrape(args: Namespace):
                 scraper.scrape_company(entry["link"], entry)
             except Exception as ex:
                 LOG.info(ex)
-                
+
         LOG.info("Done!")
     except Exception as e:
         # Log any errors to stdout

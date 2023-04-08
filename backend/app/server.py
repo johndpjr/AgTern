@@ -63,7 +63,9 @@ def start_server(args: Namespace):
             # deprecated because we are no longer using companies.csv
             # sort_companies()
             # import_companies()
-            print("NOTE: THIS IS DEPRECATED. WE ARE NO LONGER SORTING USING COMPANIES.CSV")
+            print(
+                "NOTE: THIS IS DEPRECATED. WE ARE NO LONGER SORTING USING COMPANIES.CSV"
+            )
         except Exception as e:
             LOG.error(f"An exception occurred: {e}", exc_info=True)
 

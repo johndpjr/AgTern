@@ -23,4 +23,3 @@ export type Job = {
     description?: string;
     tags?: string;
 };
-
