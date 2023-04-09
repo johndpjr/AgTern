@@ -240,27 +240,21 @@ def scrape(args: Namespace):
         scraper.start(args.headless)
 
         LOG.info("Loading scraping config...")
-        # Get JSON data from scraping_config.json (empty DataFrame if not exists)
-        done_first = False
+        company_scrape = []
         directory = abspath(join(__file__, pardir)) + "/../../../data/companies"
         for file in listdir(directory):
             filename = fsdecode(file)
             file_dir_path = join(directory, filename)
             file_scrape_config_json = DataFile(
-                "{}".format(file_dir_path),
-                default_data='[{"company":null,"link":null,"scrape":null}]',
+                file_dir_path,
+                default_data='{"company":null,"link":null,"scrape":null}',
             )
 
             with open(file_scrape_config_json.path, "r") as f:
-                if not done_first:
-                    config = json.load(f)
-                    done_first = True
-                else:
-                    # Extend the json otherwise
-                    config.extend(json.load(f))
+                company_scrape.append(json.load(f))
 
         # Transform JSON data into DataFrame (model that holds scrape data)
-        company_scrape_df = pd.DataFrame(config)
+        company_scrape_df = pd.DataFrame.from_records(company_scrape)
         # Iterate through valid sources to be scraped
         company_scrape_df: pd.DataFrame = company_scrape_df.loc[
             company_scrape_df["scrape"].notna()
@@ -271,8 +265,8 @@ def scrape(args: Namespace):
         )
         for idx, entry in company_scrape_df.iterrows():
             # TODO: Add a command-line argument to select which company/companies to scrape
-            if entry["company"] != "Allstate":
-                continue
+            # if entry["company"] != "Allstate":
+            #     continue
             LOG.info(f"Scraping {entry['company']}...")
             try:
                 scraper.scrape_company(entry["link"], entry)
