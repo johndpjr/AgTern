@@ -14,7 +14,6 @@ def main(args: Namespace):
 
 def run_cli():
     parser = ArgumentParser(prog="AgTern")
-    parser.add_argument("--update-companies", action="store_true")
     parser.add_argument("--show-scraper", dest="headless", action="store_false")
     parser.add_argument("--no-scrape", action="store_true")
     parser.add_argument("--scrape-only", action="store_true")

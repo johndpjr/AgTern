@@ -1,4 +1,4 @@
-from __future__ import annotations  # Allow type annotations before the type is defined
+from __future__ import annotations
 
 import json
 import signal
@@ -7,6 +7,8 @@ import traceback
 from argparse import Namespace
 from datetime import datetime
 from multiprocessing import Process
+from os import fsdecode, listdir, pardir
+from os.path import abspath, join
 from threading import Thread
 from typing import Any
 from urllib.parse import urlparse
@@ -65,7 +67,7 @@ class WebScraper:
             self.driver = Chrome(driver_executable_path=driver_path, options=options)
         else:
             self.driver = Chrome(options=options)
-        # self.driver = Chrome(options=options)
+
         self.wait = WebDriverWait(self.driver, 5)
 
     def goto(self, link: str):
@@ -227,8 +229,7 @@ def scrape(args: Namespace):
         if scraper is not None and scraper.driver is not None:
             LOG.info("Closing driver...")
             scraper.driver.quit()
-            LOG.info("Done!")
-        # Close Process
+        # Close process
         exit(0)
 
     # Ensure driver is closed if interrupted:
@@ -239,28 +240,39 @@ def scrape(args: Namespace):
         scraper.start(args.headless)
 
         LOG.info("Loading scraping config...")
-        # Get JSON data from scraping_config.json (empty DataFrame if not exists)
-        scraping_config_json = DataFile(
-            "scraping_config.json",
-            default_data='[{"company":null,"link":null,"scrape":null}]',
-        )
-        with open(scraping_config_json.path, "r") as f:
-            config = json.load(f)
+        company_scrape = []
+        directory = abspath(join(__file__, pardir)) + "/../../../data/companies"
+        for file in listdir(directory):
+            filename = fsdecode(file)
+            file_dir_path = join(directory, filename)
+            file_scrape_config_json = DataFile(
+                file_dir_path,
+                default_data='{"company":null,"link":null,"scrape":null}',
+            )
 
-        # Transform JSON data into DataFrame
-        # Create new job DataFrame to be written to database
-        company_scrape_df = pd.DataFrame(config)
+            with open(file_scrape_config_json.path, "r") as f:
+                company_scrape.append(json.load(f))
 
+        # Transform JSON data into DataFrame (model that holds scrape data)
+        company_scrape_df = pd.DataFrame.from_records(company_scrape)
         # Iterate through valid sources to be scraped
         company_scrape_df: pd.DataFrame = company_scrape_df.loc[
             company_scrape_df["scrape"].notna()
         ]
+        LOG.info("Scraping specified companies...")
+        company_scrape_df = company_scrape_df.sort_values(
+            by=["company"], ascending=True
+        )
         for idx, entry in company_scrape_df.iterrows():
             # TODO: Add a command-line argument to select which company/companies to scrape
             # if entry["company"] != "Allstate":
             #     continue
             LOG.info(f"Scraping {entry['company']}...")
-            scraper.scrape_company(entry["link"], entry)
+            try:
+                scraper.scrape_company(entry["link"], entry)
+            except Exception as ex:
+                LOG.info(ex)
+
         LOG.info("Done!")
     except Exception as e:
         # Log any errors to stdout
