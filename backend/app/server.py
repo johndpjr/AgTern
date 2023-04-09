@@ -11,7 +11,7 @@ from .core import settings
 from .database import DatabaseModel, engine
 from .scraping import start_scraper
 from .spa import SinglePageApplication
-from .utils import LOG, import_companies, sort_companies
+from .utils import LOG
 
 DatabaseModel.metadata.create_all(bind=engine)
 
@@ -56,18 +56,6 @@ def start_server(args: Namespace):
     if args.dev:
         Thread(target=generate_client, daemon=True).start()
     Thread(target=run_server).start()
-
-    if args.update_companies:
-        LOG.info("Updating company info...")
-        try:
-            # deprecated because we are no longer using companies.csv
-            # sort_companies()
-            # import_companies()
-            print(
-                "NOTE: THIS IS DEPRECATED. WE ARE NO LONGER SORTING USING COMPANIES.CSV"
-            )
-        except Exception as e:
-            LOG.error(f"An exception occurred: {e}", exc_info=True)
 
     if not args.no_scrape:
         start_scraper(args)
