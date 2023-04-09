@@ -1,4 +1,4 @@
-from __future__ import annotations  # Allow type annotations before the type is defined
+from __future__ import annotations
 
 import json
 import signal
@@ -7,8 +7,8 @@ import traceback
 from argparse import Namespace
 from datetime import datetime
 from multiprocessing import Process
-from os import fsdecode, fsencode, getcwd, listdir, pardir, walk
-from os.path import abspath, isfile, join
+from os import fsdecode, listdir, pardir
+from os.path import abspath, join
 from threading import Thread
 from typing import Any
 from urllib.parse import urlparse
@@ -53,7 +53,6 @@ class WebScraper:
             options = Options()
         options.headless = headless
         options.add_argument("--start-maximized")
-        LOG.info("Making driver...")
         if auto_download:
             driver_manager = ChromeDriverManager()
             driver_exists = driver_manager.driver_cache.find_driver(
@@ -69,8 +68,6 @@ class WebScraper:
         else:
             self.driver = Chrome(options=options)
 
-        # self.driver = Chrome(options=options)
-        LOG.info("driver made...")
         self.wait = WebDriverWait(self.driver, 5)
 
     def goto(self, link: str):
@@ -232,8 +229,7 @@ def scrape(args: Namespace):
         if scraper is not None and scraper.driver is not None:
             LOG.info("Closing driver...")
             scraper.driver.quit()
-            LOG.info("Done!")
-        # Close Process
+        # Close process
         exit(0)
 
     # Ensure driver is closed if interrupted:
@@ -245,55 +241,38 @@ def scrape(args: Namespace):
 
         LOG.info("Loading scraping config...")
         # Get JSON data from scraping_config.json (empty DataFrame if not exists)
-        path = getcwd()
-        doneFirst = False
+        done_first = False
         directory = abspath(join(__file__, pardir)) + "/../../../data/companies"
         for file in listdir(directory):
             filename = fsdecode(file)
-            # print(filename)
             file_dir_path = join(directory, filename)
             file_scrape_config_json = DataFile(
                 "{}".format(file_dir_path),
                 default_data='[{"company":null,"link":null,"scrape":null}]',
             )
 
-            # open the file
             with open(file_scrape_config_json.path, "r") as f:
-                # print("the path is:", file_scrape_config_json.path)
-                # print("fileLines:", f.readlines())
-                if not doneFirst:
+                if not done_first:
                     config = json.load(f)
-                    doneFirst = True
+                    done_first = True
                 else:
-                    # extend the json otherwise
-                    # print("config is currently", config)
+                    # Extend the json otherwise
                     config.extend(json.load(f))
 
-        # print("config:", config)
-        # scraping_config_json = DataFile(
-        #     "scraping_config.json",
-        #     default_data='[{"company":null,"link":null,"scrape":null}]',
-        # )
-        # with open(scraping_config_json.path, "r") as f:
-        #     config = json.load(f)
-
-        # Transform JSON data into DataFrame
-        # Create new job DataFrame to be written to database
+        # Transform JSON data into DataFrame (model that holds scrape data)
         company_scrape_df = pd.DataFrame(config)
-        LOG.info("Making pd.DataFrame iterator")
         # Iterate through valid sources to be scraped
         company_scrape_df: pd.DataFrame = company_scrape_df.loc[
             company_scrape_df["scrape"].notna()
         ]
-        LOG.info("Scraping Loop")
-        # print(company_scrape_df)
+        LOG.info("Scraping specified companies...")
         company_scrape_df = company_scrape_df.sort_values(
             by=["company"], ascending=True
         )
         for idx, entry in company_scrape_df.iterrows():
             # TODO: Add a command-line argument to select which company/companies to scrape
-            # if entry["company"] != "Allstate":
-            #     continue
+            if entry["company"] != "Allstate":
+                continue
             LOG.info(f"Scraping {entry['company']}...")
             try:
                 scraper.scrape_company(entry["link"], entry)
