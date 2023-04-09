@@ -1,54 +1,54 @@
-[{
-"company": "Ecolab",
-"link": "https://jobs.ecolab.com/job-search-results/?category[]=Internship",
-"scrape": [
+{
+  "company": "Ecolab",
+  "link": "https://jobs.ecolab.com/job-search-results/?category[]=Internship",
+  "scrape": [
     {
-    "action": "scrape",
-    "next_page": "//li[@class='pagination-li']/a[text()='>']",
-    "properties": [
+      "action": "scrape",
+      "next_page": "//li[@class='pagination-li']/a[text()='>']",
+      "properties": [
         {
-        "name": "title",
-        "xpath": "//div[@class='jobTitle']"
+          "name": "title",
+          "xpath": "//div[@class='jobTitle']"
         },
         {
-        "name": "link",
-        "xpath": "//div[@class='jobTitle']/a",
-        "html_property": "href",
-        "unique": true
+          "name": "link",
+          "xpath": "//div[@class='jobTitle']/a",
+          "html_property": "href",
+          "unique": true
         },
         {
-        "name": "location",
-        "xpath": "//li[contains(@class,'city_state')]"
+          "name": "location",
+          "xpath": "//li[contains(@class,'city_state')]"
         },
         {
-        "name": "post_date",
-        "xpath": "//li[contains(@class,'open_date')]"
+          "name": "post_date",
+          "xpath": "//li[contains(@class,'open_date')]"
         }
-    ]
+      ]
     },
     {
-    "action": "scrape",
-    "link_property": "link",
-    "properties": [
+      "action": "scrape",
+      "link_property": "link",
+      "properties": [
         {
-        "name": "company_job_id",
-        "xpath": "//span[@id='gtm-jobdetail-id']"
+          "name": "company_job_id",
+          "xpath": "//span[@id='gtm-jobdetail-id']"
         },
         {
-        "name": "apply_link",
-        "xpath": "(//a[contains(@class,'apply-btn')])[1]",
-        "html_property": "href"
+          "name": "apply_link",
+          "xpath": "(//a[contains(@class,'apply-btn')])[1]",
+          "html_property": "href"
         },
         {
-        "name": "description",
-        "xpath": "//div[@id='gtm-jobdetail-desc']//div[contains(@class,'panel-default')]",
-        "regex": {
+          "name": "description",
+          "xpath": "//div[@id='gtm-jobdetail-desc']//div[contains(@class,'panel-default')]",
+          "regex": {
             "pattern": "(Job Description\\n*)([\\s\\S]*)",
             "group": 2,
             "multiline": true
+          }
         }
-        }
-    ]
+      ]
     }
-]
-}]
+  ]
+}

@@ -1,58 +1,58 @@
-[{
-"company": "GeneralMotors",
-"link": "https://search-careers.gm.com/en/jobs/?search=&team=Students+%26+Recent+Graduates",
-"scrape": [
+{
+  "company": "General Motors",
+  "link": "https://search-careers.gm.com/en/jobs/?search=&team=Students+%26+Recent+Graduates",
+  "scrape": [
     {
-    "action": "scrape",
-    "next_page": "//li[contains(@class,'next') and contains(@class,'page-item')]/a",
-    "properties": [
+      "action": "scrape",
+      "next_page": "//li[contains(@class,'next') and contains(@class,'page-item')]/a",
+      "properties": [
         {
-        "name": "title",
-        "xpath": "//div[@id='js-job-search-results']//h2[@class='card-title']/a"
+          "name": "title",
+          "xpath": "//div[@id='js-job-search-results']//h2[@class='card-title']/a"
         },
         {
-        "name": "link",
-        "xpath": "//div[@id='js-job-search-results']//h2[@class='card-title']/a",
-        "html_property": "href",
-        "unique": true
+          "name": "link",
+          "xpath": "//div[@id='js-job-search-results']//h2[@class='card-title']/a",
+          "html_property": "href",
+          "unique": true
         },
         {
-        "name": "company_job_id",
-        "xpath": "//div[@id='js-job-search-results']//div[contains(@class,'js-job')]",
-        "html_property": "data-id"
+          "name": "company_job_id",
+          "xpath": "//div[@id='js-job-search-results']//div[contains(@class,'js-job')]",
+          "html_property": "data-id"
         },
         {
-        "name": "location",
-        "xpath": "//div[@id='js-job-search-results']//ul[contains(@class,'job-meta')]/li[2]"
+          "name": "location",
+          "xpath": "//div[@id='js-job-search-results']//ul[contains(@class,'job-meta')]/li[2]"
         }
-    ]
+      ]
     },
     {
-    "action": "scrape",
-    "link_property": "link",
-    "properties": [
+      "action": "scrape",
+      "link_property": "link",
+      "properties": [
         {
-        "name": "post_date",
-        "xpath": "//ul[contains(@class,'job-meta')]/li[3]",
-        "regex": {
+          "name": "post_date",
+          "xpath": "//ul[contains(@class,'job-meta')]/li[3]",
+          "regex": {
             "pattern": "(Posted\\n)(.*)",
             "group": 2
-        }
+          }
         },
         {
-        "name": "apply_link",
-        "xpath": "//a[@id='js-apply-external']",
-        "html_property": "href"
+          "name": "apply_link",
+          "xpath": "//a[@id='js-apply-external']",
+          "html_property": "href"
         },
         {
-        "name": "description",
-        "xpath": "//article[@class='cms-content']",
-        "regex": {
+          "name": "description",
+          "xpath": "//article[@class='cms-content']",
+          "regex": {
             "pattern": "(Description\\n\\n)([\\s\\S]*)",
             "group": 2
+          }
         }
-        }
-    ]
+      ]
     }
-]
-}]
+  ]
+}

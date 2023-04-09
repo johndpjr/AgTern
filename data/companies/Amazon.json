@@ -1,58 +1,58 @@
-[{
-"company": "Amazon",
-"link": "https://www.amazon.jobs/en/teams/internships-for-students?offset=0&result_limit=10&sort=relevant&country%5B%5D=USA&distanceType=Mi&radius=24km&latitude=&longitude=&loc_group_id=&loc_query=&base_query=&city=&country=&region=&county=&query_options=&",
-"scrape": [
+{
+  "company": "Amazon",
+  "link": "https://www.amazon.jobs/en/teams/internships-for-students?offset=0&result_limit=10&sort=relevant&country%5B%5D=USA&distanceType=Mi&radius=24km&latitude=&longitude=&loc_group_id=&loc_query=&base_query=&city=&country=&region=&county=&query_options=&",
+  "scrape": [
     {
-    "action": "scrape",
-    "next_page": "//div[@class='pagination-control']/button[@aria-label='Next page']",
-    "properties": [
+      "action": "scrape",
+      "next_page": "//div[@class='pagination-control']/button[@aria-label='Next page']",
+      "properties": [
         {
-        "name": "title",
-        "xpath": "//h3[@class='job-title']"
+          "name": "title",
+          "xpath": "//h3[@class='job-title']"
         },
         {
-        "name": "link",
-        "xpath": "//a[@class='job-link']",
-        "html_property": "href",
-        "unique": true
+          "name": "link",
+          "xpath": "//a[@class='job-link']",
+          "html_property": "href",
+          "unique": true
         },
         {
-        "name": "location",
-        "xpath": "//p[@class='location-and-id']",
-        "regex": {
+          "name": "location",
+          "xpath": "//p[@class='location-and-id']",
+          "regex": {
             "pattern": "[\\s\\S]+(?= \\| Job ID: )"
-        }
+          }
         },
         {
-        "name": "company_job_id",
-        "xpath": "//p[@class='location-and-id']",
-        "regex": {
+          "name": "company_job_id",
+          "xpath": "//p[@class='location-and-id']",
+          "regex": {
             "pattern": "(?<=\\| Job ID: )[\\s\\S]+"
-        }
+          }
         },
         {
-        "name": "post_date",
-        "xpath": "//h2[@class='posting-date']",
-        "regex": {
+          "name": "post_date",
+          "xpath": "//h2[@class='posting-date']",
+          "regex": {
             "pattern": "(?<=Posted )[\\s\\S]+"
+          }
         }
-        }
-    ]
+      ]
     },
     {
-    "action": "scrape",
-    "link_property": "link",
-    "properties": [
+      "action": "scrape",
+      "link_property": "link",
+      "properties": [
         {
-        "name": "description",
-        "xpath": "//div[@id='job-detail-body']//div[@class='content']"
+          "name": "description",
+          "xpath": "//div[@id='job-detail-body']//div[@class='content']"
         },
         {
-        "name": "apply_link",
-        "xpath": "//a[@id='apply-button']",
-        "html_property": "href"
+          "name": "apply_link",
+          "xpath": "//a[@id='apply-button']",
+          "html_property": "href"
         }
-    ]
+      ]
     }
-]
-}]
+  ]
+}

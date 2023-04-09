@@ -1,58 +1,58 @@
-[{
-"company": "GeneralElectric",
-"link": "https://jobs.gecareers.com/global/en/search-results",
-"scrape": [
+{
+  "company": "General Electric",
+  "link": "https://jobs.gecareers.com/global/en/search-results",
+  "scrape": [
     {
-    "action": "click",
-    "xpath": "//button[@id='ExperienceLevelAccordion']"
+      "action": "click",
+      "xpath": "//button[@id='ExperienceLevelAccordion']"
     },
     {
-    "action": "click",
-    "xpath": "//input[starts-with(@aria-label,'Co-op/Intern')]"
+      "action": "click",
+      "xpath": "//input[starts-with(@aria-label,'Co-op/Intern')]"
     },
     {
-    "action": "scrape",
-    "next_page": "//a[@aria-label='View next page']",
-    "scroll": true,
-    "properties": [
+      "action": "scrape",
+      "next_page": "//a[@aria-label='View next page']",
+      "scroll": true,
+      "properties": [
         {
-        "name": "title",
-        "xpath": "//li[@class='jobs-list-item']//a"
+          "name": "title",
+          "xpath": "//li[@class='jobs-list-item']//a"
         },
         {
-        "name": "link",
-        "xpath": "//li[@class='jobs-list-item']//a",
-        "html_property": "href",
-        "unique": true
+          "name": "link",
+          "xpath": "//li[@class='jobs-list-item']//a",
+          "html_property": "href",
+          "unique": true
         },
         {
-        "name": "category",
-        "xpath": "//li[@class='jobs-list-item']//span[contains(@class,'category')]"
+          "name": "category",
+          "xpath": "//li[@class='jobs-list-item']//span[contains(@class,'category')]"
         },
         {
-        "name": "post_date",
-        "xpath": "//li[@class='jobs-list-item']//span[@class='job-postdate']"
+          "name": "post_date",
+          "xpath": "//li[@class='jobs-list-item']//span[@class='job-postdate']"
         },
         {
-        "name": "company_job_id",
-        "xpath": "//li[@class='jobs-list-item']//span[contains(@class,'jobId')]"
+          "name": "company_job_id",
+          "xpath": "//li[@class='jobs-list-item']//span[contains(@class,'jobId')]"
         }
-    ]
+      ]
     },
     {
-    "action": "scrape",
-    "link_property": "link",
-    "properties": [
+      "action": "scrape",
+      "link_property": "link",
+      "properties": [
         {
-        "name": "apply_link",
-        "xpath": "(//a[@title='Apply Now'])[1]",
-        "html_property": "href"
+          "name": "apply_link",
+          "xpath": "(//a[@title='Apply Now'])[1]",
+          "html_property": "href"
         },
         {
-        "name": "description",
-        "xpath": "//div[@class='jd-info']"
+          "name": "description",
+          "xpath": "//div[@class='jd-info']"
         }
-    ]
+      ]
     }
-]
-}]
+  ]
+}

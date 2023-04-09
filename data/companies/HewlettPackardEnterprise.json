@@ -1,59 +1,59 @@
-[{
-"company": "HewlettPackardEnterprise",
-"link": "https://careers.hpe.com/us/en/search-results?keywords=intern",
-"scrape": [
+{
+  "company": "Hewlett Packard Enterprise",
+  "link": "https://careers.hpe.com/us/en/search-results?keywords=intern",
+  "scrape": [
     {
-    "action": "scrape",
-    "next_page": "//a[contains(@class,'next-btn')]",
-    "properties": [
+      "action": "scrape",
+      "next_page": "//a[contains(@class,'next-btn')]",
+      "properties": [
         {
-        "name": "title",
-        "xpath": "//li[@class='jobs-list-item']//a"
+          "name": "title",
+          "xpath": "//li[@class='jobs-list-item']//a"
         },
         {
-        "name": "link",
-        "xpath": "//li[@class='jobs-list-item']//a",
-        "html_property": "href",
-        "unique": true
+          "name": "link",
+          "xpath": "//li[@class='jobs-list-item']//a",
+          "html_property": "href",
+          "unique": true
         },
         {
-        "name": "post_date",
-        "xpath": "//li[@class='jobs-list-item']//a",
-        "html_property": "data-ph-at-job-post-date-text"
+          "name": "post_date",
+          "xpath": "//li[@class='jobs-list-item']//a",
+          "html_property": "data-ph-at-job-post-date-text"
         },
         {
-        "name": "category",
-        "xpath": "//li[@class='jobs-list-item']//p[@class='job-info']/span[3]",
-        "regex": {
+          "name": "category",
+          "xpath": "//li[@class='jobs-list-item']//p[@class='job-info']/span[3]",
+          "regex": {
             "pattern": "(Category\\n)(.*)",
             "group": 2
-        }
+          }
         },
         {
-        "name": "company_job_id",
-        "xpath": "//li[@class='jobs-list-item']//p[@class='job-info']/span[5]",
-        "regex": {
+          "name": "company_job_id",
+          "xpath": "//li[@class='jobs-list-item']//p[@class='job-info']/span[5]",
+          "regex": {
             "pattern": "(Job Id\\n)(.*)",
             "group": 2
+          }
         }
-        }
-    ]
+      ]
     },
     {
-    "action": "scrape",
-    "link_property": "link",
-    "scroll": true,
-    "properties": [
+      "action": "scrape",
+      "link_property": "link",
+      "scroll": true,
+      "properties": [
         {
-        "name": "apply_link",
-        "xpath": "//div[@class='job-header-actions']/a",
-        "html_property": "href"
+          "name": "apply_link",
+          "xpath": "//div[@class='job-header-actions']/a",
+          "html_property": "href"
         },
         {
-        "name": "description",
-        "xpath": "//div[@class='job-description']/div[@data-ph-at-id='jobdescription-text']"
+          "name": "description",
+          "xpath": "//div[@class='job-description']/div[@data-ph-at-id='jobdescription-text']"
         }
-    ]
+      ]
     }
-]
-}]
+  ]
+}
