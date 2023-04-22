@@ -19,5 +19,11 @@
             </a>
         </div>
     </mat-card-title-group>
+    <div class="tag-list">
+        <mat-chip-list>
+            <mat-chip color="accent" selected *ngFor="let tag of tags">{{tag}}</mat-chip>
+            <!-- TODO: Replace this with iteration over tags (once they're in the Job model)-->
+        </mat-chip-list>
+    </div>
     <mat-card-content style="white-space: pre-wrap">{{job.description}}</mat-card-content>
 </mat-card>

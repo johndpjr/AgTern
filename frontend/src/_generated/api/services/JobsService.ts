@@ -13,15 +13,15 @@ export class JobsService {
     /**
      * Get Jobs
      * Returns all jobs from the database.
-     * @param skip
-     * @param limit
+     * @param skip 
+     * @param limit 
      * @returns Job Successful Response
      * @throws ApiError
      */
     public static getJobs(
-        skip?: number,
-        limit: number = 100,
-    ): CancelablePromise<Array<Job>> {
+skip?: number,
+limit: number = 100,
+): CancelablePromise<Array<Job>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/jobs/',
@@ -38,13 +38,13 @@ export class JobsService {
     /**
      * Create Job
      * Adds a Job object to the database.
-     * @param requestBody
+     * @param requestBody 
      * @returns Job Successful Response
      * @throws ApiError
      */
     public static createJob(
-        requestBody: JobCreate,
-    ): CancelablePromise<Job> {
+requestBody: JobCreate,
+): CancelablePromise<Job> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/v1/jobs/',
@@ -59,17 +59,17 @@ export class JobsService {
     /**
      * Search Jobs
      * Searches the database for jobs.
-     * @param q
-     * @param skip
-     * @param limit
+     * @param q 
+     * @param skip 
+     * @param limit 
      * @returns Job Successful Response
      * @throws ApiError
      */
     public static searchJobs(
-        q?: string,
-        skip?: number,
-        limit: number = 100,
-    ): CancelablePromise<Array<Job>> {
+q?: string,
+skip?: number,
+limit: number = 100,
+): CancelablePromise<Array<Job>> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/v1/jobs/search',
