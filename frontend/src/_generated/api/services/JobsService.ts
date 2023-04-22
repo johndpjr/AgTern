@@ -13,8 +13,8 @@ export class JobsService {
     /**
      * Get Jobs
      * Returns all jobs from the database.
-     * @param skip 
-     * @param limit 
+     * @param skip
+     * @param limit
      * @returns Job Successful Response
      * @throws ApiError
      */
@@ -38,7 +38,7 @@ limit: number = 100,
     /**
      * Create Job
      * Adds a Job object to the database.
-     * @param requestBody 
+     * @param requestBody
      * @returns Job Successful Response
      * @throws ApiError
      */
@@ -59,9 +59,9 @@ requestBody: JobCreate,
     /**
      * Search Jobs
      * Searches the database for jobs.
-     * @param q 
-     * @param skip 
-     * @param limit 
+     * @param q
+     * @param skip
+     * @param limit
      * @returns Job Successful Response
      * @throws ApiError
      */
