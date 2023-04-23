@@ -9,6 +9,7 @@ from pydantic import AnyUrl
 from selenium.common import NoSuchElementException, TimeoutException
 from selenium.webdriver import ActionChains, Keys
 
+from backend.app.data_processing import *
 from backend.app.utils import LOG
 
 from .models import ScrapePropertyModel, ScrapingContext
@@ -113,6 +114,8 @@ def scrape_property(ctx: ScrapingContext, prop: ScrapePropertyModel):
                     text = match.group(prop.regex.group)  # Group 0 is the whole match
             elif prop.regex.use_default_on_failure:
                 text = prop.regex.default
+        if prop.data_processing is not None:
+            text = eval(prop.data_processing)
         contents.append(text)
     new_data = pd.Series(contents, dtype=prop.store_as)
     if prop.name in ctx.data:
