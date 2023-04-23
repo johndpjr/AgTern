@@ -34,7 +34,7 @@
           }
         },
         {
-          "name": "link",
+          "name": "posting_link",
           "xpath": "//tbody/tr[@class='tds-table-row']/td[1]/a",
           "html_property": "href",
           "unique": true
@@ -51,11 +51,16 @@
     },
     {
       "action": "scrape",
-      "link_property": "link",
+      "link_property": "posting_link",
       "properties": [
         {
           "name": "description",
           "xpath": "//div[@class='careers-width-constraint']/div/div[2]"
+        },
+        {
+          "name": "tags",
+          "xpath": "//div[@class='careers-width-constraint']/div/div[2]",
+          "data_processing": "get_keywords(text)"
         },
         {
           "name": "company_job_id",

@@ -11,7 +11,7 @@
           "xpath": "//a[@class='gc-card']//h2[contains(@class,'gc-card__title')]"
         },
         {
-          "name": "link",
+          "name": "posting_link",
           "xpath": "//a[@class='gc-card']",
           "html_property": "href",
           "unique": true
@@ -20,7 +20,7 @@
     },
     {
       "action": "scrape",
-      "link_property": "link",
+      "link_property": "posting_link",
       "properties": [
         {
           "name": "apply_link",
@@ -30,6 +30,11 @@
         {
           "name": "description",
           "xpath": "//div[contains(@class,'gc-card__content')]"
+        },
+        {
+          "name": "tags",
+          "xpath": "//div[contains(@class,'gc-card__content')]",
+          "data_processing": "get_keywords(text)"
         },
         {
           "name": "post_date",

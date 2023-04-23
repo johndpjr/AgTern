@@ -11,7 +11,7 @@
           "xpath": "//div[@id='js-job-search-results']//h2[@class='card-title']/a"
         },
         {
-          "name": "link",
+          "name": "posting_link",
           "xpath": "//div[@id='js-job-search-results']//h2[@class='card-title']/a",
           "html_property": "href",
           "unique": true
@@ -29,7 +29,7 @@
     },
     {
       "action": "scrape",
-      "link_property": "link",
+      "link_property": "posting_link",
       "properties": [
         {
           "name": "post_date",
@@ -51,6 +51,11 @@
             "pattern": "(Description\\n\\n)([\\s\\S]*)",
             "group": 2
           }
+        },
+        {
+          "name": "tags",
+          "xpath": "//article[@class='cms-content']",
+          "data_processing": "get_keywords(text)"
         }
       ]
     }

@@ -20,7 +20,7 @@
           "xpath": "//li[@class='jobs-list-item']//a"
         },
         {
-          "name": "link",
+          "name": "posting_link",
           "xpath": "//li[@class='jobs-list-item']//a",
           "html_property": "href",
           "unique": true
@@ -41,7 +41,7 @@
     },
     {
       "action": "scrape",
-      "link_property": "link",
+      "link_property": "posting_link",
       "properties": [
         {
           "name": "apply_link",
@@ -51,6 +51,11 @@
         {
           "name": "description",
           "xpath": "//div[@class='jd-info']"
+        },
+        {
+          "name": "tags",
+          "xpath": "//div[@class='jd-info']",
+          "data_processing": "get_keywords(text)"
         }
       ]
     }

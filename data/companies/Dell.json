@@ -10,7 +10,7 @@
       "action": "scrape",
       "properties": [
         {
-          "name": "link",
+          "name": "posting_link",
           "xpath": "//section[@id='search-results-list']//a",
           "html_property": "href",
           "unique": true
@@ -27,7 +27,7 @@
     },
     {
       "action": "scrape",
-      "link_property": "link",
+      "link_property": "posting_link",
       "properties": [
         {
           "name": "apply_link",
@@ -37,6 +37,11 @@
         {
           "name": "description",
           "xpath": "//div[@class='ats-description']"
+        },
+        {
+          "name": "tags",
+          "xpath": "//div[@class='ats-description']",
+          "data_processing": "get_keywords(text)"
         },
         {
           "name": "company_job_id",
