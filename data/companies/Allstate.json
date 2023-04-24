@@ -10,7 +10,7 @@
           "xpath": "//div[@class='jobTitle']"
         },
         {
-          "name": "link",
+          "name": "posting_link",
           "xpath": "//div[@class='jobTitle']/a",
           "html_property": "href",
           "unique": true
@@ -31,7 +31,7 @@
     },
     {
       "action": "scrape",
-      "link_property": "link",
+      "link_property": "posting_link",
       "properties": [
         {
           "name": "company_job_id",
@@ -45,6 +45,11 @@
         {
           "name": "description",
           "xpath": "//div[@id='gtm-jobdetail-desc']"
+        },
+        {
+          "name": "tags",
+          "xpath": "//div[@id='gtm-jobdetail-desc']",
+          "data_processing": "get_keywords(text)"
         }
       ]
     }

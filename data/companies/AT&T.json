@@ -27,7 +27,7 @@
           "xpath": "//section[@id='search-results-list']//li//span[@class='job-location']"
         },
         {
-          "name": "link",
+          "name": "posting_link",
           "xpath": "//section[@id='search-results-list']//li/a",
           "html_property": "href",
           "unique": true
@@ -36,7 +36,7 @@
     },
     {
       "action": "scrape",
-      "link_property": "link",
+      "link_property": "posting_link",
       "properties": [
         {
           "name": "description",
@@ -46,6 +46,11 @@
             "group": 2,
             "multiline": true
           }
+        },
+        {
+          "name": "tags",
+          "xpath": "//div[@class='ats-description']",
+          "data_processing": "get_keywords(text)"
         },
         {
           "name": "company_job_id",

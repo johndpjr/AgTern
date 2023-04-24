@@ -14,7 +14,7 @@
           "xpath": "//ul[contains(@class,'sr-featured-jobs')]/li//a//h3"
         },
         {
-          "name": "link",
+          "name": "posting_link",
           "xpath": "//ul[contains(@class,'sr-featured-jobs')]/li//a[contains(@class,'featured-job-')]",
           "html_property": "href",
           "unique": true
@@ -28,7 +28,7 @@
           "xpath": "//ul[contains(@class,'sr-main-jobs')]/li//a//h3"
         },
         {
-          "name": "link",
+          "name": "posting_link",
           "xpath": "//ul[contains(@class,'sr-main-jobs')]/li//a",
           "html_property": "href",
           "unique": true
@@ -41,7 +41,7 @@
     },
     {
       "action": "scrape",
-      "link_property": "link",
+      "link_property": "posting_link",
       "properties": [
         {
           "name": "location",
@@ -68,6 +68,11 @@
             "group": 2,
             "multiline": true
           }
+        },
+        {
+          "name": "tags",
+          "xpath": "//div[contains(@class,'job-description-wrap')]",
+          "data_processing": "get_keywords(text)"
         }
       ]
     }

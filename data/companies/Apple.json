@@ -11,7 +11,7 @@
           "xpath": "//a[contains(@id,'jotTitle')]"
         },
         {
-          "name": "link",
+          "name": "posting_link",
           "xpath": "//a[contains(@id,'jotTitle')]",
           "html_property": "href",
           "unique": true
@@ -24,7 +24,7 @@
     },
     {
       "action": "scrape",
-      "link_property": "link",
+      "link_property": "posting_link",
       "properties": [
         {
           "name": "category",
@@ -51,6 +51,11 @@
             "group": 2,
             "multiline": true
           }
+        },
+        {
+          "name": "tags",
+          "xpath": "//div[@itemprop='description']",
+          "data_processing": "get_keywords(text)"
         }
       ]
     }

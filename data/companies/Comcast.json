@@ -12,7 +12,7 @@
           "xpath": "//div[contains(@class,'table-item') and not(contains(@class,'hide'))]/a"
         },
         {
-          "name": "link",
+          "name": "posting_link",
           "loading_text": "Loading...",
           "xpath": "//div[contains(@class,'table-item') and not(contains(@class,'hide'))]/a",
           "html_property": "href",
@@ -32,7 +32,7 @@
     },
     {
       "action": "scrape",
-      "link_property": "link",
+      "link_property": "posting_link",
       "properties": [
         {
           "name": "company_job_id",
@@ -54,6 +54,11 @@
             "pattern": "(Job Summary:\\n\\n)([\\s\\S]*)",
             "multiline": true
           }
+        },
+        {
+          "name": "tags",
+          "xpath": "//div[@id='section-job-description']",
+          "data_processing": "get_keywords(text)"
         }
       ]
     }

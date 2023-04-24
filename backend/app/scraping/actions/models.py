@@ -128,6 +128,7 @@ class ScrapePropertyModel(ScrapeActionModel):
     regex: RegexConfigModel = None
     store_as: DataType = DataType.str
     unique: bool = False
+    data_processing: str = None
 
     @root_validator(pre=True)
     def validate_value(cls, values):

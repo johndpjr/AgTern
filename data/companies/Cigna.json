@@ -11,7 +11,7 @@
           "xpath": "//div[@class='job-title']"
         },
         {
-          "name": "link",
+          "name": "posting_link",
           "xpath": "//a[@ph-tevent='job_click']",
           "html_property": "href",
           "unique": true
@@ -36,7 +36,7 @@
     },
     {
       "action": "scrape",
-      "link_property": "link",
+      "link_property": "posting_link",
       "properties": [
         {
           "name": "company_job_id",
@@ -54,6 +54,11 @@
         {
           "name": "description",
           "xpath": "//section[@class='job-description']"
+        },
+        {
+          "name": "tags",
+          "xpath": "//section[@class='job-description']",
+          "data_processing": "get_keywords(text)"
         }
       ]
     }

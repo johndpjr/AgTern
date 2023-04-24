@@ -15,9 +15,8 @@
             : job.description
           }}</div>
         <br/>
-        <mat-chip-list>
-            <mat-chip color="accent" selected *ngFor="let tag of tags">{{tag}}</mat-chip>
-            <!-- TODO: Replace this with iteration over tags (once they're in the Job model)-->
+        <mat-chip-list *ngIf="job.tags">
+            <mat-chip color="accent" selected *ngFor="let tag of job.tags.split(',')">{{tag}}</mat-chip>
         </mat-chip-list>
     </mat-card-content>
 </mat-card>
