@@ -244,6 +244,12 @@ def scrape(args: Namespace):
         directory = abspath(join(__file__, pardir)) + "/../../../data/companies"
         for file in listdir(directory):
             filename = fsdecode(file)
+            # Include/exclude companies
+            company = filename.removesuffix(".json")
+            if (args.include_companies and company not in args.include_companies) or (
+                args.exclude_companies and company in args.exclude_companies
+            ):
+                continue
             file_dir_path = join(directory, filename)
             file_scrape_config_json = DataFile(
                 file_dir_path,

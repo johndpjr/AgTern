@@ -20,6 +20,9 @@ def run_cli():
     parser.add_argument("--save-jobs", action="store_true")
     parser.add_argument("--run-as-proc", dest="multiprocessing", action="store_true")
     parser.add_argument("--dev", action="store_true")
+    company_modify_group = parser.add_mutually_exclusive_group()
+    company_modify_group.add_argument("--include-companies", nargs="+")
+    company_modify_group.add_argument("--exclude-companies", nargs="+")
     args = parser.parse_args()
 
     if args.dev:
