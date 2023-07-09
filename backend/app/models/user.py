@@ -9,6 +9,9 @@ class User(DatabaseModel):
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String)
     password = Column(String)
+    full_name = Column(String)
+    email = Column(String)
+    disabled = Column(String)
 
     def __str__(self):
         return str(

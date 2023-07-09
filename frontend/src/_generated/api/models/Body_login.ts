@@ -10,4 +10,3 @@ export type Body_login = {
     client_id?: string;
     client_secret?: string;
 };
-

@@ -24,7 +24,7 @@ export class JobsService {
     ): CancelablePromise<Array<Job>> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/api/v1/jobs/',
+            url: '/jobs/',
             query: {
                 'skip': skip,
                 'limit': limit,
@@ -47,7 +47,7 @@ export class JobsService {
     ): CancelablePromise<Job> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/api/v1/jobs/',
+            url: '/jobs/',
             body: requestBody,
             mediaType: 'application/json',
             errors: {
@@ -72,7 +72,7 @@ export class JobsService {
     ): CancelablePromise<Array<Job>> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/api/v1/jobs/search',
+            url: '/jobs/search',
             query: {
                 'q': q,
                 'skip': skip,

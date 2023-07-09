@@ -7,6 +7,9 @@ class UserBase(BaseModel):
     id: Union[int, None] = None
     username: str = ""
     password: str = ""
+    full_name: str = ""
+    email: str = ""
+    disabled: bool = False
 
 
 class UserCreate(UserBase):
