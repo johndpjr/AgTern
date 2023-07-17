@@ -1,0 +1,34 @@
+@use "@angular/material" as mat;
+
+:host {
+  display: flex;
+  flex-direction: column;
+}
+
+mat-spinner {
+  grid-column: 2 / -1;
+  margin: 5em auto;
+}
+
+.job-list-content-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .job-list-items {
+    height: 100vh;
+    position: relative;
+    overflow-y: auto;
+  }
+
+  .job-list-paginator {
+    position: fixed;
+    bottom: 0px;
+    z-index: 1000;
+  }
+}
+
+.job-details-container {
+  height: 100vh;
+  overflow-y: auto;
+}

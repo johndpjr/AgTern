@@ -12,6 +12,11 @@ import {JobCardComponent} from './job-card/job-card.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MaterialModule} from "./modules/material/material.module";
 import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from "@angular/material/form-field";
+import { MainLayoutComponent } from './main-layout/main-layout.component';
+import { LoginComponent } from './pages/login/login.component';
+import { SignUpComponent } from './pages/sign-up/sign-up.component';
+import { JobsComponent } from './pages/jobs/jobs.component';
+import {AppRoutingModule} from "./app-routing.module";
 
 @NgModule({
   declarations: [
@@ -22,6 +27,10 @@ import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from "@angular/material/form-field";
     ProfileDialogComponent,
     SidebarComponent,
     ToolbarComponent,
+    MainLayoutComponent,
+    LoginComponent,
+    SignUpComponent,
+    JobsComponent,
   ],
   imports: [
     BrowserAnimationsModule,
@@ -29,6 +38,7 @@ import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from "@angular/material/form-field";
     FormsModule,
     MaterialModule,
     ReactiveFormsModule,
+    AppRoutingModule,
   ],
   providers: [
     {
