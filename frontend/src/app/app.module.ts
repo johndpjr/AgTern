@@ -3,7 +3,6 @@ import {BrowserModule} from '@angular/platform-browser';
 
 import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {ProfileDialogComponent} from './profile-dialog/profile-dialog.component';
 import {ToolbarComponent} from './toolbar/toolbar.component';
 import {SidebarComponent} from './sidebar/sidebar.component';
 import {JobListComponent} from './job-list/job-list.component';
@@ -24,7 +23,6 @@ import {AppRoutingModule} from "./app-routing.module";
     JobCardComponent,
     JobDetailsComponent,
     JobListComponent,
-    ProfileDialogComponent,
     SidebarComponent,
     ToolbarComponent,
     MainLayoutComponent,
