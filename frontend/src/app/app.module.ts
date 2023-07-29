@@ -16,6 +16,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { SignUpComponent } from './pages/sign-up/sign-up.component';
 import { JobsComponent } from './pages/jobs/jobs.component';
 import {AppRoutingModule} from "./app-routing.module";
+import { NotFoundComponent } from './pages/not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import {AppRoutingModule} from "./app-routing.module";
     LoginComponent,
     SignUpComponent,
     JobsComponent,
+    NotFoundComponent,
   ],
   imports: [
     BrowserAnimationsModule,

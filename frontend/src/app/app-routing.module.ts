@@ -4,6 +4,7 @@ import {MainLayoutComponent} from "./main-layout/main-layout.component";
 import {LoginComponent} from "./pages/login/login.component";
 import {SignUpComponent} from "./pages/sign-up/sign-up.component";
 import {JobsComponent} from "./pages/jobs/jobs.component";
+import {NotFoundComponent} from "./pages/not-found/not-found.component";
 
 const routes: Routes = [
   {
@@ -16,7 +17,7 @@ const routes: Routes = [
       { path: 'sign-up', component: SignUpComponent, title: 'AgTern | Sign Up' },
     ]
   },
-  // { path: '**', component: NotFoundComponent, title: 'AgTern | 404 Not Found' }
+  { path: '**', component: NotFoundComponent, title: 'AgTern | 404 Not Found' }
 ];
 
 @NgModule({
