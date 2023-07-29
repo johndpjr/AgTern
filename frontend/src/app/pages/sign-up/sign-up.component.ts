@@ -1,15 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Router} from "@angular/router";
+import {FormControl, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-sign-up',
   templateUrl: './sign-up.component.html',
   styleUrls: ['./sign-up.component.scss']
 })
-export class SignUpComponent implements OnInit {
+export class SignUpComponent {
+  constructor(public router: Router) { }
 
-  constructor() { }
+  form: FormGroup = new FormGroup({
+    username: new FormControl(''),
+    password: new FormControl(''),
+  });
 
-  ngOnInit(): void {
+  submit() {
+    if (this.form.valid) {
+      this.submitEM.emit(this.form.value);
+    }
   }
+  @Input() error: string | null = null;
 
+  @Output() submitEM = new EventEmitter();
 }
