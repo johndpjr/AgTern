@@ -13,6 +13,7 @@ from .scraping import start_scraper
 from .spa import SinglePageApplication
 from .utils import LOG
 
+print(DatabaseModel.metadata)
 DatabaseModel.metadata.create_all(bind=engine)
 
 app = FastAPI(title="AgTern", generate_unique_id_function=lambda route: route.name)

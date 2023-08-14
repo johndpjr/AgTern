@@ -1,9 +1,13 @@
+import os
+from datetime import datetime, timedelta
 from typing import Annotated
 
+import bcrypt
+from dotenv import load_dotenv
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from jose import JWTError, jwt
 from pydantic import BaseModel
-from sqlalchemy import Boolean, Column, String
 from sqlalchemy.orm import Session
 
 from backend.app.crud import crud
@@ -12,32 +16,24 @@ from backend.app.models import User as UserModel
 
 from ..deps import get_db
 
-fake_users_db = {
-    "johndoe": {
-        "username": "johndoe",
-        "full_name": "John Doe",
-        "email": "johndoe@example.com",
-        "hashed_password": "fakehashedsecret",
-        "disabled": False,
-    },
-    "alice": {
-        "username": "alice",
-        "full_name": "Alice Wonderson",
-        "email": "alice@example.com",
-        "hashed_password": "fakehashedsecret2",
-        "disabled": True,
-    },
-}
+load_dotenv()
+JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
+
 users_db = get_db()
 
 router = APIRouter()
 
 
-def fake_hash_password(password: str):
-    return "fakehashed" + password
+def hash_password(password: str):
+    bytes = password.encode("utf-8")
+    salt = bcrypt.gensalt()
+    hash = bcrypt.hashpw(bytes, salt)
+    return hash
 
 
-hashing_function = fake_hash_password
+hashing_function = hash_password
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login/token")
 
 
@@ -52,27 +48,53 @@ class UserInDB(User):
     hashed_password: str
 
 
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    username: str | None = None
+
+
+def create_access_token(data: dict, expires_delta: timedelta | None = None):
+    to_encode = data.copy()
+    if expires_delta:
+        expire = datetime.utcnow() + expires_delta
+    else:
+        expire = datetime.utcnow() + timedelta(minutes=15)
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(to_encode, JWT_SECRET_KEY, algorithm=ALGORITHM)
+    return encoded_jwt
+
+
 def get_user(db, username: str):
-    if username in db:
-        user_dict = db[username]
-        return UserInDB(**user_dict)
+    users = crud.search_users(db, username)
+    if len(users) > 0:
+        return users[0]
+    return None
 
 
-def fake_decode_token(token):
-    # This doesn't provide any security at all
-    # Check the next version
-    user = get_user(fake_users_db, token)
-    return user
-
-
-async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
-    user = fake_decode_token(token)
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid authentication credentials",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+async def get_current_user(
+    token: Annotated[str, Depends(oauth2_scheme)],
+    db: Session = Depends(get_db),
+):
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=[ALGORITHM])
+        username: str = payload.get("sub")
+        if username is None:
+            raise credentials_exception
+        token_data = TokenData(username=username)
+    except JWTError:
+        raise credentials_exception
+    user = get_user(db, username=token_data.username)
+    if user is None:
+        raise credentials_exception
     return user
 
 
@@ -84,19 +106,27 @@ async def get_current_active_user(
     return current_user
 
 
+def authenticate_user(username: str, password: str, db: Session = Depends(get_db)):
+    user = get_user(db, username)
+    if not user:
+        raise HTTPException(status_code=400, detail="Incorrect username or password")
+    encoded_password = password.encode("utf-8")
+    if not bcrypt.checkpw(encoded_password, user.password.encode("utf-8")):
+        raise HTTPException(status_code=400, detail="Incorrect username or password")
+    return user
+
+
 @router.post("/token")
 async def login(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     db: Session = Depends(get_db),
 ):
-    users = crud.search_users(db, form_data.username)
-    if len(users) == 0:
-        raise HTTPException(status_code=400, detail="Incorrect username or password")
-    user = users[0]
-    hashed_password = fake_hash_password(form_data.password)
-    if not hashed_password == user.password:
-        raise HTTPException(status_code=400, detail="Incorrect username or password")
-    return {"access_token": user.username, "token_type": "bearer"}
+    user = authenticate_user(form_data.username, form_data.password, db)
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(
+        data={"sub": user.username}, expires_delta=access_token_expires
+    )
+    return {"access_token": access_token, "token_type": "bearer"}
 
 
 @router.get("/users/me")
@@ -116,6 +146,7 @@ async def register_user(
 ):
     """Registers a user"""
     users = crud.search_users(db, username)
+    hashed_password = hashing_function(password)
     if len(users) > 0:
         raise HTTPException(status_code=400, detail="Username already exists!")
     new_user = UserModel(
@@ -123,7 +154,7 @@ async def register_user(
             "username": username,
             "full_name": full_name,
             "email": email,
-            "password": hashing_function(password),
+            "password": hashed_password.decode("utf-8"),
             "disabled": False,
         }
     )
@@ -132,69 +163,25 @@ async def register_user(
     return {"status": "success"}
 
 
-@router.post("users/delete")
+@router.post("/users/delete")
 async def delete_user(
+    current_user: Annotated[User, Depends(get_current_active_user)],
     username: str,
     password: str,
     db: Session = Depends(get_db),
 ):
     """Deletes a user. Requires password confirmation"""
-    users = crud.search_users(db, username)
-    deleted = False
-    for user in users:
-        if hashing_function(password) == user.password:
-            crud.delete_user(db, username)
-            deleted = True
-        else:
-            print(user.password, password)
-    return {"deleted": deleted}
+    if authenticate_user(username, password, db):
+        crud.delete_user(db, username)
+        return {"deleted": True}
+    else:
+        return {"deleted": False}
 
 
 # This should be restricted to administrators only - useful for debugging
 @router.get("/get_users")
-async def get_users(db: Session = Depends(get_db)):
+async def get_users(
+    current_user: Annotated[User, Depends(get_current_active_user)],
+    db: Session = Depends(get_db),
+):
     return crud.get_all_users(db)
-
-
-def add_column(engine, table_name, column):
-    column_name = column.compile(dialect=engine.dialect)
-    column_type = column.type.compile(engine.dialect)
-    engine.execute(
-        "ALTER TABLE %s ADD COLUMN %s %s" % (table_name, column_name, column_type)
-    )
-
-
-@router.post("/update_columns")
-def update_columns():
-    """Updates the user model"""
-    columns = []
-    columns.append(Column("full_name", String(100)))
-    columns.append(Column("email", String(100)))
-    columns.append(Column("disabled", Boolean))
-    errors = []
-    for col in columns:
-        try:
-            add_column(engine, "user", col)
-        except Exception as e:
-            errors.append(str(e))
-    return {"errors": errors}
-
-
-@router.post("/init_user_db")
-def init_database(db: Session = Depends(get_db)):
-    """Initializes the user model in the database"""
-    init_user_list = []
-    init_user_list.append(
-        UserModel(
-            **{
-                "username": "johndoe",
-                "full_name": "John Doe",
-                "email": "johndoe@example.com",
-                "password": "fakehashedsecret",
-                "disabled": False,
-            }
-        )
-    )
-    crud.create_users(db, *init_user_list)
-    print("Saving to database succeeded!")
-    return {"status": "success"}

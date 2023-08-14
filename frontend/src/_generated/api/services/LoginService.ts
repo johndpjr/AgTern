@@ -86,7 +86,7 @@ export class LoginService {
     ): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/loginusers/delete',
+            url: '/login/users/delete',
             query: {
                 'username': username,
                 'password': password,
@@ -106,32 +106,6 @@ export class LoginService {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/login/get_users',
-        });
-    }
-
-    /**
-     * Update Columns
-     * Updates the user model
-     * @returns any Successful Response
-     * @throws ApiError
-     */
-    public static updateColumns(): CancelablePromise<any> {
-        return __request(OpenAPI, {
-            method: 'POST',
-            url: '/login/update_columns',
-        });
-    }
-
-    /**
-     * Init Database
-     * Initializes the user model in the database
-     * @returns any Successful Response
-     * @throws ApiError
-     */
-    public static initDatabase(): CancelablePromise<any> {
-        return __request(OpenAPI, {
-            method: 'POST',
-            url: '/login/init_user_db',
         });
     }
 
