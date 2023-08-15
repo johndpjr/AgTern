@@ -19,12 +19,12 @@ export class JobsService {
      * @throws ApiError
      */
     public static getJobs(
-skip?: number,
-limit: number = 100,
-): CancelablePromise<Array<Job>> {
+        skip?: number,
+        limit: number = 100,
+    ): CancelablePromise<Array<Job>> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/api/v1/jobs/',
+            url: '/jobs/',
             query: {
                 'skip': skip,
                 'limit': limit,
@@ -43,11 +43,11 @@ limit: number = 100,
      * @throws ApiError
      */
     public static createJob(
-requestBody: JobCreate,
-): CancelablePromise<Job> {
+        requestBody: JobCreate,
+    ): CancelablePromise<Job> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/api/v1/jobs/',
+            url: '/jobs/',
             body: requestBody,
             mediaType: 'application/json',
             errors: {
@@ -66,13 +66,13 @@ requestBody: JobCreate,
      * @throws ApiError
      */
     public static searchJobs(
-q?: string,
-skip?: number,
-limit: number = 100,
-): CancelablePromise<Array<Job>> {
+        q?: string,
+        skip?: number,
+        limit: number = 100,
+    ): CancelablePromise<Array<Job>> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/api/v1/jobs/search',
+            url: '/jobs/search',
             query: {
                 'q': q,
                 'skip': skip,
