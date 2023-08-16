@@ -1,15 +1,10 @@
-:host, .toolbar {
-    position: relative;
-    top: 0;
-    z-index: 5;
-    flex-shrink: 0;
-    height: 80px;
+.toolbar-spacer {
+    flex: 0.75 1 auto;
 }
 
-.agtern-title {
-    font-family: "Roboto Slab", serif;
-    font-variant: small-caps;
-    letter-spacing: 5px;
-    font-size: 32px;
-    margin-left: 2ch;
+.toolbar-bttn-container {
+  display: flex;
+  flex: 0.25 1 auto;
+  justify-content: flex-end;
+  column-gap: 20px;
 }

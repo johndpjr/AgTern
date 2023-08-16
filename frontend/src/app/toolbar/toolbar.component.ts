@@ -1,6 +1,4 @@
-import {Component, OnInit} from '@angular/core';
-import {MatDialog} from "@angular/material/dialog";
-import {ProfileDialogComponent} from "../profile-dialog/profile-dialog.component";
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-toolbar',
@@ -8,10 +6,7 @@ import {ProfileDialogComponent} from "../profile-dialog/profile-dialog.component
   styleUrls: ['./toolbar.component.scss']
 })
 export class ToolbarComponent {
-  constructor(public dialog: MatDialog) {
+  constructor() {
   }
 
-  openSettings() {
-    this.dialog.open(ProfileDialogComponent)
-  }
 }
