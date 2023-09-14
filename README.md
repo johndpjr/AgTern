@@ -138,7 +138,7 @@ To set up your project locally and get it running, follow these simple steps.
    ```sh
    git clone https://github.com/johndpjr/AgTern.git
    ```
-2. Create a virtual environment (in the `AgTern` directory) and activate it
+2. Create a virtual environment and activate it (run at repo root)
    ```sh
    virtualenv venv
 
@@ -152,8 +152,9 @@ To set up your project locally and get it running, follow these simple steps.
    pip install -r requirements.txt
    ```
 
-4. Install [npm](https://www.npmjs.com/) and build the frontend
+4. Install [npm](https://www.npmjs.com/) and build the frontend (run in `frontend` folder)
   ```sh
+  npm install
   npm run build
   ```
 
@@ -161,9 +162,9 @@ To set up your project locally and get it running, follow these simple steps.
 
 ### Running
 
-#### Option 1: Normal Run
+#### Option 1: PyCharm
 
-If you are using PyCharm, run configurations are already defined in the `.idea` folder.
+If you are using [PyCharm](https://www.jetbrains.com/pycharm/) (it's free for students!), run configurations are already defined in the `.idea` folder.
 
 If you are running the program for the first time, you should populate the database with internships by running command (2) below:
 
@@ -171,6 +172,8 @@ Prestep: Go into `frontend` directory and start the frontend (this will watch fo
   ```sh
   npm run start
   ```
+
+#### Option 2: Command Line
 
 Common commands to run the program (make sure you're in the `AgTern` directory):
 
