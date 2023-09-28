@@ -62,8 +62,6 @@ SOFTWARE.
     <a href="https://www.youtube.com/watch?v=QtYvDcYtCVM">View Demo</a>
     ·
     <a href="https://github.com/johndpjr/AgTern/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/johndpjr/AgTern/issues">Request Feature</a>
   </p>
 </div>
 
@@ -88,7 +86,6 @@ SOFTWARE.
         <li><a href="#running">Running</a></li>
       </ul>
     </li>
-    <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
@@ -134,106 +131,69 @@ To set up your project locally and get it running, follow these simple steps.
 
 ### Installation
 
-1. Clone the repo
-   ```sh
-   git clone https://github.com/johndpjr/AgTern.git
-   ```
+Complete all the parts below (in order) for a complete installation.
+
+#### Part 1: Git Setup
+
+1. Install [Git](https://git-scm.com/downloads)
+2. Clone the repository: `git clone https://github.com/johndpjr/AgTern.git`
+3. Navigate to the `AgTern` directory
+4. Change to `dev` branch: `git checkout dev`
+
+#### Part 2: Backend Setup
+
+1. Install [Python](https://www.python.org/downloads/)
 2. Create a virtual environment and activate it (run at repo root)
-   ```sh
-   virtualenv venv
+    ```sh
+    pip3 install virtualenv
+    python3 -m virtualenv venv
+    virtualenv venv
 
-   # Linux & MacOS
-   source venv/bin/activate
-   # Windows
-   .\venv\Scripts\activate
-   ```
-3. Install all Python packages
-   ```sh
-   pip install -r requirements.txt
-   ```
+    # Linux & MacOS
+    source venv/bin/activate
+    # Windows
+    .\venv\Scripts\activate
+    ```
+3. Install Python packages: `pip3 install -r requirements.txt`
 
-4. Install [npm](https://www.npmjs.com/) and build the frontend (run in `frontend` folder)
-  ```sh
-  npm install
-  npm run build
-  ```
+#### Part 3: Frontend Setup
+
+1. Install [NodeJS](https://nodejs.org/en)
+2. Navigate to the `frontend` directory
+3. Build the frontend
+    ```sh
+    npm install
+    npm run build
+    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Running
 
-#### Option 1: PyCharm
+*Note: if you are running the program for the first time, you either need to download the
+database (see #file-upload in Discord for file) or run a scraping job to populate jobs in a database*
 
-If you are using [PyCharm](https://www.jetbrains.com/pycharm/) (it's free for students!), run configurations are already defined in the `.idea` folder.
-
-If you are running the program for the first time, you should populate the database with internships by running command (2) below:
-
-Prestep: Go into `frontend` directory and start the frontend (this will watch for changes)
-  ```sh
-  npm run start
-  ```
-
-#### Option 2: Command Line
+#### Option 1: Command Line
 
 Common commands to run the program (make sure you're in the `AgTern` directory):
 
-1. Starts a server and a scraping instance in a separate thread and enters the GUI:
+**Run server command:**
+1. `python3 -m backend --dev --no-scrape`
+2. Goto `localhost:8000` in your web browser
 
-`python3 -m agtern --dev`
-
-2. Only scrape and save the jobs to the database:
-
+**Run scraper command (only scrape):**
 `python3 -m agtern --dev --scrape-only --save-jobs`
 
-3. Run the GUI without scraping
+#### Option 2: PyCharm
 
-`python3 -m agtern --dev --no-scrape`
+If you are using [PyCharm](https://www.jetbrains.com/pycharm/) (it's free for students!), run configurations are already defined in the `.idea` folder.
+You should be able to run all configurations without issue.
 
-#### Option 2: Docker Run
-
-Docker is easy!
+#### Option 3: Docker Run
 
 Install [Docker](https://www.docker.com/) and run `docker-compose up` to start
 the project. Right now, the container won't auto-reload (detect changes and
 rebuild), but this is planned!
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- USAGE EXAMPLES -->
-[//]: # (## Usage)
-
-[//]: # (TODO: Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.)
-
-[//]: # (_ TODO: For more examples, please refer to the [Documentation]&#40;https://example.com&#41;_)
-
-[//]: # (<p align="right">&#40;<a href="#readme-top">back to top</a>&#41;</p>)
-
-
-
-<!-- ROADMAP -->
-## Roadmap
-
-- [ ] Development
-  - [X] Configure Docker
-  - [ ] Mirror `main` and `dev` branches to DigitalOcean instance
-- [ ] Documentation
-  - [X] Update README
-  - [ ] Create Wiki (describes overall concepts and project structure)
-  - [ ] Create documentation
-- [ ] Job description text analysis
-  - [ ] Display keywords as tags
-- [ ] Scape and extract more from internships
-  - [ ] Qualifications
-  - [ ] Duties
-  - [ ] Keywords
-- [ ] Security
-  - [ ] Communicate over HTTPS
-  - [ ] Enable authenticated API requests
-  - [ ] Central Authentication System (CAS) authentication
-- [ ] Advanced search
-- [ ] Track internships
-
-See the [open issues](https://github.com/johndpjr/AgTern/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
