@@ -177,9 +177,11 @@ database (see #file-upload in Discord for file) or run a scraping job to populat
 
 Common commands to run the program (make sure you're in the `AgTern` directory):
 
-**Run server command:**
-1. `python3 -m backend --dev --no-scrape`
-2. Goto `localhost:8000` in your web browser
+**Run frontend and backend:**
+1. Navigate to the `frontend` directory
+2. `npm run start`
+3. (Open a new terminal) Run in repo root: `python3 -m backend --dev --no-scrape`
+4. Goto `localhost:8000` in your web browser
 
 **Run scraper command (only scrape):**
 `python3 -m agtern --dev --scrape-only --save-jobs`
@@ -191,9 +193,11 @@ You should be able to run all configurations without issue.
 
 #### Option 3: Docker Run
 
-Install [Docker](https://www.docker.com/) and run `docker-compose up` to start
-the project. Right now, the container won't auto-reload (detect changes and
-rebuild), but this is planned!
+1. Install [Docker](https://www.docker.com/)
+2. Start Docker container: `docker-compose up`
+3. Goto `localhost:8000` in your web browser
+
+*Note: Right now, the container won't auto-reload (detect local changes and rebuild), but this is planned!*
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -212,10 +216,16 @@ If you are interested in a ticket (that is not assigned already), assign it to y
 create a pull request completing the task.
 
 1. Assign the task to yourself and set the status as "In Progress"
-2. Create your Feature Branch (`git checkout -b feature/ticket#/short-description`)
-3. Commit your Changes (`git commit -m 'Add some feature`)
-4. Push to the Branch (`git push origin feature/ticket#/short-description`)
-5. Open a [Pull Request](https://github.com/johndpjr/AgTern/pulls)
+2. Ensure you're on the `dev` branch with the latest changes
+    ```bash
+    git checkout dev
+    git pull
+    ```
+3. Create your feature branch: `git checkout -b feature/ticket#/short-description`
+4. Implement feature/bug fix and stage your changes: `git add .`
+5. Commit your changes with the following format: `git commit -m 'AT-ticket#: Add some feature`
+6. Push to the remote branch: `git push`
+7. Open a [pull request](https://github.com/johndpjr/AgTern/pulls) to merge your feature branch into `dev`
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
