@@ -98,7 +98,8 @@ SOFTWARE.
 ## About The Project
 
 ### Current Features
-* Scrapes and displays over 1500 internships.
+* Scrapes over 30 company job sites (over 1500 internships!)
+* Search interface to search job keywords
 * Displays relevant information about found internships
   * Company
   * Title
