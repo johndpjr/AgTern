@@ -8,6 +8,12 @@ import { Job } from '../../_generated/api';
 })
 export class JobCardComponent implements OnInit {
   @Input() job!: Job;
+  isFavorite: boolean = false;
 
   ngOnInit(): void {}
+
+  onFavoriteIconClicked(event: Event) {
+    event.stopPropagation();
+    this.isFavorite = !this.isFavorite;
+  }
 }
