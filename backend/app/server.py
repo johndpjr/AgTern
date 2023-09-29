@@ -6,10 +6,11 @@ import uvicorn
 from dotenv import load_dotenv
 from fastapi import FastAPI
 
+from backend.scraping import start_scraper
+
 from .api import api_router
 from .core import settings
 from .database import DatabaseModel, engine
-from .scraping import start_scraper
 from .spa import SinglePageApplication
 from .utils import LOG
 

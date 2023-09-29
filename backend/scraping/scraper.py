@@ -45,28 +45,14 @@ class WebScraper:
         self.last_request_time: datetime = None
         self.save_jobs = save_jobs
 
-    def start(
-        self, headless: bool, options: Options = None, auto_download: bool = True
-    ):
+    def start(self, headless: bool, options: Options = None):
         """Starts a new Chrome instance."""
         if options is None:
             options = Options()
         options.headless = headless
         options.add_argument("--start-maximized")
-        if auto_download:
-            driver_manager = ChromeDriverManager()
-            driver_exists = driver_manager.driver_cache.find_driver(
-                driver_manager.driver
-            )
-            if not driver_exists:
-                LOG.info("Chrome WebDriver does not exist! Downloading...")
-            driver_path = ChromeDriverManager().install()
-            if not driver_exists:
-                LOG.info("Done downloading Chrome WebDriver!")
-            LOG.info("Starting Chrome WebDriver...")
-            self.driver = Chrome(driver_executable_path=driver_path, options=options)
-        else:
-            self.driver = Chrome(options=options)
+        driver_path = ChromeDriverManager().install()
+        self.driver = Chrome(driver_executable_path=driver_path, options=options)
 
         self.wait = WebDriverWait(self.driver, 5)
 
@@ -241,7 +227,7 @@ def scrape(args: Namespace):
 
         LOG.info("Loading scraping config...")
         company_scrape = []
-        directory = abspath(join(__file__, pardir)) + "/../../../data/companies"
+        directory = abspath(join(__file__, pardir)) + "/../../data/companies"
         for file in listdir(directory):
             filename = fsdecode(file)
             # Include/exclude companies
