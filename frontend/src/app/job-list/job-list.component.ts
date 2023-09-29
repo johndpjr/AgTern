@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Job} from "../../_generated/api";
 import {animate, style, transition, trigger} from "@angular/animations";
 

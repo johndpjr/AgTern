@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input } from '@angular/core';
 import {Job} from "../../_generated/api";
 import {animate, style, transition, trigger} from "@angular/animations";
 

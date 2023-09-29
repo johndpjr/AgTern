@@ -6,6 +6,8 @@
     "start": "ng build --watch --configuration development",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
+    "lint": "eslint . --ext .ts",
+    "lint-and-fix": "eslint . --ext .ts --fix",
     "update-api-client": "openapi --input http://localhost:8000/openapi.json --output src/_generated/api --client axios --useUnionTypes"
   },
   "private": true,
@@ -30,6 +32,9 @@
     "@angular-devkit/build-angular": "^14.2.8",
     "@angular/cli": "~14.2.8",
     "@angular/compiler-cli": "^14.2.0",
+    "@typescript-eslint/eslint-plugin": "^6.7.3",
+    "@typescript-eslint/parser": "^6.7.3",
+    "eslint": "^8.50.0",
     "typescript": "~4.7.2"
   }
 }

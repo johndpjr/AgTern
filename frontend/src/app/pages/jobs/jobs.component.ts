@@ -48,7 +48,7 @@ export class JobsComponent implements OnInit, AfterViewInit {
     } else {
       this.paginationContext = PaginationContext.Search;
     }
-    let jobsResp = this.ctxGetJobs(this.paginator.pageIndex * this.paginator.pageSize, this.paginator.pageSize)
+    const jobsResp = this.ctxGetJobs(this.paginator.pageIndex * this.paginator.pageSize, this.paginator.pageSize)
     if (this.paginationContext === PaginationContext.Search) {
       jobsResp.then(jobs => {
         // TODO: we have no current way to retrieve the job count from a search if we want to paginate
