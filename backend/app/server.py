@@ -1,7 +1,6 @@
 from argparse import Namespace
-from os import makedirs, system
+from os import makedirs
 from threading import Thread
-from time import sleep
 
 import uvicorn
 from dotenv import load_dotenv
@@ -42,13 +41,6 @@ def run_server():
     )
 
 
-def generate_client():
-    sleep(1)
-    # The rmtree is not needed (openapi-typescript-codegen does it automatically)
-    # rmtree("./frontend/src/_generated", ignore_errors=True)
-    system("cd frontend && npm run update-api-client")
-
-
 def start_server(args: Namespace):
     if not args.save_jobs:
         LOG.warning("Jobs won't be stored to db; use --save-jobs to store to db")
@@ -58,8 +50,6 @@ def start_server(args: Namespace):
         start_scraper(args)
         return
 
-    if args.dev:
-        Thread(target=generate_client, daemon=True).start()
     Thread(target=run_server).start()
 
     if not args.no_scrape:
