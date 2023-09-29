@@ -1,5 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Job} from "../../_generated/api";
+import { Component, Input, OnInit } from '@angular/core';
+import { Job } from '../../_generated/api';
 
 @Component({
   selector: 'app-job-card',
@@ -7,8 +7,7 @@ import {Job} from "../../_generated/api";
   styleUrls: ['./job-card.component.scss']
 })
 export class JobCardComponent implements OnInit {
-  @Input() job!: Job
+  @Input() job!: Job;
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 }

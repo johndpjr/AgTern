@@ -1,6 +1,6 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {Router} from "@angular/router";
-import {FormControl, FormGroup} from "@angular/forms";
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Router } from '@angular/router';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-sign-up',
@@ -8,11 +8,11 @@ import {FormControl, FormGroup} from "@angular/forms";
   styleUrls: ['./sign-up.component.scss']
 })
 export class SignUpComponent {
-  constructor(public router: Router) { }
+  constructor(public router: Router) {}
 
   form: FormGroup = new FormGroup({
     username: new FormControl(''),
-    password: new FormControl(''),
+    password: new FormControl('')
   });
 
   submit() {
