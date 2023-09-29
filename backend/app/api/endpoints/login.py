@@ -27,10 +27,10 @@ router = APIRouter()
 
 
 def hash_password(password: str):
-    bytes = password.encode("utf-8")
+    bytes_ = password.encode("utf-8")
     salt = bcrypt.gensalt()
-    hash = bcrypt.hashpw(bytes, salt)
-    return hash
+    hash_ = bcrypt.hashpw(bytes_, salt)
+    return hash_
 
 
 hashing_function = hash_password

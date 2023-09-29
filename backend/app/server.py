@@ -4,6 +4,7 @@ from threading import Thread
 from time import sleep
 
 import uvicorn
+from dotenv import load_dotenv
 from fastapi import FastAPI
 
 from .api import api_router
@@ -13,10 +14,13 @@ from .scraping import start_scraper
 from .spa import SinglePageApplication
 from .utils import LOG
 
-print(DatabaseModel.metadata)
+load_dotenv()
+
 DatabaseModel.metadata.create_all(bind=engine)
 
-app = FastAPI(title="AgTern", generate_unique_id_function=lambda route: route.name)
+app = FastAPI(
+    title=settings.APP_NAME, generate_unique_id_function=lambda route: route.name
+)
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
@@ -25,14 +29,14 @@ makedirs(client_dir, exist_ok=True)
 app.mount(
     "/",
     SinglePageApplication(directory=client_dir, html=True),
-    name="AgTern",
+    name=settings.APP_NAME,
 )
 
 
 def run_server():
     uvicorn.run(
         "backend.app.server:app",
-        host="0.0.0.0",
+        host=settings.HOST,
         port=settings.PORT,
         log_level="info",
     )
