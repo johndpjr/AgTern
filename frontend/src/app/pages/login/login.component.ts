@@ -1,6 +1,6 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {FormControl, FormGroup} from "@angular/forms";
-import {Router} from "@angular/router";
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -8,12 +8,11 @@ import {Router} from "@angular/router";
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
-
-  constructor(public router: Router) { }
+  constructor(public router: Router) {}
 
   form: FormGroup = new FormGroup({
     username: new FormControl(''),
-    password: new FormControl(''),
+    password: new FormControl('')
   });
 
   submit() {

@@ -38,17 +38,3 @@ async def search_jobs(
 ):
     """Searches the database for jobs."""
     return crud.search_jobs(db, q=q, skip=skip, limit=limit)
-
-
-# @router.delete("/")
-# def delete_job(job_id: int, db: Session = Depends(get_db)):
-#     if not crud.job_exists(db, job_id):
-#         raise HTTPException(status_code=400, detail="Job not found")
-#     crud.delete_job(db=db, job_id=job_id)
-#
-#
-# @router.put("/")
-# def update_job(job: JobSchema, db: Session = Depends(get_db)):
-#     if not crud.job_exists(db, job.id):
-#         raise HTTPException(status_code=400, detail="Job not found")
-#     crud.update_job(db=db, job=job)

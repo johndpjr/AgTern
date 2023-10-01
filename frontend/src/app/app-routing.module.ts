@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {MainLayoutComponent} from "./main-layout/main-layout.component";
-import {LoginComponent} from "./pages/login/login.component";
-import {SignUpComponent} from "./pages/sign-up/sign-up.component";
-import {JobsComponent} from "./pages/jobs/jobs.component";
-import {NotFoundComponent} from "./pages/not-found/not-found.component";
+import { MainLayoutComponent } from './main-layout/main-layout.component';
+import { LoginComponent } from './pages/login/login.component';
+import { SignUpComponent } from './pages/sign-up/sign-up.component';
+import { JobsComponent } from './pages/jobs/jobs.component';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
 
 const routes: Routes = [
   {
@@ -14,7 +14,11 @@ const routes: Routes = [
     children: [
       { path: 'jobs', component: JobsComponent, title: 'AgTern | Jobs' },
       { path: 'login', component: LoginComponent, title: 'AgTern | Log In' },
-      { path: 'sign-up', component: SignUpComponent, title: 'AgTern | Sign Up' },
+      {
+        path: 'sign-up',
+        component: SignUpComponent,
+        title: 'AgTern | Sign Up'
+      }
     ]
   },
   { path: '**', component: NotFoundComponent, title: 'AgTern | 404 Not Found' }
@@ -24,4 +28,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

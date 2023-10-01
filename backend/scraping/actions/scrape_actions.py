@@ -9,7 +9,6 @@ from pydantic import AnyUrl
 from selenium.common import NoSuchElementException, TimeoutException
 from selenium.webdriver import ActionChains, Keys
 
-from backend.app.data_processing import *
 from backend.app.utils import LOG
 
 from .models import ScrapePropertyModel, ScrapingContext

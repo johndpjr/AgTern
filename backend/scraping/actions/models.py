@@ -12,7 +12,7 @@ from pydantic import *
 from sqlalchemy.orm import Session
 
 if TYPE_CHECKING:
-    from backend.app.scraping import WebScraper
+    from backend.scraping import WebScraper
 
 
 # See https://pydantic-docs.helpmanual.io/usage/types/ for a complete list of Pydantic built-in type annotations
