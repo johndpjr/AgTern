@@ -1,6 +1,6 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {FormControl} from "@angular/forms";
-import {debounceTime} from "rxjs";
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { debounceTime } from 'rxjs';
 
 @Component({
   selector: 'app-sidebar',
@@ -19,6 +19,6 @@ export class SidebarComponent implements OnInit {
   ngOnInit(): void {
     this.search.valueChanges
       .pipe(debounceTime(500))
-      .subscribe(next => this.searchChanged.emit(next ?? ""))
+      .subscribe((next) => this.searchChanged.emit(next ?? ''));
   }
 }

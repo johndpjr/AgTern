@@ -1,0 +1,41 @@
+<mat-card class="job-card">
+  <mat-card-header>
+    <div mat-card-avatar class="icon">
+      {{ job.company?.charAt(0)?.toUpperCase() ?? '?' }}
+    </div>
+    <mat-card-title>
+      {{ job.title }}
+    </mat-card-title>
+    <mat-card-subtitle>
+      {{ job.company }}
+    </mat-card-subtitle>
+    <mat-icon
+      (click)="onFavoriteIconClicked($event)"
+      *ngIf="!isFavorite; else favorite_job"
+      >favorite_outline</mat-icon
+    >
+    <ng-template #favorite_job
+      ><mat-icon (click)="onFavoriteIconClicked($event)"
+        >favorite</mat-icon
+      ></ng-template
+    >
+  </mat-card-header>
+  <mat-card-content>
+    <div style="white-space: pre-wrap">
+      {{
+        job.description !== undefined && job.description.length > 500
+          ? job.description.substring(0, 497) + '...'
+          : job.description
+      }}
+    </div>
+    <br />
+    <mat-chip-list *ngIf="job.tags">
+      <mat-chip
+        color="accent"
+        selected
+        *ngFor="let tag of job.tags.split(',')"
+        >{{ tag }}</mat-chip
+      >
+    </mat-chip-list>
+  </mat-card-content>
+</mat-card>

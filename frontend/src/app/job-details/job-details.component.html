@@ -1,0 +1,28 @@
+<mat-card class="job-details" [@enterLeave]="job">
+    <mat-card-title-group>
+        <mat-card-title>
+            {{job.title}}
+        </mat-card-title>
+        <mat-card-subtitle>
+            {{job.company}}
+        </mat-card-subtitle>
+        <div>
+            <a
+              mat-flat-button
+              color="accent"
+              class="apply-now"
+              [href]="job.apply_link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+                <span>Apply Now!</span>&nbsp;&nbsp;&nbsp;&nbsp;<mat-icon matSuffix class="apply-now-icon">open_in_new</mat-icon>
+            </a>
+        </div>
+    </mat-card-title-group>
+    <div class="tag-list">
+        <mat-chip-list *ngIf="job.tags">
+            <mat-chip color="accent" selected *ngFor="let tag of job.tags.split(',')">{{tag}}</mat-chip>
+        </mat-chip-list>
+    </div>
+    <mat-card-content style="white-space: pre-wrap">{{job.description}}</mat-card-content>
+</mat-card>

@@ -1,0 +1,27 @@
+@use "@angular/material" as mat;
+
+.job-details {
+    margin: 2em 2em 2em 0;
+    height: max-content;
+    @include mat.elevation(8);
+
+    @media (max-width: 900px) {
+        margin: 0;
+    }
+}
+
+.apply-now {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.75em;
+    padding: 0.5ch 2ch 0.5ch 2ch;
+}
+
+.tag-list {
+    padding-bottom: 16px;
+}
+
+.apply-now-icon {
+    line-height: 20px;
+}

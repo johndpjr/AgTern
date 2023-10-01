@@ -1,0 +1,63 @@
+{
+  "company": "Apple",
+  "link": "https://jobs.apple.com/en-us/search?team=Internships-STDNT-INTRN",
+  "scrape": [
+    {
+      "action": "scrape",
+      "next_page": "//li[@class='pagination__next']//a",
+      "properties": [
+        {
+          "name": "title",
+          "xpath": "//a[contains(@id,'jotTitle')]"
+        },
+        {
+          "name": "posting_link",
+          "xpath": "//a[contains(@id,'jotTitle')]",
+          "html_property": "href",
+          "unique": true
+        },
+        {
+          "name": "post_date",
+          "xpath": "//span[contains(@id,'postedDate')]"
+        }
+      ]
+    },
+    {
+      "action": "scrape",
+      "link_property": "posting_link",
+      "properties": [
+        {
+          "name": "category",
+          "xpath": "//div[@id='job-team-name']"
+        },
+        {
+          "name": "apply_link",
+          "xpath": "(//div[@id='job-details-actions']/a)[1]",
+          "html_property": "href"
+        },
+        {
+          "name": "location",
+          "xpath": "//div[@itemprop='address']"
+        },
+        {
+          "name": "company_job_id",
+          "xpath": "//strong[@id='jobNumber']"
+        },
+        {
+          "name": "description",
+          "xpath": "//div[@itemprop='description']",
+          "regex": {
+            "pattern": "(Role Number:\\d*\\n)([\\s\\S]*)",
+            "group": 2,
+            "multiline": true
+          }
+        },
+        {
+          "name": "tags",
+          "xpath": "//div[@itemprop='description']",
+          "data_processing": "get_keywords(text)"
+        }
+      ]
+    }
+  ]
+}

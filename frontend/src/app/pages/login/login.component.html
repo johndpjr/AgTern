@@ -1,0 +1,41 @@
+<div class="login-container">
+  <mat-card>
+    <mat-card-title>Login</mat-card-title>
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <p>
+          <mat-form-field>
+            <input type="text" matInput placeholder="Username" formControlName="username">
+          </mat-form-field>
+        </p>
+
+        <p>
+          <mat-form-field>
+            <input type="password" matInput placeholder="Password" formControlName="password">
+          </mat-form-field>
+        </p>
+
+        <p *ngIf="error" class="error">
+          {{ error }}
+        </p>
+
+        <div class="login-button">
+          <button type="submit" mat-button>Login</button>
+        </div>
+
+        <div class="login-button">
+          <button mat-button (click)="router.navigateByUrl('jobs')" color="warn">Continue as Guest</button>
+        </div>
+
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="no-account">
+    <h2>
+      Don't have an account?
+    </h2>
+
+    <a mat-button color="accent" (click)="router.navigateByUrl('sign-up')">Sign Up</a>
+  </div>
+</div>

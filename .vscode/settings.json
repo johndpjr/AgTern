@@ -1,0 +1,7 @@
+{
+  "prettier.configPath": "frontend/.prettierrc",
+  "[typescript]": {
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true
+  }
+}

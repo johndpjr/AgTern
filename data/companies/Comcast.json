@@ -1,0 +1,66 @@
+{
+  "company": "Comcast",
+  "link": "https://jobs.comcast.com/university-relations/internships-coops#",
+  "scrape": [
+    {
+      "action": "scrape",
+      "next_page": "//a[@aria-label='Next']",
+      "properties": [
+        {
+          "name": "title",
+          "loading_text": "Loading...",
+          "xpath": "//div[contains(@class,'table-item') and not(contains(@class,'hide'))]/a"
+        },
+        {
+          "name": "posting_link",
+          "loading_text": "Loading...",
+          "xpath": "//div[contains(@class,'table-item') and not(contains(@class,'hide'))]/a",
+          "html_property": "href",
+          "unique": true
+        },
+        {
+          "name": "location",
+          "loading_text": "Loading...",
+          "xpath": "//div[contains(@class,'table-item') and not(contains(@class,'hide'))]//span[contains(@class,'item-location')]"
+        },
+        {
+          "name": "post_date",
+          "loading_text": "Loading...",
+          "xpath": "//div[contains(@class,'table-item') and not(contains(@class,'hide'))]//span[contains(@class,'item-date-posted')]"
+        }
+      ]
+    },
+    {
+      "action": "scrape",
+      "link_property": "posting_link",
+      "properties": [
+        {
+          "name": "company_job_id",
+          "xpath": "//span[contains(@class,'req-id')]"
+        },
+        {
+          "name": "category",
+          "xpath": "//span[contains(@class,'job-detail-api-industrycode')]"
+        },
+        {
+          "name": "apply_link",
+          "xpath": "//a[contains(@class,'job-detail-api-apply_url')]",
+          "html_property": "href"
+        },
+        {
+          "name": "description",
+          "xpath": "//div[@id='section-job-description']",
+          "regex": {
+            "pattern": "(Job Summary:\\n\\n)([\\s\\S]*)",
+            "multiline": true
+          }
+        },
+        {
+          "name": "tags",
+          "xpath": "//div[@id='section-job-description']",
+          "data_processing": "get_keywords(text)"
+        }
+      ]
+    }
+  ]
+}

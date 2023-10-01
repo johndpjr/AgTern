@@ -1,0 +1,51 @@
+@use '@angular/material' as mat;
+
+:host {
+  display: flex;
+  flex-direction: column;
+}
+
+mat-spinner {
+  grid-column: 2 / -1;
+  margin: 5em auto;
+}
+
+.job-list-content-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.job-list-items {
+  height: 100vh;
+  position: relative;
+  overflow-y: auto;
+}
+
+.job-list-paginator {
+  position: fixed;
+  bottom: 0;
+  width: 40%;
+  z-index: 1000;
+}
+
+/* Target the mat-paginator container */
+.mat-paginator {
+  border: 1px solid #500000; /* Set the border color and style */
+  border-radius: 4px; /* Add rounded corners if desired */
+}
+
+/* Target the page size input field */
+.mat-paginator-page-size {
+  border: 1px solid #500000; /* Set the border color for the input field */
+}
+
+/* Target the navigation buttons */
+.mat-paginator-navigation button {
+  border: 1px solid #500000; /* Set the border color for the buttons */
+}
+
+.job-details-container {
+  height: 100vh;
+  overflow-y: auto;
+}

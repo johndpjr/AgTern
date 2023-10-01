@@ -1,0 +1,57 @@
+{
+  "company": "Dell",
+  "link": "https://jobs.dell.com/category/internship-jobs/375/24213/1",
+  "scrape": [
+    {
+      "action": "click",
+      "xpath": "//a[@class='pagination-show-all']"
+    },
+    {
+      "action": "scrape",
+      "properties": [
+        {
+          "name": "posting_link",
+          "xpath": "//section[@id='search-results-list']//a",
+          "html_property": "href",
+          "unique": true
+        },
+        {
+          "name": "title",
+          "xpath": "//section[@id='search-results-list']//a/h2"
+        },
+        {
+          "name": "location",
+          "xpath": "//span[@class='job-location-search']"
+        }
+      ]
+    },
+    {
+      "action": "scrape",
+      "link_property": "posting_link",
+      "properties": [
+        {
+          "name": "apply_link",
+          "xpath": "(//a[contains(@class,'job-apply')])[1]",
+          "html_property": "href"
+        },
+        {
+          "name": "description",
+          "xpath": "//div[@class='ats-description']"
+        },
+        {
+          "name": "tags",
+          "xpath": "//div[@class='ats-description']",
+          "data_processing": "get_keywords(text)"
+        },
+        {
+          "name": "company_job_id",
+          "xpath": "//div[@class='ats-description']/following-sibling::p",
+          "regex": {
+            "pattern": "(Job ID:\\s)(.*)",
+            "group": 2
+          }
+        }
+      ]
+    }
+  ]
+}

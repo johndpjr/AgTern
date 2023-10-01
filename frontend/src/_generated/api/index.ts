@@ -6,10 +6,12 @@ export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
+export type { Body_login } from './models/Body_login';
 export type { HTTPValidationError } from './models/HTTPValidationError';
-export type { Internship } from './models/Internship';
-export type { InternshipCreate } from './models/InternshipCreate';
+export type { Job } from './models/Job';
+export type { JobCreate } from './models/JobCreate';
 export type { Season } from './models/Season';
 export type { ValidationError } from './models/ValidationError';
 
-export { InternshipsService } from './services/InternshipsService';
+export { JobsService } from './services/JobsService';
+export { LoginService } from './services/LoginService';

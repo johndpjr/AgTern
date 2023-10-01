@@ -1,0 +1,45 @@
+@use '@angular/material' as mat;
+
+.job-card {
+  position: relative;
+  margin: 2em;
+  cursor: pointer;
+  transition: 150ms ease-in-out;
+  user-select: none;
+  @include mat.elevation(1);
+
+  div.icon {
+    padding-left: 8px;
+    font-family: 'Roboto Slab', serif;
+    font-size: 50px;
+    line-height: 50px;
+    text-align: center;
+  }
+
+  mat-icon {
+    position: absolute;
+    right: 24px;
+    color: #500000;
+    z-index: 999;
+  }
+
+  &:hover {
+    @include mat.elevation(16);
+    z-index: 998;
+  }
+
+  &:active {
+    transition: 80ms ease-in-out;
+    @include mat.elevation(1);
+    z-index: 998;
+  }
+
+  @media (max-width: 900px) {
+    margin: 0;
+    border-radius: 0;
+  }
+
+  mat-chip {
+    cursor: pointer;
+  }
+}
