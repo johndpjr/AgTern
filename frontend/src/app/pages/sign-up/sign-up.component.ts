@@ -13,6 +13,7 @@ export class SignUpComponent {
 
   form: FormGroup = new FormGroup({
     username: new FormControl('', Validators.required),
+    email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [
       Validators.required,
       Validators.minLength(8)
@@ -24,7 +25,7 @@ export class SignUpComponent {
       LoginService.registerUser(
         this.form.get('username')?.value,
         '',
-        '',
+        this.form.get('email')?.value,
         this.form.get('password')?.value
       );
       this.form.reset();
