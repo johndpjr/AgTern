@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { LoginService } from '../../../_generated/api';
@@ -20,17 +20,15 @@ export class SignUpComponent {
   });
 
   submit() {
-    console.log('here');
     if (this.form.valid) {
       LoginService.registerUser(
         this.form.get('username')?.value,
-        'Placeholder',
-        'some@email.com',
+        '',
+        '',
         this.form.get('password')?.value
       );
       this.form.reset();
       this.router.navigate(['/jobs']);
     }
   }
-  @Input() error: string | null = null;
 }
