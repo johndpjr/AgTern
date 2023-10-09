@@ -11,6 +11,8 @@ import { LoginService } from '../../../_generated/api';
 export class SignUpComponent {
   constructor(public router: Router) {}
 
+  isTakenUsername: boolean = false;
+
   form: FormGroup = new FormGroup({
     username: new FormControl('', Validators.required),
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -27,9 +29,16 @@ export class SignUpComponent {
         '',
         this.form.get('email')?.value,
         this.form.get('password')?.value
+      ).then(
+        () => {
+          this.form.reset();
+          this.isTakenUsername = false;
+          this.router.navigate(['/jobs']);
+        },
+        () => {
+          this.isTakenUsername = true;
+        }
       );
-      this.form.reset();
-      this.router.navigate(['/jobs']);
     }
   }
 }

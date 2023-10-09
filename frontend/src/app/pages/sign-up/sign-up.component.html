@@ -29,6 +29,8 @@
         <button type="submit" mat-button>Sign Up</button>
       </div>
 
+      <div class="invalid-username" *ngIf="isTakenUsername"><p>Username is already taken</p></div>
+
     </form>
   </mat-card-content>
 </mat-card>
