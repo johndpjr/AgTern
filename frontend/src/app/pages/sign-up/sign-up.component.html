@@ -5,22 +5,31 @@
       <p>
         <mat-form-field>
           <input type="text" matInput placeholder="Username" formControlName="username">
+          <mat-error *ngIf="form.get('username')!.hasError('required')">Username is required</mat-error>
+        </mat-form-field>
+      </p>
+
+      <p>
+        <mat-form-field>
+          <input type="text" matInput placeholder="Email" formControlName="email">
+          <mat-error *ngIf="form.get('email')!.hasError('required')">Email is required</mat-error>
+          <mat-error *ngIf="form.get('email')!.hasError('email')">Invalid email</mat-error>
         </mat-form-field>
       </p>
 
       <p>
         <mat-form-field>
           <input type="password" matInput placeholder="Password" formControlName="password">
+          <mat-error *ngIf="form.get('password')!.hasError('required')">Password is required</mat-error>
+          <mat-error *ngIf="form.get('password')!.hasError('minlength')">Password must be at least 8 characters long</mat-error>
         </mat-form-field>
-      </p>
-
-      <p *ngIf="error" class="error">
-        {{ error }}
       </p>
 
       <div class="sign-up-button">
         <button type="submit" mat-button>Sign Up</button>
       </div>
+
+      <div class="invalid-username" *ngIf="isTakenUsername"><p>Username is already taken</p></div>
 
     </form>
   </mat-card-content>
