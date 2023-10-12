@@ -176,12 +176,3 @@ async def delete_user(
         return {"deleted": True}
     else:
         return {"deleted": False}
-
-
-# This should be restricted to administrators only - useful for debugging
-@router.get("/get_users")
-async def get_users(
-    current_user: Annotated[User, Depends(get_current_active_user)],
-    db: Session = Depends(get_db),
-):
-    return crud.get_all_users(db)
