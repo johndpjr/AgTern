@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { LoginService } from '../../../_generated/api';
 
 @Component({
   selector: 'app-login',
@@ -17,10 +18,19 @@ export class LoginComponent {
 
   submit() {
     if (this.form.valid) {
-      this.submitEM.emit(this.form.value);
+      LoginService.login({
+        username: this.form.get('username')?.value,
+        password: this.form.get('password')?.value
+      }).then(
+        () => {
+          console.log('success');
+          this.form.reset();
+          this.router.navigate(['/jobs']);
+        },
+        () => {
+          console.log('fail');
+        }
+      );
     }
   }
-  @Input() error: string | null = null;
-
-  @Output() submitEM = new EventEmitter();
 }
