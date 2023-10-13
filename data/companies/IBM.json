@@ -1,5 +1,60 @@
 {
   "company": "IBM",
-  "link": "https://www.ibm.com/employment/#jobs?%23jobs=&experience=Intern",
-  "scrape": null
+  "link": "https://www.ibm.com/careers/us-en/search/?search=intern&filters=primary_country%3ACA%2Cprimary_country%3AUS",
+  "scrape": [
+    {
+      "action": "scrape",
+      "next_page": "//button[@class='cds--btn--icon-only cds--btn cds--btn--md cds--btn--ghost']",
+      "properties": [
+        {
+          "name": "title",
+          "xpath": "//h2[contains(@class,'bx--card__heading')]"
+        },
+        {
+          "name": "posting_link",
+          "xpath": "//h2[contains(@class,'bx--card__heading')]",
+          "html_property": "href",
+          "unique": true
+        }
+      ]
+    },
+    {
+      "action": "scrape",
+      "link_property": "posting_link",
+      "properties": [
+        {
+          "name": "category",
+          "xpath": "//div[@class='fusion-text fusion-text-3 ejd_list_subheading ejd_list_subheading1']//ul//li[2]"
+        },
+        {
+          "name": "apply_link",
+          "xpath": "//a[contains(@class,'apply-btn')]",
+          "html_property": "href"
+        },
+        {
+          "name": "location",
+          "xpath": "//div[@class='fusion-text fusion-text-3 ejd_list_subheading ejd_list_subheading1']//ul//li[1]"
+        },
+        {
+          "name": "company_job_id",
+          "xpath": "//div[@class='sidebar-lists-item']//span[. = 'Req ID:']/..",
+          "regex": {
+            "pattern": "Req ID:(.+)",
+            "group": 1,
+            "multiline": false
+          }
+        },
+        {
+          "name": "description",
+          "xpath": "//div[@class='jd-description']",
+        },
+        {
+          "name": "tags",
+          "xpath": "//div[@class='jd-description']",
+          "data_processing": "get_keywords(text)"
+        }
+      ]
+    }
+  ]
 }
+

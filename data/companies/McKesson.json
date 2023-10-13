@@ -1,5 +1,49 @@
 {
   "company": "McKesson",
   "link": "https://mckesson.wd3.myworkdayjobs.com/Acquisition_campus/",
-  "scrape": null
+  "scrape": [
+    {
+      "action": "scrape",
+      "properties": [
+        {
+          "name": "title",
+          "xpath": "//div[@class='css-qiqmbt']"
+        },
+        {
+          "name": "posting_link",
+          "xpath": "//div[@class='css-qiqmbt']//div//div//h3//a",
+          "action": "click",
+          "unique": true
+        }
+      ]
+    },
+    {
+      "action": "scrape",
+      "link_property": "posting_link",
+      "properties": [
+        {
+          "name": "apply_link",
+          "xpath": "//a[@class='css-e08yrh']",
+          "html_property": "href"
+        },
+        {
+          "name": "location",
+          "xpath": "//div[@class='css-oa138a']//div//div//div//div//div//div//div[@data-automation-id='locations']//dl//dd[@class='css-129m7dg']"
+        },
+        {
+          "name": "company_job_id",
+          "xpath": "//dt[@class='css-y8qsrx' and . = 'job requisition id']//..//dd"
+        },
+        {
+          "name": "description",
+          "xpath": "//div[@data-automation-id='jobPostingDescription']",
+        },
+        {
+          "name": "tags",
+          "xpath": "//div[@data-automation-id='jobPostingDescription']",
+          "data_processing": "get_keywords(text)"
+        }
+      ]
+    }
+  ]
 }

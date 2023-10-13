@@ -1,5 +1,51 @@
 {
   "company": "Microsoft",
-  "link": "https://careers.microsoft.com/students/us/en/search-results",
-  "scrape": null
+  "link": "https://jobs.careers.microsoft.com/global/en/search?exp=Students+and+graduates&et=Internship&l=en_us&pg=1&pgSz=20&o=Relevance&flt=true",
+  "scrape": [
+    {
+      "action": "scrape",
+      "next_page": "//button[contains(@class,'ms-Button--commandBar root-519')]",
+      "properties": [
+        {
+          "name": "title",
+          "xpath": "//h2[contains(@class,'MZGzlrn8gfgSs8TZHhv2')]"
+        },
+        {
+          "name": "posting_link",
+          "xpath": "//h2[contains(@class,'MZGzlrn8gfgSs8TZHhv2')]",
+          "action": "click",
+          "unique": true
+        }
+      ]
+    },
+    {
+      "action": "scrape",
+      "link_property": "posting_link",
+      "properties": [
+        {
+          "name": "category",
+          "xpath": "//div[@class='ms-Stack css-411' and . = 'Role type']//..//div[contains(@style,'rgb(23, 23, 23)')]"
+        },
+        {
+          "name": "apply_link",
+          "xpath": "//button[@class='ms-Button ms-Button--default root-558']",
+          "html_property": "href"
+        },
+        {
+          "name": "company_job_id",
+          "xpath": "//div[@class='ms-Stack css-411' and . = 'Job number']//..//div[contains(@style,'rgb(23, 23, 23)')]"
+        },
+        {
+          "name": "description",
+          "xpath": "//div[@class='ms-Stack css-411']//h3[. = 'Overview']//..",
+        },
+        {
+          "name": "tags",
+          "xpath": "//div[@class='ms-Stack css-411']//h3[. = 'Overview']//..",
+          "data_processing": "get_keywords(text)"
+        }
+      ]
+    }
+  ]
 }
+

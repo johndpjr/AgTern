@@ -1,5 +1,59 @@
 {
   "company": "Texas Instruments",
   "link": "https://careers.ti.com/search-jobs/?brand=Interns",
-  "scrape": null
+  "scrape": [
+    {
+      "action": "scrape",
+      "next_page": "//li[@class='pagination-li']//a[contains(@onclick,'next_page')]",
+      "properties": [
+        {
+          "name": "title",
+          "xpath": "//div[contains(@class,'jobTitle')]"
+        },
+        {
+          "name": "posting_link",
+          "xpath": "//a[@class='fusion-button button-default button-small white-button']",
+          "html_property": "href",
+          "unique": true
+        },
+        {
+          "name": "post_date",
+          "xpath": "//div[@class='flex_column joblist-posdate fusion-layout-column fusion-one-fourth ']"
+        }
+      ]
+    },
+    {
+      "action": "scrape",
+      "link_property": "posting_link",
+      "properties": [
+        {
+          "name": "apply_link",
+          "xpath": "//a[contains(@class,'fusion-button button-flat')]",
+          "html_property": "href"
+        },
+        {
+          "name": "location",
+          "xpath": "//hi[@class='fusion-responsive-typography-calculated']",
+          "regex": {
+            "pattern": ".+ – .+ – (.+)",
+            "group": 1,
+            "multiline": false
+          }
+        },
+        {
+          "name": "company_job_id",
+          "xpath": "//div[@class='fusion-text fusion-text-1']//p"
+        },
+        {
+          "name": "description",
+          "xpath": "//div[@class='fusion-text fusion-text-2']",
+        },
+        {
+          "name": "tags",
+          "xpath": "//div[@class='fusion-text fusion-text-2']",
+          "data_processing": "get_keywords(text)"
+        }
+      ]
+    }
+  ]
 }
