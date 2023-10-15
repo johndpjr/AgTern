@@ -16,6 +16,7 @@ from urllib.parse import urlparse
 import pandas as pd
 import requests
 import selenium.webdriver.support.expected_conditions as condition
+from cerberus import Validator
 from pydantic import ValidationError
 from selenium.common import InvalidArgumentException
 from selenium.webdriver.chrome.options import Options
@@ -232,10 +233,18 @@ def scrape(args: Namespace):
             filename = fsdecode(file)
             # Include/exclude companies
             company = filename.removesuffix(".json")
+            # Schema for valid company JSON file
+            valid_json = {"company": {'type': 'string'}, "link": {'type': 'string'}, "scrape":  {'type': 'list', 'type':'NoneType'}}
+            validator = Validator(valid_json)
+            # Convert json file to dict
+            with open(filename, 'r', encoding='utf-8') as f:
+                company_dict = json.load(f)
             if (args.include_companies and company not in args.include_companies) or (
                 args.exclude_companies and company in args.exclude_companies
-            ):
+            ) or (validator.validate(company_dict) is False):
+                LOG.info(f"Validation failed for company: {company}")
                 continue
+
             file_dir_path = join(directory, filename)
             file_scrape_config_json = DataFile(
                 file_dir_path,
