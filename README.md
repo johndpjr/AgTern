@@ -181,11 +181,11 @@ Common commands to run the program (make sure you're in the `AgTern` directory):
 **Run frontend and backend:**
 1. Navigate to the `frontend` directory
 2. `npm run start`
-3. (Open a new terminal) Run in repo root: `python3 -m backend --dev --no-scrape`
+3. (Open a new terminal) Run in repo root (i.e. `AgTern`): `python3 -m backend --dev --no-scrape`
 4. Goto `localhost:8000` in your web browser
 
 **Run scraper command (only scrape):**
-`python3 -m agtern --dev --scrape-only --save-jobs`
+`python3 -m backend --dev --scrape-only --save-jobs`
 
 #### Option 2: PyCharm
 
