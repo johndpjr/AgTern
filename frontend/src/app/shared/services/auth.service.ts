@@ -10,6 +10,14 @@ export class AuthService {
 
   private isAuthenticated: boolean = false;
 
+  signUp(username: string, fullName: string, email: string, password: string) {
+    return LoginService.registerUser(username, fullName, email, password).then(
+      () => {
+        this.login(username, password);
+      }
+    );
+  }
+
   login(username: string, password: string) {
     return LoginService.login({
       username: username,
