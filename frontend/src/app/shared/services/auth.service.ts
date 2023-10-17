@@ -8,12 +8,15 @@ import jwt_decode from 'jwt-decode';
 export class AuthService {
   constructor() {}
 
+  private isAuthenticated: boolean = false;
+
   login(username: string, password: string) {
     return LoginService.login({
       username: username,
       password: password
     }).then((res) => {
       this.setSession(res);
+      this.isAuthenticated = true;
     });
   }
 
@@ -34,10 +37,11 @@ export class AuthService {
   logout() {
     localStorage.removeItem('id_token');
     localStorage.removeItem('expires_at');
+    this.isAuthenticated = false;
   }
 
   public isLoggedIn() {
-    return true;
+    return this.isAuthenticated;
   }
 
   isLoggedOut() {
