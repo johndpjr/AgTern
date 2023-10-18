@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -8,7 +9,12 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
-  constructor(public router: Router) {}
+  constructor(
+    private authService: AuthService,
+    public router: Router
+  ) {}
+
+  incorrectLogin: boolean = false;
 
   form: FormGroup = new FormGroup({
     username: new FormControl(''),
@@ -17,10 +23,20 @@ export class LoginComponent {
 
   submit() {
     if (this.form.valid) {
-      this.submitEM.emit(this.form.value);
+      this.authService
+        .login(
+          this.form.get('username')?.value,
+          this.form.get('password')?.value
+        )
+        .then(
+          () => {
+            this.form.reset();
+            this.router.navigate(['/jobs']);
+          },
+          () => {
+            this.incorrectLogin = true;
+          }
+        );
     }
   }
-  @Input() error: string | null = null;
-
-  @Output() submitEM = new EventEmitter();
 }

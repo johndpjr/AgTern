@@ -97,16 +97,4 @@ export class LoginService {
         });
     }
 
-    /**
-     * Get Users
-     * @returns any Successful Response
-     * @throws ApiError
-     */
-    public static getUsers(): CancelablePromise<any> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/login/get_users',
-        });
-    }
-
 }

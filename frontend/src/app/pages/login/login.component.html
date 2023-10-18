@@ -15,17 +15,15 @@
           </mat-form-field>
         </p>
 
-        <p *ngIf="error" class="error">
-          {{ error }}
-        </p>
-
         <div class="login-button">
-          <button type="submit" mat-button>Login</button>
+          <button type="submit" mat-button color="accent">Login</button>
         </div>
 
         <div class="login-button">
-          <button mat-button (click)="router.navigateByUrl('jobs')" color="warn">Continue as Guest</button>
+          <button mat-button (click)="router.navigateByUrl('jobs')">Continue as Guest</button>
         </div>
+
+        <div class="incorrect-login" *ngIf="incorrectLogin"><p>Incorrect username or password</p></div>
 
       </form>
     </mat-card-content>
