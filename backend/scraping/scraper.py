@@ -229,26 +229,20 @@ def scrape(args: Namespace):
         LOG.info("Loading scraping config...")
         company_scrape = []
         directory = abspath(join(__file__, pardir)) + "/../../data/companies"
+        # Schema for valid company JSON file
+        valid_json = {
+            "company": {"type": "string"},
+            "link": {"type": "string"},
+            "scrape": {"type": "list", "nullable": True},
+        }
+        validator = Validator(valid_json)
         for file in listdir(directory):
             filename = fsdecode(file)
             # Include/exclude companies
             company = filename.removesuffix(".json")
-            # Schema for valid company JSON file
-            valid_json = {
-                "company": {"type": "string"},
-                "link": {"type": "string"},
-                "scrape": {"type": "list", "type": "NoneType"},
-            }
-            validator = Validator(valid_json)
-            # Convert json file to dict
-            with open(filename, "r", encoding="utf-8") as f:
-                company_dict = json.load(f)
-            if (
-                (args.include_companies and company not in args.include_companies)
-                or (args.exclude_companies and company in args.exclude_companies)
-                or (validator.validate(company_dict) is False)
+            if (args.include_companies and company not in args.include_companies) or (
+                args.exclude_companies and company in args.exclude_companies
             ):
-                LOG.info(f"Validation failed for company: {company}")
                 continue
 
             file_dir_path = join(directory, filename)
@@ -258,7 +252,12 @@ def scrape(args: Namespace):
             )
 
             with open(file_scrape_config_json.path, "r") as f:
-                company_scrape.append(json.load(f))
+                scrape_json = json.load(f)
+                company_scrape.append(scrape_json)
+                if not validator.validate(scrape_json):
+                    LOG.error(f"Validation failed for company: {company}")
+                    LOG.error(validator.errors)
+                    exit(1)
 
         # Transform JSON data into DataFrame (model that holds scrape data)
         company_scrape_df = pd.DataFrame.from_records(company_scrape)

@@ -22,11 +22,11 @@
         <ENTRY IS_ENABLED="true" PARSER="runconfig" IS_EXECUTABLE="false" />
       </ENTRIES>
     </EXTENSION>
-    <option name="SCRIPT_NAME" value="" />
+    <option name="SCRIPT_NAME" value="backend" />
     <option name="PARAMETERS" value="--dev --no-scrape" />
     <option name="SHOW_COMMAND_LINE" value="false" />
     <option name="EMULATE_TERMINAL" value="false" />
-    <option name="MODULE_MODE" value="false" />
+    <option name="MODULE_MODE" value="true" />
     <option name="REDIRECT_INPUT" value="false" />
     <option name="INPUT_FILE" value="" />
     <method v="2" />
