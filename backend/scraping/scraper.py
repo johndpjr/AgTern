@@ -16,6 +16,7 @@ from urllib.parse import urlparse
 import pandas as pd
 import requests
 import selenium.webdriver.support.expected_conditions as condition
+from cerberus import Validator
 from pydantic import ValidationError
 from selenium.common import InvalidArgumentException
 from selenium.webdriver.chrome.options import Options
@@ -228,6 +229,13 @@ def scrape(args: Namespace):
         LOG.info("Loading scraping config...")
         company_scrape = []
         directory = abspath(join(__file__, pardir)) + "/../../data/companies"
+        # Schema for valid company JSON file
+        valid_json = {
+            "company": {"type": "string"},
+            "link": {"type": "string"},
+            "scrape": {"type": "list", "nullable": True},
+        }
+        validator = Validator(valid_json)
         for file in listdir(directory):
             filename = fsdecode(file)
             # Include/exclude companies
@@ -236,6 +244,7 @@ def scrape(args: Namespace):
                 args.exclude_companies and company in args.exclude_companies
             ):
                 continue
+
             file_dir_path = join(directory, filename)
             file_scrape_config_json = DataFile(
                 file_dir_path,
@@ -243,7 +252,12 @@ def scrape(args: Namespace):
             )
 
             with open(file_scrape_config_json.path, "r") as f:
-                company_scrape.append(json.load(f))
+                scrape_json = json.load(f)
+                company_scrape.append(scrape_json)
+                if not validator.validate(scrape_json):
+                    LOG.error(f"Validation failed for company: {company}")
+                    LOG.error(validator.errors)
+                    exit(1)
 
         # Transform JSON data into DataFrame (model that holds scrape data)
         company_scrape_df = pd.DataFrame.from_records(company_scrape)
