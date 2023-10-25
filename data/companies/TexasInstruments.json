@@ -46,7 +46,7 @@
         },
         {
           "name": "description",
-          "xpath": "//div[@class='fusion-text fusion-text-2']",
+          "xpath": "//div[@class='fusion-text fusion-text-2']"
         },
         {
           "name": "tags",

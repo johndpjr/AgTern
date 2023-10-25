@@ -32,7 +32,7 @@
         },
         {
           "name": "description",
-          "xpath": "//div[@class='row  jpmc-grid']//div//div//p",
+          "xpath": "//div[@class='row  jpmc-grid']//div//div//p"
         },
         {
           "name": "tags",

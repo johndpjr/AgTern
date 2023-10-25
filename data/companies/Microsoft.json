@@ -37,7 +37,7 @@
         },
         {
           "name": "description",
-          "xpath": "//div[@class='ms-Stack css-411']//h3[. = 'Overview']//..",
+          "xpath": "//div[@class='ms-Stack css-411']//h3[. = 'Overview']//.."
         },
         {
           "name": "tags",
@@ -48,4 +48,3 @@
     }
   ]
 }
-

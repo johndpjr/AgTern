@@ -46,7 +46,7 @@
         },
         {
           "name": "description",
-          "xpath": "//div[@class='jd-description']",
+          "xpath": "//div[@class='jd-description']"
         },
         {
           "name": "tags",
@@ -57,4 +57,3 @@
     }
   ]
 }
-

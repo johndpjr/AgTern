@@ -4,7 +4,7 @@
   "scrape": [
     {
       "action": "scrape",
-      "next_page": "//a[@class='button inactive']", 
+      "next_page": "//a[@class='button inactive']",
       "properties": [
         {
           "name": "title",
@@ -41,7 +41,7 @@
         },
         {
           "name": "description",
-          "xpath": "//div[contains(@data-field,'Position_Description')]",
+          "xpath": "//div[contains(@data-field,'Position_Description')]"
         },
         {
           "name": "tags",

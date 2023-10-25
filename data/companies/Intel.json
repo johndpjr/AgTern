@@ -32,7 +32,7 @@
       "properties": [
         {
           "name": "description",
-          "xpath": "//div[@class='ats-description']",
+          "xpath": "//div[@class='ats-description']"
         },
         {
           "name": "tags",

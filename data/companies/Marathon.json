@@ -37,7 +37,7 @@
         },
         {
           "name": "description",
-          "xpath": "//div[@data-automation-id='jobPostingDescription']",
+          "xpath": "//div[@data-automation-id='jobPostingDescription']"
         },
         {
           "name": "tags",

@@ -31,7 +31,7 @@
       "properties": [
         {
           "name": "description",
-          "xpath": "//div[contains(@class,'job-details__description-content')]",
+          "xpath": "//div[contains(@class,'job-details__description-content')]"
         },
         {
           "name": "tags",
@@ -40,7 +40,7 @@
         },
         {
           "name": "company_job_id",
-          "xpath": "//span[contains(@class,'job-meta__title') and . = 'Job Identification']//..//span[contains(@class,'job-meta__subitem')]",
+          "xpath": "//span[contains(@class,'job-meta__title') and . = 'Job Identification']//..//span[contains(@class,'job-meta__subitem')]"
         },
         {
           "name": "apply_link",

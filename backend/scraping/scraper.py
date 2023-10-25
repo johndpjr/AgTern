@@ -242,6 +242,7 @@ def scrape(args: Namespace):
                 default_data='{"company":null,"link":null,"scrape":null}',
             )
 
+            print(file_scrape_config_json.path)
             with open(file_scrape_config_json.path, "r") as f:
                 company_scrape.append(json.load(f))
 

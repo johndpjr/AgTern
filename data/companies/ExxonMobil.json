@@ -37,7 +37,7 @@
         },
         {
           "name": "description",
-          "xpath": "//ul//li[@style='text-align:justify']",
+          "xpath": "//ul//li[@style='text-align:justify']"
         },
         {
           "name": "tags",
