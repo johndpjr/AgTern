@@ -4,7 +4,8 @@
   <div class="toolbar-bttn-container">
     <a mat-button routerLink="" aria-label="Home page button">Home</a>
     <a mat-button routerLink="jobs" aria-label="Jobs page button">Jobs</a>
-    <a mat-raised-button color="primary" routerLink="login" aria-label="Log in page button">Log In</a>
-    <a mat-button routerLink="sign-up" aria-label="Sign up page button">Sign Up</a>
+    <a mat-raised-button *ngIf="authService.isLoggedOut()" color="primary" routerLink="login" aria-label="Log in button">Log In</a>
+    <a mat-button *ngIf="authService.isLoggedOut()" routerLink="sign-up" aria-label="Sign up button">Sign Up</a>
+    <a mat-raised-button *ngIf="authService.isLoggedIn()" color="primary" (click)="authService.logout()" aria-label="Log out button">Log Out</a>
   </div>
 </mat-toolbar>
