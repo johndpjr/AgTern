@@ -251,7 +251,6 @@ def scrape(args: Namespace):
                 default_data='{"company":null,"link":null,"scrape":null}',
             )
 
-            print(file_scrape_config_json.path)
             with open(file_scrape_config_json.path, "r") as f:
                 scrape_json = json.load(f)
                 company_scrape.append(scrape_json)
@@ -271,9 +270,6 @@ def scrape(args: Namespace):
             by=["company"], ascending=True
         )
         for idx, entry in company_scrape_df.iterrows():
-            # TODO: Add a command-line argument to select which company/companies to scrape
-            # if entry["company"] != "Allstate":
-            #     continue
             LOG.info(f"Scraping {entry['company']}...")
             try:
                 scraper.scrape_company(entry["link"], entry)
