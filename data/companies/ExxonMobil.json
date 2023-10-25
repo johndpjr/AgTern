@@ -1,5 +1,50 @@
 {
   "company": "Exxon Mobil",
   "link": "https://jobs.exxonmobil.com/search/?optionsFacetsDD_shifttype=Intern%2Fco-op%2Fapprentice",
-  "scrape": null
+  "scrape": [
+    {
+      "action": "scrape",
+      "next_page": "(//li//a[@class='paginationItemLast'])[1]",
+      "properties": [
+        {
+          "name": "title",
+          "xpath": "//tr[@class='data-row']//span[@class='jobTitle hidden-phone']//a[contains(@class,'jobTitle-link')]"
+        },
+        {
+          "name": "posting_link",
+          "xpath": "//tr[@class='data-row']//span[@class='jobTitle hidden-phone']//a[contains(@class,'jobTitle-link')]",
+          "html_property": "href",
+          "unique": true
+        },
+        {
+          "name": "post_date",
+          "xpath": "//tr[@class='data-row']//td[@class='colDate hidden-phone']//span[@class='jobDate']"
+        }
+      ]
+    },
+    {
+      "action": "scrape",
+      "link_property": "posting_link",
+      "properties": [
+        {
+          "name": "apply_link",
+          "xpath": "(//a[@class='btn btn-primary btn-large btn-lg apply dialogApplyBtn '])[1]",
+          "html_property": "href"
+        },
+        {
+          "name": "location",
+          "xpath": "//span[@class='jobGeoLocation']"
+        },
+        {
+          "name": "description",
+          "xpath": "//ul//li[@style='text-align:justify']"
+        },
+        {
+          "name": "tags",
+          "xpath": "//ul//li[@style='text-align:justify']",
+          "data_processing": "get_keywords(text)"
+        }
+      ]
+    }
+  ]
 }

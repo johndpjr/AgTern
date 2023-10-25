@@ -1,5 +1,45 @@
 {
   "company": "JPMorgan",
   "link": "https://careers.jpmorgan.com/global/en/students/programs?deeplink=multiTabNav1::tab3",
-  "scrape": null
+  "scrape": [
+    {
+      "action": "scrape",
+      "properties": [
+        {
+          "name": "title",
+          "xpath": "//div[contains(@class,'internship active')]//div//p//a[contains(@class,'event-name-href')]"
+        },
+        {
+          "name": "posting_link",
+          "xpath": "//div[contains(@class,'internship active')]//div//p//a[contains(@class,'event-name-href')]",
+          "html_property": "href",
+          "unique": true
+        }
+      ]
+    },
+    {
+      "action": "scrape",
+      "link_property": "posting_link",
+      "properties": [
+        {
+          "name": "category",
+          "xpath": "//div[@class='headline']"
+        },
+        {
+          "name": "apply_link",
+          "xpath": "//div[@id='programs-apply-now-btn']//div//a[contains(@class,'button primary promo-btn')]",
+          "html_property": "href"
+        },
+        {
+          "name": "description",
+          "xpath": "//div[@class='row  jpmc-grid']//div//div//p"
+        },
+        {
+          "name": "tags",
+          "xpath": "//div[@class='row  jpmc-grid']//div//div//p",
+          "data_processing": "get_keywords(text)"
+        }
+      ]
+    }
+  ]
 }

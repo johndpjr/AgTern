@@ -1,5 +1,59 @@
 {
   "company": "Verizon",
   "link": "https://www.verizon.com/about/work/search/campus-and-apprenticeships/jobs?sort_by=cfml10%2Cdesc",
-  "scrape": null
+  "scrape": [
+    {
+      "action": "scrape",
+      "next_page": "//a[@class='page-link' and contains(@aria-label,'Go to next page of results')]",
+      "properties": [
+        {
+          "name": "title",
+          "xpath": "//h2[contains(@class,'card-title')]//a"
+        },
+        {
+          "name": "posting_link",
+          "xpath": "//h2[contains(@class,'card-title')]//a",
+          "html_property": "href",
+          "unique": true
+        }
+      ]
+    },
+    {
+      "action": "scrape",
+      "link_property": "posting_link",
+      "properties": [
+        {
+          "name": "category",
+          "xpath": "//p[@class='text-white']"
+        },
+        {
+          "name": "apply_link",
+          "xpath": "//a[@class='btn btn-link']",
+          "html_property": "href"
+        },
+        {
+          "name": "location",
+          "xpath": "//ul[@class='locations']//li"
+        },
+        {
+          "name": "company_job_id",
+          "xpath": "//p[@class='job-meta']",
+          "regex": {
+            "pattern": "Job ID: (.+)",
+            "group": 1,
+            "multiline": false
+          }
+        },
+        {
+          "name": "description",
+          "xpath": "//article[@class='cms-content cms-content--light-text pr-md-5']"
+        },
+        {
+          "name": "tags",
+          "xpath": "//article[@class='cms-content cms-content--light-text pr-md-5']",
+          "data_processing": "get_keywords(text)"
+        }
+      ]
+    }
+  ]
 }

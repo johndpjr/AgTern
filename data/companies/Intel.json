@@ -1,5 +1,62 @@
 {
   "company": "Intel",
   "link": "https://jobs.intel.com/search-jobs?acm=8451568&alrpm=ALL&ascf=[%7B%22key%22:%22ALL%22,%22value%22:%22%22%7D]",
-  "scrape": null
+  "scrape": [
+    {
+      "action": "click",
+      "xpath": "//button[@id='system-ialert-button']"
+    },
+    {
+      "action": "scrape",
+      "next_page": "//a[@class='next']",
+      "properties": [
+        {
+          "name": "title",
+          "xpath": "//div[@class='search-title-location']//h2"
+        },
+        {
+          "name": "location",
+          "xpath": "//span[@class='job-location']"
+        },
+        {
+          "name": "posting_link",
+          "xpath": "//a[@class='job-title-link']",
+          "html_property": "href",
+          "unique": true
+        }
+      ]
+    },
+    {
+      "action": "scrape",
+      "link_property": "posting_link",
+      "properties": [
+        {
+          "name": "description",
+          "xpath": "//div[@class='ats-description']"
+        },
+        {
+          "name": "tags",
+          "xpath": "//div[@class='ats-description']",
+          "data_processing": "get_keywords(text)"
+        },
+        {
+          "name": "company_job_id",
+          "xpath": "//span[contains(@class,'job-id job-info')]",
+          "regex": {
+            "pattern": "(Job ID )(.*)",
+            "group": 2
+          }
+        },
+        {
+          "name": "location",
+          "xpath": "//span[contains(@class,'location-pin')]"
+        },
+        {
+          "name": "apply_link",
+          "xpath": "//a[contains(@class,'button job-apply')]",
+          "html_property": "href"
+        }
+      ]
+    }
+  ]
 }

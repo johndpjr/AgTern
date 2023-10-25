@@ -1,5 +1,54 @@
 {
   "company": "Home Depot",
   "link": "https://careers.homedepot.com/job-search-results/?category[]=Internship",
-  "scrape": null
+  "scrape": [
+    {
+      "action": "scrape",
+      "next_page": "//a[@class='button inactive']",
+      "properties": [
+        {
+          "name": "title",
+          "xpath": "//a[contains(@id,'job-result')]"
+        },
+        {
+          "name": "posting_link",
+          "xpath": "//a[contains(@id,'job-result')]",
+          "html_property": "href",
+          "unique": true
+        }
+      ]
+    },
+    {
+      "action": "scrape",
+      "link_property": "posting_link",
+      "properties": [
+        {
+          "name": "category",
+          "xpath": "//div[@class='fusion-text fusion-text-3']"
+        },
+        {
+          "name": "apply_link",
+          "xpath": "//a[contains(@class,'apply-btn')]",
+          "html_property": "href"
+        },
+        {
+          "name": "location",
+          "xpath": "//div[@class='fusion-text fusion-text-2']"
+        },
+        {
+          "name": "company_job_id",
+          "xpath": "//div[@class='fusion-text fusion-text-5']"
+        },
+        {
+          "name": "description",
+          "xpath": "//div[contains(@data-field,'Position_Description')]"
+        },
+        {
+          "name": "tags",
+          "xpath": "//div[contains(@data-field,'Position_Description')]",
+          "data_processing": "get_keywords(text)"
+        }
+      ]
+    }
+  ]
 }
