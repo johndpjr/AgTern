@@ -22,10 +22,16 @@
         <div class="login-button">
           <button type="submit" mat-button>Login</button>
         </div>
-
+        
+        <div class="separator">OR</div>
+        <button type="button" class="google-sign-in-button" >
+          Login with Google
+        </button>
+        
         <div class="login-button">
           <button mat-button (click)="router.navigateByUrl('jobs')" color="warn">Continue as Guest</button>
         </div>
+
 
       </form>
     </mat-card-content>
