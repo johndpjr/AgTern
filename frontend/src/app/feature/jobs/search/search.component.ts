@@ -3,11 +3,11 @@ import { FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs';
 
 @Component({
-  selector: 'app-sidebar',
-  templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.scss']
+  selector: 'app-search',
+  templateUrl: './search.component.html',
+  styleUrls: ['./search.component.scss']
 })
-export class SidebarComponent implements OnInit {
+export class SearchComponent implements OnInit {
   search = new FormControl('');
   sort = new FormControl('alpha');
   major = new FormControl('cpen');
