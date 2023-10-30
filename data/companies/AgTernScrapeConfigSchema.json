@@ -1,0 +1,90 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "title": "AgTern Company Scrape Configuration Schema",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "enum": [ "AgTernScrapeConfigSchema.json" ]
+    },
+    "company": {
+      "type": [ "object", "string" ],
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [ "name" ]
+    },
+    "links": {
+      "type": "object",
+      "patternProperties": {
+        ".*": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "required": [ "home", "internships" ]
+    },
+    "xpaths": {
+      "type": "object",
+      "patternProperties": {
+        ".*": {
+          "type": "string"
+        }
+      }
+    },
+    "regexes": {
+      "type": [ "object", "string" ],
+      "patternProperties": {
+        ".*": {
+          "type": "object",
+          "properties": {
+            "pattern": {
+              "type": "string",
+              "format": "regex"
+            },
+            "group": {
+              "type": "integer"
+            },
+            "format": {
+              "type": "string"
+            },
+            "default": {
+              "type": "string"
+            },
+            "ascii": {
+              "type": "boolean"
+            },
+            "dot_all": {
+              "type": "boolean"
+            },
+            "ignore_case": {
+              "type": "boolean"
+            },
+            "locale": {
+              "type": "boolean"
+            },
+            "multiline": {
+              "type": "boolean"
+            },
+            "verbose": {
+              "type": "boolean"
+            }
+          },
+          "required": [ "pattern" ],
+          "additionalProperties": false
+        }
+      },
+      "format": "regex"
+    },
+    "unique": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [ "$schema", "company", "links" ],
+  "additionalProperties": false
+}
