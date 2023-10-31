@@ -43,3 +43,5 @@ Thumbs.db
 
 # Environment
 .env
+
+.idea/dataSources.xml
