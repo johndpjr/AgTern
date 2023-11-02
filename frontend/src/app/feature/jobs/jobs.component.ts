@@ -12,7 +12,7 @@ import {
 } from '@angular/material/paginator';
 import { Job, JobsService } from '../../../_generated/api';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { JobClickedEvent } from '../../job-list/job-list.component';
+import { JobClickedEvent } from './job-list/job-list.component';
 
 enum PaginationContext {
   Search,

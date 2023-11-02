@@ -1,16 +1,11 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Job } from '../../_generated/api';
+import { Component, Input } from '@angular/core';
+import { Job } from '../../../../_generated/api';
 import { animate, style, transition, trigger } from '@angular/animations';
 
-export type JobClickedEvent = {
-  index: number;
-  job: Job;
-};
-
 @Component({
-  selector: 'app-job-list',
-  templateUrl: './job-list.component.html',
-  styleUrls: ['./job-list.component.scss'],
+  selector: 'app-job-details',
+  templateUrl: './job-details.component.html',
+  styleUrls: ['./job-details.component.scss'],
   animations: [
     trigger('enterLeave', [
       transition(':enter', [
@@ -25,14 +20,8 @@ export type JobClickedEvent = {
     ])
   ]
 })
-export class JobListComponent {
-  @Input() jobs: Job[] = [];
-  @Output() jobClicked: EventEmitter<JobClickedEvent> = new EventEmitter();
+export class JobDetailsComponent {
+  @Input() public job!: Job;
 
-  onJobClicked(index: number) {
-    this.jobClicked.emit({
-      index: index,
-      job: this.jobs[index]
-    });
-  }
+  ngOnInit(): void {}
 }
