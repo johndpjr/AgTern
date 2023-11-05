@@ -1,8 +1,7 @@
 class ActionFailure(Exception):
     """Raised when something goes wrong when executing an action in a pipeline."""
 
-    def __init__(self, *args):
-        super().__init__(*args)
+    pass
 
 
 class ScrapeString(str):

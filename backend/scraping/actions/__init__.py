@@ -7,6 +7,6 @@ from .actions import (
     scrape,
     scroll_to_bottom,
     sleep,
-    type,
+    type_text,
 )
 from .models import ActionFailure, ScrapeString

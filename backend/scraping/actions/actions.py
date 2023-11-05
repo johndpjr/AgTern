@@ -16,7 +16,20 @@ def raise_on_failure(action: Callable):
         try:
             return action(*args, **kwargs)
         except Exception as cause:
-            raise ActionFailure() from cause
+            try:
+                # Prevent printing multiple tracebacks:
+                new_cause = ActionFailure(*cause.args).with_traceback(
+                    cause.__traceback__
+                )
+                cause_str = str(cause)
+                if len(cause_str) > 0:
+                    cause_str = f": {cause_str}"
+                new_cause.add_note(f"{type(cause).__name__}{cause_str}")
+                # from None prevents exception chaining:
+                raise new_cause from None
+            except Exception:
+                # Fallback if an error occurs while printing
+                raise ActionFailure() from cause
 
     return modified_action
 
@@ -62,7 +75,7 @@ def click(xpath_id: str, must_exist: bool = True):
 
 
 @raise_on_failure
-def type(xpath_id: str, text: str):
+def type_text(xpath_id: str, text: str):
     """Types text into a text input."""
     # TODO: Delay in between keystrokes
     ActionChains(ctx.scraper.driver).send_keys_to_element(
