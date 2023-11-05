@@ -8,6 +8,7 @@ from datetime import datetime
 from multiprocessing import Process
 from threading import Thread
 from typing import Any
+from urllib.parse import urlparse
 
 import selenium.webdriver.support.expected_conditions as condition
 from pydantic import ValidationError
@@ -65,12 +66,17 @@ class WebScraper:
         # noinspection PyBroadException
         try:
             self.goto(context.robots_txt.url, ignore_robots_txt=True)
-            LOG.info(f"Parsing {context.robots_txt.url}")
-            context.robots_txt.parse(self.scrape_xpath("//body/@innerText")[0])
         except Exception:
             LOG.error(
                 f"Request for robots.txt located at {context.robots_txt.url} timed out!"
             )
+        # noinspection PyBroadException
+        try:
+            LOG.info(f"Parsing {context.robots_txt.url}")
+            context.robots_txt.parse(self.scrape_xpath("//body")[0])
+        except Exception:
+            LOG.error(f"robots.txt parsing failed!")
+            LOG.error(traceback.format_exc())
         LOG.info(f"Crawl-Delay: {context.robots_txt.crawl_delay}")
         if not context.valid():
             raise Exception("The generated ScrapeContext is invalid!")
@@ -89,10 +95,39 @@ class WebScraper:
             self.wait = None
             LOG.info("Driver closed.")
 
+    def make_link_absolute(self, link: str):
+        """Makes a link absolute relative to the current URL.
+        If link is already an absolute URL, it is returned unchanged."""
+        relative_url = urlparse(link)
+        current_url = urlparse(self.driver.current_url)
+        scheme = relative_url.scheme if relative_url.scheme else current_url.scheme
+        netloc = relative_url.netloc if relative_url.netloc else current_url.netloc
+        path = relative_url.path if relative_url.path else current_url.path
+        params = relative_url.params if relative_url.params else current_url.params
+        query = relative_url.query if relative_url.query else current_url.query
+        fragment = (
+            relative_url.fragment if relative_url.fragment else current_url.fragment
+        )
+        absolute_link = ""
+        if scheme:
+            absolute_link += scheme + "://"
+        absolute_link += netloc
+        absolute_link += path
+        if not relative_url.path:
+            # The following are page-specific, so don't use them if the path changed
+            if params:
+                absolute_link += ";" + params
+            if query:
+                absolute_link += "?" + query
+            if fragment:
+                absolute_link += "#" + query
+        return absolute_link
+
     def goto(self, link: str, ignore_robots_txt: bool = False):
         """Navigates to a link.
         Waits until the crawl delay specified in robots.txt has passed.
         Waits until the page is loaded."""
+        link = self.make_link_absolute(link)
         LOG.info(f"Navigating to {link}")
         if not ignore_robots_txt and not ctx.robots_txt.crawl_allowed(link):
             LOG.warning(f"Warning: Crawling is disallowed for {link}")
@@ -112,18 +147,34 @@ class WebScraper:
         """Executes a JavaScript code string. Waits for and returns the result."""
         return self.driver.execute_script(code, *args)
 
+    def wait_until_true(self, code: str, *args: Any):
+        """Waits until a JavaScript code string returns true.
+        Times out after a few seconds."""
+        self.wait.until(lambda d: d.execute_script(code, *args))
+
     def scrape_xpath(self, xpath: str) -> list[str]:
         """Retrieves a list of strings from elements on the current page.
         Waits until there is at least one element that matches the XPath.
         Times out after a few seconds."""
-        html_property = "innerText"
-        last_segment = xpath.split("/")[-1]
-        if last_segment.startswith("@") and len(last_segment) > 1:
-            xpath = xpath[: -len(last_segment) - 1]
-            html_property = last_segment[1:]
-        elements = self.get_elements_by_xpath(xpath)
-        # TODO: Optimize this list comprehension, use one JS call for retrieving the elements and their attributes?
-        return [element.get_attribute(html_property) for element in elements]
+        # Loosely based on https://stackoverflow.com/a/68216786/11827673
+        xpath = xpath.replace('"', '\\"')
+        script = (
+            f"return (x=>{{"
+            f"const s=document.evaluate(x,document,null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null);"
+            f"return [...Array(s.snapshotLength)].map((_,i)=>{{"
+            f"n=s.snapshotItem(i);"
+            f"return n.nodeType===Node.ATTRIBUTE_NODE?n.value:n.textContent"
+            f'}})}})("{xpath}")'
+        )
+        # (x=>{
+        #     const s=document.evaluate(x,document,null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null);
+        #     return [...Array(s.snapshotLength)].map((_,i)=>{
+        #         n=s.snapshotItem(i);
+        #         return n.nodeType===Node.ATTRIBUTE_NODE?n.value:n.textContent
+        #     })
+        # })("")
+        self.wait_until_true(f"{script}.length!=0")
+        return self.js(script)
 
     def get_elements_by_xpath(self, xpath: str) -> list[WebElement]:
         """Retrieves a list of elements on the current page.
@@ -206,14 +257,11 @@ class WebScraper:
     def scrape_company(self, company_name: str):
         """Navigates to the given link and starts scraping based on the scrape config.
         Returns the final context."""
-        LOG.info(f"Scraping {company_name}...")
         try:
             pipelines = get_pipelines_for_company(company_name)
             if "scrape" not in pipelines:
-                LOG.error(
-                    f'"scrape" pipeline does not exist for {company_name}. Skipping!'
-                )
                 return None
+            LOG.info(f"Scraping {company_name}...")
             # noinspection PyShadowingNames
             ctx = self.generate_context(company_name)
             ctx.execute(pipelines["scrape"])
@@ -231,7 +279,8 @@ class WebScraper:
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        """Called when a WebScraper that has been created with a 'with' statement either goes out of scope or raises an error."""
+        """Called when a WebScraper that has been created with a 'with' statement either
+        goes out of scope or raises an error."""
         if exc_type is not None:
             LOG.error("A fatal error occurred. Aborting!")
             LOG.error(traceback.format_exc())
@@ -251,13 +300,21 @@ def scrape_all(args: Namespace):
         signal.signal(signal.SIGINT, scraper.signal_handler)
         configs = get_configs()
         something_succeeded = False
+        skipped = []
         for config in configs:
             company_name = config.company_name
             try:
                 # noinspection PyShadowingNames
                 ctx = scraper.scrape_company(company_name)
                 if ctx is None:  # No config for company or no "scrape" pipeline
+                    skipped.append(company_name)
                     continue
+                if len(skipped) > 0:
+                    skipped_company_names = ", ".join(skipped)
+                    skipped.clear()
+                    LOG.error(
+                        f"The following companies were skipped: {skipped_company_names}"
+                    )
                 LOG.info(json.dumps(ctx.data, indent=2))
                 ctx.execute(scraper.commit_jobs)
                 something_succeeded = True
@@ -265,6 +322,11 @@ def scrape_all(args: Namespace):
                 LOG.error(f"Error scraping {company_name}:")
                 LOG.error(traceback.format_exc())
                 LOG.error(f"Scraping {company_name} aborted!")
+            if len(skipped) > 0:
+                skipped_company_names = ", ".join(skipped)
+                LOG.error(
+                    f"The following companies were skipped: {skipped_company_names}"
+                )
         if something_succeeded:
             LOG.info("SCRAPING COMPLETE!")
 

@@ -1,5 +1,4 @@
 from .actions import (
-    ActionFailure,
     click,
     get_tags,
     goto,
@@ -10,3 +9,4 @@ from .actions import (
     sleep,
     type,
 )
+from .models import ActionFailure, ScrapeString

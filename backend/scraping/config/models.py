@@ -110,7 +110,16 @@ class CompanyScrapeConfigModel(BaseModel):
             iter(self.links.values())
         )  # First value in dict (at least for CPython 3.6+)
 
+    # noinspection PyShadowingBuiltins
+    @staticmethod
+    def is_id(id: str):
+        return type(id) == str
+
     def lookup(self, source_name: str, name: str):
+        if not self.is_id(
+            name
+        ):  # If name is a subclass of str (like ScrapeString), return it
+            return name
         source = getattr(self, source_name)
         if name in source:
             return source[name]

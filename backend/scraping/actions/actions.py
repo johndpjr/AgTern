@@ -6,12 +6,9 @@ from selenium.common import TimeoutException
 from selenium.webdriver import ActionChains, Keys
 
 from backend.app.utils import LOG
-from backend.scraping.context.context import ctx
+from backend.scraping.context import ctx
 
-
-class ActionFailure(Exception):
-    def __init__(self, *args):
-        super().__init__(*args)
+from .models import ActionFailure, ScrapeString
 
 
 def raise_on_failure(action: Callable):
@@ -25,9 +22,9 @@ def raise_on_failure(action: Callable):
 
 
 @raise_on_failure
-def goto(url: str):
+def goto(link_id: str):
     """Navigates to a URL."""
-    ctx.scraper.goto(url)
+    ctx.scraper.goto(ctx.config.link(link_id))
 
 
 @raise_on_failure
@@ -94,7 +91,7 @@ def scroll_to_bottom():
 
 
 @raise_on_failure
-def scrape(*xpath_ids: str) -> list[str]:
+def scrape(*xpath_ids: str, savemap: dict[str, str] = None) -> list[str]:
     """Looks up a series of XPaths by ID, gets the text from each of the elements, and stores them in ctx.data."""
     if len(xpath_ids) != 1:
         elements = []
@@ -111,17 +108,17 @@ def scrape(*xpath_ids: str) -> list[str]:
         return []
     result = ctx.scraper.scrape_xpath(xpath)
     if len(result) == 0:
-        raise ActionFailure(
-            f'XPath "{xpath}" (id={xpath_id}) did not match any elements!'
-        )
+        id_hint = f" (id={xpath_id})" if ctx.config.is_id(xpath_id) else ""
+        raise ActionFailure(f'XPath "{xpath}"{id_hint} did not match any elements!')
     if len(ctx.data[xpath_id]) + len(result) > ctx.settings.max_internships:
         result = result[: ctx.settings.max_internships - len(ctx.data[xpath_id])]
-    ctx.data[xpath_id] += result
+    result = [ScrapeString(value) for value in result]
+    ctx.data[ctx.savemap_lookup(xpath_id, savemap)] += result
     return result
 
 
 @raise_on_failure
-def match(*regex_ids: str) -> list[str]:
+def match(*regex_ids: str, savemap: dict[str, str] = None) -> list[str]:
     """Looks up a series of RegExes by ID and filters each column in ctx.data according to those IDs."""
     if len(regex_ids) != 1:
         strings = []
@@ -142,13 +139,13 @@ def match(*regex_ids: str) -> list[str]:
                 string = result.group(regex.group)  # Group 0 is the whole match
         elif regex.use_default_on_failure:
             string = regex.default
-        strings.append(string)
-    ctx.data[regex_id] = strings
+        strings.append(ScrapeString(string))
+    ctx.data[ctx.savemap_lookup(regex_id, savemap)] = strings
     return strings
 
 
 @raise_on_failure
-def get_tags(*column_ids):
+def get_tags(*column_ids, savemap: dict[str, str] = None):
     """Performs NLP to collect tags from the given column IDs and stores them in ctx.data['tags']."""
     if len(column_ids) > 1:
         for column_id in column_ids:

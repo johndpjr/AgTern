@@ -47,6 +47,13 @@ class ScrapeContext:
             and self.robots_txt is not None
         )
 
+    def savemap_lookup(self, some_id: str, savemap: dict[str, str]) -> str:
+        """Maps an ID to a column string.
+        If savemap is None or doesn't contain the ID, the ID is returned."""
+        if savemap is None or some_id not in savemap:
+            return some_id
+        return savemap[some_id]
+
     def __getitem__(self, item):
         return self.data[item]
 
@@ -61,6 +68,8 @@ class ScrapeContext:
 
     def __repr__(self):
         return f"ScrapeContext({self.config.company_name})"
+
+    # TODO: Add __enter__ and __exit__ to make this a context manager usable with the 'with' statement
 
 
 class ScrapeContextProxy(ScrapeContext):

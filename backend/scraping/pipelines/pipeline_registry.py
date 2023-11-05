@@ -61,19 +61,19 @@ def pipeline_decorator(
     def decorator_declared(company_name: str) -> Callable:
         """Returns a decorator that registers a pipeline for the specified company."""
 
-        def decorator_called(function: Callable) -> Callable:
+        def decorator_called(pipeline: Callable) -> Callable:
             """Registers a pipeline. Returns the function unchanged."""
 
-            def function_executed(*args, **kwargs) -> Any:
+            def pipeline_executed(*args, **kwargs) -> Any:
                 """Returns a function unchanged."""
                 # TODO: Dependency injection based on function signature?
                 before()
-                return_value = function(*args, **kwargs)
+                return_value = pipeline(*args, **kwargs)
                 after()
                 return return_value
 
-            register_pipeline(pipeline_name, company_name, function_executed)
-            return function_executed
+            register_pipeline(pipeline_name, company_name, pipeline_executed)
+            return pipeline_executed
 
         return decorator_called
 
