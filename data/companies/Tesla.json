@@ -1,6 +1,40 @@
 {
-  "company": "Tesla",
-  "link": "https://www.tesla.com/careers/search/?type=3&site=US",
+  "$schema": "AgTernScrapeConfigSchema.json",
+  "company": {
+    "name": "Tesla"
+  },
+  "links": {
+    "home": "https://www.tesla.com",
+    "internships": "https://www.tesla.com/careers/search/?type=3&site=US"
+  },
+  "xpaths": {
+    "title": "//tbody/tr[@class='tds-table-row']/td[1]",
+    "year": "//tbody/tr[@class='tds-table-row']/td[1]",
+    "period": "//tbody/tr[@class='tds-table-row']/td[1]",
+    "posting_link": "//tbody/tr[@class='tds-table-row']/td[1]/a/@href",
+    "category": "//tbody/tr[@class='tds-table-row']/td[2]",
+    "location": "//tbody/tr[@class='tds-table-row']/td[3]",
+    "description": "//div[@class='careers-width-constraint']/div/div[2]",
+    "company_job_id": "//tbody/tr[@class='tds-table-row'][3]/td[1]",
+    "job_type": "//tbody/tr[@class='tds-table-row'][4]/td[1]",
+    "apply_link": "//a[@class='tds-btn'][1]/@href"
+  },
+  "regexes": {
+    "title": {
+      "pattern": ".+?intern(ship)?(\\))?",
+      "ignore_case": true
+    },
+    "year": {
+      "pattern": "\\d{4}",
+      "default": ""
+    },
+    "period": {
+      "pattern": "summer|spring|fall|winter",
+      "ignore_case": true,
+      "default": ""
+    }
+  },
+  "unique": [ "posting_link" ],
   "scrape": [
     {
       "action": "scroll_to_bottom"

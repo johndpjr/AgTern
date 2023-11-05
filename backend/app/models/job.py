@@ -1,3 +1,5 @@
+import json
+
 from sqlalchemy import Column, Integer, String
 
 from backend.app.database import DatabaseModel
@@ -22,10 +24,11 @@ class Job(DatabaseModel):
     tags = Column(String)
 
     def __str__(self):
-        return str(
+        return json.dumps(
             {
                 column: getattr(self, column)
                 for column in Job.__table__.columns.keys()
                 if hasattr(self, column)
-            }
+            },
+            indent=2,
         )
