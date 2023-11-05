@@ -1,12 +1,15 @@
 import logging
-from os import makedirs, getpid
-from pathlib import Path
 import time
+from os import getpid, makedirs
+from pathlib import Path
+
 
 def setup_logger(name):
     # logger settings
     makedirs(Path.cwd().joinpath("log"), exist_ok=True)
-    file = "log/agtern.log.{}.{}".format(time.strftime("(%Y-%m-%d)-(%H-%M-%S)"), getpid())
+    file = "log/agtern.log.{}.{}".format(
+        time.strftime("(%Y-%m-%d)-(%H-%M-%S)"), getpid()
+    )
     format = "%(asctime)s [%(levelname)s] %(message)s"
 
     # setup handlers and formatters
