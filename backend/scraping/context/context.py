@@ -50,8 +50,13 @@ class ScrapeContext:
     def savemap_lookup(self, some_id: str, savemap: dict[str, str]) -> str:
         """Maps an ID to a column string.
         If savemap is None or doesn't contain the ID, the ID is returned."""
-        if savemap is None or some_id not in savemap:
+        if savemap is None:
             return some_id
+        if some_id not in savemap:
+            if "*" in savemap:
+                return savemap["*"]
+            else:
+                return some_id
         return savemap[some_id]
 
     def __getitem__(self, item):
