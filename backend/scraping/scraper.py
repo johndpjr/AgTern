@@ -217,15 +217,14 @@ class WebScraper:
                     if (
                         unique_prop in column_names
                         and hasattr(JobModel, unique_prop)
-                        and hasattr(job, unique_prop)
+                        and unique_prop in job
                     ):
                         # noinspection PyTypeChecker
                         if (
                             ctx.db.query(getattr(JobModel, unique_prop))
                             .filter(
                                 JobModel.company == ctx.config.company_name
-                                and getattr(JobModel, unique_prop)
-                                == getattr(job, unique_prop)
+                                and getattr(JobModel, unique_prop) == job[unique_prop]
                             )
                             .count()
                             > 0
