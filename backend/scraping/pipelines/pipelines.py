@@ -16,7 +16,7 @@ def after_scrape():
         column_length_dict = {
             column: len(ctx.data[column]) for column in ctx.data.keys()
         }
-        # TODO: Save this data so that the job can be resumed?
+        # TODO: Save this data so that the pipeline can be resumed?
         raise ActionFailure(
             f"Internship data length mismatch! SCRAPE DATA LOST! {column_length_dict}"
         )

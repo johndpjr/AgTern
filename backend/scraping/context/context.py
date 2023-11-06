@@ -15,8 +15,18 @@ ctxvar = contextvars.ContextVar("ctx")
 
 
 class ScrapeSettings:
+    # noinspection PyTypeChecker
     def __init__(self):
-        self.max_internships = 3
+        # Limit the number of links visited, jobs processed, etc
+        self.max_internships: int = 3
+
+        # Override the crawl_delay specified in robots.txt
+        # WARNING! Setting this too low WILL get you blocked on certain websites!
+        self.crawl_delay_override: float = None
+
+        # Prints the processed Job objects as JSON to the console before writing to the database
+        # It is recommended to also set max_internships to avoid flooding the console
+        self.print_result: bool = False
         # TODO: Add more variables that change how scraping is performed
 
 
@@ -28,7 +38,7 @@ class ScrapeContext:
         self.config: CompanyScrapeConfigModel = None
         self.settings: ScrapeSettings = ScrapeSettings()
         self.db: DatabaseSession = DatabaseSession()
-        self.data: Union[dict[str, list], list] = {}
+        self.data: dict[str, Union[list[str], str]] = {}
         self.unique: list[str] = []
         self.robots_txt: RobotsTxt = RobotsTxt()
 

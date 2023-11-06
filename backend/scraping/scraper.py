@@ -7,6 +7,7 @@ from argparse import Namespace
 from datetime import datetime
 from multiprocessing import Process
 from threading import Thread
+from time import time
 from typing import Any
 from urllib.parse import urlparse
 
@@ -206,9 +207,9 @@ class WebScraper:
         # TODO: Clean up this function so it's easier to read and possibly more performant
         if not self.save_jobs:
             return True
-        LOG.info("Writing to database...")
         success = True
         jobs_to_add = []
+        num_skipped = 0
         column_names = JobModel.__table__.columns.keys()
         for job in ctx.data:
             try:
@@ -240,37 +241,68 @@ class WebScraper:
                             }
                         )
                     )
+                else:
+                    num_skipped += 1
             except ValidationError as errors:
                 LOG.error("Unable to create job!")
-                LOG.error(f"Job: {job.to_dict()}")
+                LOG.error(f"Job: {json.dumps(job, indent=2)}")
                 LOG.error(errors)
                 success = False
-        try:
-            crud.create_jobs(ctx.db, *jobs_to_add)
-            LOG.info(f"Saved {len(jobs_to_add)} jobs to the database.")
-        except Exception as e:
-            LOG.error("Saving to database FAILED!")
-            LOG.error(e)
+        LOG.info(f"{num_skipped} jobs were skipped.")
+        if len(jobs_to_add) > 0:
+            try:
+                LOG.info("Writing to database...")
+                crud.create_jobs(ctx.db, *jobs_to_add)
+                LOG.info(f"Saved {len(jobs_to_add)} jobs to the database!")
+            except Exception as e:
+                LOG.error("Saving to database FAILED!")
+                LOG.error(e)
+        else:
+            LOG.info("Nothing to save!")
         return success
 
     def scrape_company(self, company_name: str):
         """Navigates to the given link and starts scraping based on the scrape config.
         Returns the final context."""
+        start_time = time()
+        pipelines = get_pipelines_for_company(company_name)
         try:
-            pipelines = get_pipelines_for_company(company_name)
             if "scrape" not in pipelines:
                 return None
             LOG.info(f"Scraping {company_name}...")
             # noinspection PyShadowingNames
             ctx = self.generate_context(company_name)
             ctx.execute(pipelines["scrape"])
-            return ctx
         except ActionFailure:
             LOG.error(f"Error scraping {company_name}:")
             LOG.error(traceback.format_exc())
             LOG.error(f"Scraping {company_name} aborted!")
+            return None
+        if "process" in pipelines:
+            # TODO: Execute processing in parallel
+            original_data = ctx.data
+            final_data = []
+            for i, row in enumerate(original_data):
+                LOG.info(f"Processing job {i+1}/{len(original_data)}...")
+                try:
+                    ctx.data = row
+                    ctx.execute(pipelines["process"])
+                    final_data.append(ctx.data)
+                except ActionFailure:
+                    LOG.error("Error processing job:")
+                    LOG.error(json.dumps(row, indent=2))
+                    LOG.error(traceback.format_exc())
+                    LOG.error("Saving job aborted!")
+            ctx.data = final_data
+        if ctx.settings.print_result:
+            LOG.info(json.dumps(ctx.data, indent=2))
         # self.commit_jobs(context)
-        return None
+        end_time = time()
+        delta_time = int(end_time - start_time)
+        minutes = delta_time // 60
+        seconds = delta_time % 60
+        LOG.info(f"Scraping and processing for {company_name} took {minutes}:{seconds}")
+        return ctx
 
     def __enter__(self):
         """Called when a WebScraper is created in a 'with' statement."""
@@ -294,6 +326,7 @@ class WebScraper:
 def scrape_all(args: Namespace):
     """Scrapes all companies in scraping config if actions are defined there.
     Scraped jobs are stored in a database."""
+    start_time = time()
     with WebScraper(args.save_jobs, args.headless) as scraper:
         # Ensure driver is closed if interrupted:
         signal.signal(signal.SIGINT, scraper.signal_handler)
@@ -308,13 +341,6 @@ def scrape_all(args: Namespace):
                 if ctx is None:  # No config for company or no "scrape" pipeline
                     skipped.append(company_name)
                     continue
-                if len(skipped) > 0:
-                    skipped_company_names = ", ".join(skipped)
-                    skipped.clear()
-                    LOG.error(
-                        f"The following companies were skipped: {skipped_company_names}"
-                    )
-                LOG.info(json.dumps(ctx.data, indent=2))
                 ctx.execute(scraper.commit_jobs)
                 something_succeeded = True
             except ActionFailure as e:
@@ -327,7 +353,12 @@ def scrape_all(args: Namespace):
                     f"The following companies were skipped: {skipped_company_names}"
                 )
         if something_succeeded:
+            end_time = time()
+            delta_time = int(end_time - start_time)
+            minutes = delta_time // 60
+            seconds = delta_time % 60
             LOG.info("SCRAPING COMPLETE!")
+            LOG.info(f"Scraping ALL companies took {minutes}:{seconds}")
 
 
 def start_scraper(args: Namespace):

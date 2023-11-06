@@ -6,6 +6,7 @@ from selenium.common import TimeoutException
 from selenium.webdriver import ActionChains, Keys
 
 from backend.app.utils import LOG
+from backend.data_processing import get_keywords
 from backend.scraping.context import ctx
 
 from .models import ActionFailure, ScrapeString
@@ -104,30 +105,51 @@ def scroll_to_bottom():
 
 
 @raise_on_failure
-def scrape(*xpath_ids: str, savemap: dict[str, str] = None) -> list[str]:
+def scrape_text(*xpath_ids: str, savemap: dict[str, str] = None) -> list[str]:
     """Looks up a series of XPaths by ID, gets the text from each of the elements, and stores them in ctx.data."""
     if len(xpath_ids) != 1:
         elements = []
         for xpath_id in xpath_ids:
-            elements += scrape(xpath_id)
+            elements += scrape_text(xpath_id, savemap=savemap)
         return elements
     xpath_id = xpath_ids[0]
     xpath = ctx.config.xpath(xpath_id)
-    LOG.info(f"Scraping {xpath_id}...")
     if xpath_id not in ctx.data:
         ctx.data[xpath_id] = []
-    if len(ctx.data[xpath_id]) > ctx.settings.max_internships:
-        ctx.data[xpath_id] = ctx.data[xpath_id][: ctx.settings.max_internships]
-        return []
+    if ctx.settings.max_internships is not None:
+        if len(ctx.data[xpath_id]) > ctx.settings.max_internships:
+            ctx.data[xpath_id] = ctx.data[xpath_id][: ctx.settings.max_internships]
+            return []
     result = ctx.scraper.scrape_xpath(xpath)
     if len(result) == 0:
         id_hint = f" (id={xpath_id})" if ctx.config.is_id(xpath_id) else ""
         raise ActionFailure(f'XPath "{xpath}"{id_hint} did not match any elements!')
-    if len(ctx.data[xpath_id]) + len(result) > ctx.settings.max_internships:
-        result = result[: ctx.settings.max_internships - len(ctx.data[xpath_id])]
+    LOG.info(f"Found {len(result)}x {xpath_id}")
+    if ctx.settings.max_internships is not None:
+        if len(ctx.data[xpath_id]) + len(result) > ctx.settings.max_internships:
+            result = result[: ctx.settings.max_internships - len(ctx.data[xpath_id])]
     result = [ScrapeString(value) for value in result]
     ctx.data[ctx.savemap_lookup(xpath_id, savemap)] += result
     return result
+
+
+@raise_on_failure
+def scrape_links(*xpath_ids, savemap: dict[str, str] = None) -> list[str]:
+    """Looks up a series of XPaths by ID, gets the text from each of the elements, and stores them in ctx.data.
+    Transforms relative links to absolute links."""
+    if len(xpath_ids) != 1:
+        elements = []
+        for xpath_id in xpath_ids:
+            elements += scrape_links(xpath_id, savemap=savemap)
+        return elements
+    xpath_id = xpath_ids[0]
+    column_id = ctx.savemap_lookup(xpath_id, savemap)
+    links = scrape_text(xpath_id, savemap=savemap)
+    ctx.data[column_id] = [
+        ScrapeString(ctx.scraper.make_link_absolute(link))
+        for link in ctx.data[column_id]
+    ]
+    return [ScrapeString(ctx.scraper.make_link_absolute(link)) for link in links]
 
 
 @raise_on_failure
@@ -136,31 +158,61 @@ def match(*regex_ids: str, savemap: dict[str, str] = None) -> list[str]:
     if len(regex_ids) != 1:
         strings = []
         for regex_id in regex_ids:
-            strings += match(regex_id)
+            strings += match(regex_id, savemap=savemap)
         return strings
     regex_id = regex_ids[0]
     regex = ctx.config.regex(regex_id)
     column = ctx.data[regex_id]
+    LOG.info(f"Matching {regex_id} regex")
     strings = []
+    num_matches = 0
+    num_defaults = 0
+    num_no_change = 0
     for string in column:
         result = regex.pattern.search(string)
         if result is not None:
+            num_matches += 1
             # Replace text with either group or format string
             if regex.format is not None:
                 string = regex.format.format(result.groupdict())
             else:
                 string = result.group(regex.group)  # Group 0 is the whole match
         elif regex.use_default_on_failure:
+            num_defaults += 1
             string = regex.default
+        else:
+            num_no_change += 1
         strings.append(ScrapeString(string))
+    LOG.info(
+        f"Match/Default/NoChange/Total: {num_matches}/{num_defaults}/{num_no_change}/{len(column)}"
+    )
     ctx.data[ctx.savemap_lookup(regex_id, savemap)] = strings
     return strings
 
 
 @raise_on_failure
 def get_tags(*column_ids, savemap: dict[str, str] = None):
-    """Performs NLP to collect tags from the given column IDs and stores them in ctx.data['tags']."""
+    """Performs NLP to collect tags from the given column IDs and stores them in ctx.data['tags'] by default."""
+    # TODO: Move nlt.download into backend.data_processing.nlp
+    import nltk
+
+    nltk.download("popular", quiet=True)
     if len(column_ids) > 1:
+        tags = []
         for column_id in column_ids:
-            get_tags(column_id)
-    LOG.error("get_tags is not implemented yet!")
+            tags += get_tags(column_id, savemap=savemap)
+        return tags
+    if savemap is None:
+        savemap = {"*": "tags"}
+    column_id = column_ids[0]
+    tags_column_id = ctx.savemap_lookup(column_id, savemap)
+    LOG.info(f"Extracting keywords from {column_id}...")
+    # TODO: Sort keywords and remove duplicates
+    keywords = get_keywords(ctx.data[column_id]).lower()
+    if tags_column_id in ctx.data:
+        ctx.data[tags_column_id] = ScrapeString(
+            ",".join(ctx.data[tags_column_id].split(",") + keywords.split(","))
+        )
+    else:
+        ctx.data[tags_column_id] = ScrapeString(keywords)
+    return keywords.split(",")

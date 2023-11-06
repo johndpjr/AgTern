@@ -65,7 +65,13 @@ class RobotsTxt:
                 seconds=self.crawl_delay
             )
         time_passed = (datetime.now() - self.last_request_time).total_seconds()
-        delay_amount = self.crawl_delay - time_passed
+        from backend.scraping.context import ctx
+
+        if ctx.settings.crawl_delay_override is not None:
+            crawl_delay = ctx.settings.crawl_delay_override
+        else:
+            crawl_delay = self.crawl_delay
+        delay_amount = crawl_delay - time_passed
         if delay_amount > 0:
             LOG.info(f"Delaying for {delay_amount:.2f} seconds...")
             time.sleep(delay_amount)
