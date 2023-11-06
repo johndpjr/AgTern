@@ -133,3 +133,5 @@ data/temp/
 data/*.db
 
 /log
+
+.idea/dataSources.xml
