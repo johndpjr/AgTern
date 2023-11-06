@@ -83,6 +83,13 @@
       "items": {
         "type": "string"
       }
+    },
+    "scrape": {
+      "type": "array",
+      "$comment": "Holds the old scrape config (TODO: remove after migration)",
+      "items": {
+        "type": "object"
+      }
     }
   },
   "required": [ "$schema", "company", "links" ],
