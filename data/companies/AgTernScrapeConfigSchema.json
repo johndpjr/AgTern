@@ -35,10 +35,11 @@
       }
     },
     "regexes": {
-      "type": [ "object", "string" ],
+      "type": "object",
       "patternProperties": {
         ".*": {
           "type": "object",
+          "$comment": "TODO: Support type ['object', 'string']",
           "properties": {
             "pattern": {
               "type": "string",
@@ -60,9 +61,6 @@
               "type": "boolean"
             },
             "ignore_case": {
-              "type": "boolean"
-            },
-            "locale": {
               "type": "boolean"
             },
             "multiline": {
