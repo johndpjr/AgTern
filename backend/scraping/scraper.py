@@ -57,9 +57,16 @@ class WebScraper:
         )
         self.wait = WebDriverWait(self.driver, 5)
 
+    @property
+    def current_url(self):
+        return self.driver.current_url
+
     def generate_context(self, company_name: str):
-        """Generates a ScrapeContext bound to this WebScraper and the CompanyScrapeConfigModel for the given company."""
+        """Generates a ScrapeContext bound to this WebScraper and the CompanyScrapeConfigModel for the given company.
+        Returns None if scraping cannot be performed."""
         config = get_config(company_name)
+        if config.default_link is None:
+            return None  # The company cannot be scraped
         context = ScrapeContext()
         context.config = config
         context.scraper = self
@@ -151,7 +158,7 @@ class WebScraper:
     def wait_until_true(self, code: str, *args: Any):
         """Waits until a JavaScript code string returns true.
         Times out after a few seconds."""
-        self.wait.until(lambda d: d.execute_script(code, *args))
+        return self.wait.until(lambda d: d.execute_script(code, *args))
 
     def scrape_xpath(self, xpath: str) -> list[str]:
         """Retrieves a list of strings from elements on the current page.
@@ -263,19 +270,28 @@ class WebScraper:
 
     def scrape_company(self, company_name: str):
         """Navigates to the given link and starts scraping based on the scrape config.
-        Returns the final context."""
+        Returns the final context or None if scraping could not be performed."""
         start_time = time()
+        # noinspection PyShadowingNames
+        ctx = self.generate_context(company_name)
+        if ctx is None:
+            return None
+        self.wait = WebDriverWait(self.driver, ctx.settings.timeout)
         pipelines = get_pipelines_for_company(company_name)
         try:
             if "scrape" not in pipelines:
                 return None
             LOG.info(f"Scraping {company_name}...")
-            # noinspection PyShadowingNames
-            ctx = self.generate_context(company_name)
             ctx.execute(pipelines["scrape"])
-        except ActionFailure:
+        except ActionFailure as cause:
             LOG.error(f"Error scraping {company_name}:")
-            LOG.error(traceback.format_exc())
+            if ctx.settings.print_tracebacks or len(cause.args) == 0:
+                # If there's no message, print the traceback
+                LOG.error(traceback.format_exc())
+            else:
+                # If the ActionFailure has a message, just print it
+                for arg in cause.args:
+                    LOG.error(arg)
             LOG.error(f"Scraping {company_name} aborted!")
             return None
         if "process" in pipelines:
@@ -296,7 +312,6 @@ class WebScraper:
             ctx.data = final_data
         if ctx.settings.print_result:
             LOG.info(json.dumps(ctx.data, indent=2))
-        # self.commit_jobs(context)
         end_time = time()
         delta_time = int(end_time - start_time)
         minutes = delta_time // 60
