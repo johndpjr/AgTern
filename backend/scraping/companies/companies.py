@@ -63,6 +63,24 @@ def process_apple():
     default_process()
 
 
+@scrape_internships("AT&T")
+def scrape_att():
+    click("category_tab")
+    click("internships_category_button")
+    click("show_all_button", must_exist=False)
+    scrape_text("title", "location")
+    for link in scrape_links("posting_link"):
+        goto(link)
+        scrape_text("description", "company_job_id", "post_date")
+        scrape_links("apply_link")
+
+
+@process_internship("AT&T")
+def process_att():
+    match("description", "company_job_id", "post_date")
+    default_process()
+
+
 @scrape_internships("Tesla")
 def scrape_tesla():
     scroll_to_bottom()

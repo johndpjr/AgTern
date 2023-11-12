@@ -1,6 +1,38 @@
 {
-  "company": "AT&T",
-  "link": "https://www.att.jobs/search-jobs",
+  "company": {
+    "name": "AT&T"
+  },
+  "links": {
+    "home": "https://www.att.com/",
+    "internships": "https://www.att.jobs/search-jobs"
+  },
+  "xpaths": {
+    "category_tab": "//button[@id='category-toggle']",
+    "internships_category_button": "//input[@data-display='Internships']",
+    "show_all_button": "//a[@class='pagination-show-all']",
+    "title": "//section[@id='search-results-list']//li//h2",
+    "location": "//section[@id='search-results-list']//li//span[@class='job-location']",
+    "posting_link": "//section[@id='search-results-list']//li/a/@href",
+    "description": "//div[@class='ats-description']",
+    "company_job_id": "//span[contains(@class,'job-id')]",
+    "post_date": "//span[contains(@class,'job-date')]",
+    "apply_link": "//div[@id='anchor-navigation']//a[@data-selector-name='job-apply-link']/@href"
+  },
+  "regexes": {
+    "description": {
+      "pattern": "(Job Overview\\n*)([\\s\\S]+)(\\n*Job ID)",
+      "group": 2,
+      "multiline": true
+    },
+    "company_job_id": {
+      "pattern": "(Job ID )(.*)",
+      "group": 2
+    },
+    "post_date": {
+      "pattern": "(Date posted )(.*)",
+      "group": 2
+    }
+  },
   "scrape": [
     {
       "action": "click",

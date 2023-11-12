@@ -38,7 +38,7 @@ class ScrapeSettings:
         # This is a case-insensitive list of the names of the companies that should be scraped
         # If None, everything is scraped
         # If [], nothing is scraped
-        self.scrape_companies: list[str] = ["Apple"]
+        self.scrape_companies: list[str] = ["AT&T"]
 
 
 class ScrapeContext:
