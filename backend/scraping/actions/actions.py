@@ -112,7 +112,7 @@ def click(xpath_id: str, must_exist: bool = True):
     """Clicks on one or more elements.
     Raises an exception if the element(s) cannot be located unless must_exist is False.
     """
-    elements = ctx.scraper.scrape_xpath(ctx.config.xpath(xpath_id))
+    elements = ctx.scraper.get_elements_by_xpath(ctx.config.xpath(xpath_id))
     i = 0
     for element in elements:
         i += 1

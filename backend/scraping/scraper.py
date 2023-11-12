@@ -204,7 +204,7 @@ class WebScraper:
                 element,
                 property_value,
             )
-            for element in self.scrape_xpath(xpath)
+            for element in self.get_elements_by_xpath(xpath)
         ]
 
     def commit_jobs(self) -> bool:
@@ -276,6 +276,14 @@ class WebScraper:
         ctx = self.generate_context(company_name)
         if ctx is None:
             return None
+        if ctx.settings.scrape_companies is not None:
+            found = False
+            for name in ctx.settings.scrape_companies:
+                if name.lower() == company_name.lower():
+                    found = True
+                    break
+            if not found:
+                return None
         self.wait = WebDriverWait(self.driver, ctx.settings.timeout)
         pipelines = get_pipelines_for_company(company_name)
         try:
