@@ -43,22 +43,25 @@ class RegexConfigModel(BaseModel):
     @root_validator(skip_on_failure=True)
     def validate(cls, values):
         if "pattern" in values:
+            pattern = values["pattern"]
+            if isinstance(pattern, re.Pattern):
+                pattern = pattern.pattern
             # Recompile regex with specified flags
             flags = 0
             all_flags = {
                 "ascii": re.ASCII,
                 "dot_all": re.DOTALL,
                 "ignore_case": re.IGNORECASE,
-                "locale": re.LOCALE,
                 "multiline": re.MULTILINE,
                 "verbose": re.VERBOSE,
             }
             for flag in all_flags:
                 if flag in values:
-                    flags |= all_flags[flag]
+                    if values[flag]:
+                        flags |= all_flags[flag]
             values["_flags"] = flags
             values["_use_default_on_failure"] = "default" in values
-            values["pattern"] = re.compile(values["pattern"], flags)
+            values["pattern"] = re.compile(pattern, flags)
             return RegexConfigModel.construct(**values)
 
     @property
@@ -85,12 +88,12 @@ class CompanyScrapeConfigModel(BaseModel):
     @root_validator(pre=True)
     def validate(cls, values):
         """Transforms string aliases into config objects."""
+        # TODO: Fix, possibly update to Pydantic 2 validator
         if "company" in values and isinstance(values["company"], str):
             values["company"] = CompanyConfigModel(name=values["company"])
         if "regexes" in values and isinstance(values["regexes"], dict):
             for key, value in values["regexes"].items():
                 if isinstance(value, str):
-                    # noinspection PyTypeChecker
                     values["regexes"][key] = RegexConfigModel(pattern=value)
         return values
 
@@ -100,7 +103,7 @@ class CompanyScrapeConfigModel(BaseModel):
 
     @property
     def default_link(self) -> Union[AnyUrl, None]:
-        if len(self.links.values()) == 0:
+        if not isinstance(self.links, dict) or len(self.links.values()) == 0:
             return None
         if "internships" in self.links:
             return self.links["internships"]
