@@ -34,7 +34,7 @@
       "default": ""
     }
   },
-  "unique": [ "posting_link" ],
+  "unique": [ "posting_link", "company_job_id" ],
   "scrape": [
     {
       "action": "scroll_to_bottom"
