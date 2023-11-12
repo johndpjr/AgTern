@@ -1,4 +1,5 @@
 import traceback
+from json import JSONDecodeError
 from typing import Union
 
 from pydantic import ValidationError
@@ -56,8 +57,12 @@ def load_configs():
             continue
         # noinspection PyBroadException
         try:
-            register_config(CompanyScrapeConfigModel(**file.load_json()))
-        except ValidationError as e:
+            json = file.load_json()
+            for required_prop in ["$schema", "company", "unique"]:
+                if required_prop not in json:
+                    LOG.warn(f'{file.name} does not have a "{required_prop}" property!')
+            register_config(CompanyScrapeConfigModel(**json))
+        except (ValidationError, JSONDecodeError) as e:
             LOG.error(
                 f"Validation of {file.name} failed! {file.name_without_extension} will not be scraped."
             )
