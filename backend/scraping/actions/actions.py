@@ -1,8 +1,8 @@
 import time
 from random import randint
-from typing import Callable
+from typing import Callable, Union
 
-from selenium.common import TimeoutException
+from selenium.common import NoSuchElementException, TimeoutException
 from selenium.webdriver import ActionChains, Keys
 
 from backend.app.utils import LOG
@@ -16,29 +16,41 @@ def raise_on_failure(action: Callable):
     def modified_action(*args, **kwargs):
         try:
             return action(*args, **kwargs)
+        except ActionFailure as cause:
+            raise cause from None
         except Exception as cause:
             try:
-                # Prevent printing multiple tracebacks:
-                new_cause = ActionFailure(*cause.args).with_traceback(
-                    cause.__traceback__
-                )
                 cause_str = str(cause)
                 if len(cause_str) > 0:
                     cause_str = f": {cause_str}"
-                new_cause.add_note(f"{type(cause).__name__}{cause_str}")
-                # from None prevents exception chaining:
-                raise new_cause from None
+                cause_description = f"{type(cause).__name__}{cause_str}"
+                new_cause = ActionFailure(cause_description).with_traceback(
+                    cause.__traceback__
+                )
             except Exception:
                 # Fallback if an error occurs while printing
                 raise ActionFailure() from cause
+            # from None prevents exception chaining:
+            raise new_cause from None
 
     return modified_action
 
 
 @raise_on_failure
+def column(column_id: str):
+    """Alias for ctx.data[column_id]."""
+    return ctx.data[column_id]
+
+
+@raise_on_failure
 def goto(link_id: str):
     """Navigates to a URL."""
-    ctx.scraper.goto(ctx.config.link(link_id))
+    link = ctx.config.link(link_id)
+    try:
+        ctx.scraper.goto(link)
+    except TimeoutException:
+        id_hint = f" (id={link_id})" if ctx.config.is_id(link_id) else ""
+        raise ActionFailure(f'Navigation to "{link}"{id_hint} timed out!') from None
 
 
 @raise_on_failure
@@ -51,6 +63,48 @@ def goto_default():
 def sleep(ms: float):
     """Waits for a period of time."""
     time.sleep(ms / 1000)
+
+
+@raise_on_failure
+def wait_until_true(predicate: Union[str, Callable[[], bool]]):
+    """Waits until a JavaScript code string or Python function returns true.
+    Times out after a few seconds."""
+    if isinstance(predicate, str):
+        return ctx.scraper.wait_until_true(predicate)
+    return ctx.scraper.wait.until(lambda d: predicate())
+
+
+@raise_on_failure
+def is_clickable(*xpath_ids: str) -> Union[bool, list[bool]]:
+    """Returns True if all of the elements matched by the specified XPath are clickable.
+    Waits for at least one element to exist, but doesn't wait for an element to be clickable.
+    Times out after a few seconds."""
+    if len(xpath_ids) != 1:
+        bools = []
+        for xpath_id in xpath_ids:
+            bools += is_clickable(xpath_id)
+        return bools
+    xpath_id = xpath_ids[0]
+    xpath = ctx.config.xpath(xpath_id)
+    try:
+        elements = ctx.scraper.get_elements_by_xpath(xpath)
+        # TODO: Fix this race condition caused by fetching the elements twice
+        cursors = ctx.scraper.scrape_css(xpath, "cursor")
+        if len(elements) == 0:
+            return False
+        for element, cursor in zip(elements, cursors):
+            if (
+                not element.is_enabled()
+                or not element.is_displayed()
+                or element.get_attribute("aria-disabled") == "true"
+                or cursor == "default"
+            ):
+                return False
+    except NoSuchElementException:
+        return False
+    except TimeoutException:
+        return False
+    return True
 
 
 @raise_on_failure
@@ -120,10 +174,16 @@ def scrape_text(*xpath_ids: str, savemap: dict[str, str] = None) -> list[str]:
         if len(ctx.data[xpath_id]) > ctx.settings.max_internships:
             ctx.data[xpath_id] = ctx.data[xpath_id][: ctx.settings.max_internships]
             return []
-    result = ctx.scraper.scrape_xpath(xpath)
-    if len(result) == 0:
+    try:
+        result = ctx.scraper.scrape_xpath(xpath)
+        if len(result) == 0:
+            raise TimeoutException()
+    except TimeoutException:
         id_hint = f" (id={xpath_id})" if ctx.config.is_id(xpath_id) else ""
-        raise ActionFailure(f'XPath "{xpath}"{id_hint} did not match any elements!')
+        raise ActionFailure(
+            f'XPath "{xpath}"{id_hint} did not match any elements on '
+            f"{ctx.scraper.current_url}"
+        ) from None
     LOG.info(f"Found {len(result)}x {xpath_id}")
     if ctx.settings.max_internships is not None:
         if len(ctx.data[xpath_id]) + len(result) > ctx.settings.max_internships:
@@ -153,7 +213,7 @@ def scrape_links(*xpath_ids, savemap: dict[str, str] = None) -> list[str]:
 
 
 @raise_on_failure
-def match(*regex_ids: str, savemap: dict[str, str] = None) -> list[str]:
+def match(*regex_ids: str, savemap: dict[str, str] = None) -> str:
     """Looks up a series of RegExes by ID and filters each column in ctx.data according to those IDs."""
     if len(regex_ids) != 1:
         strings = []
@@ -162,32 +222,27 @@ def match(*regex_ids: str, savemap: dict[str, str] = None) -> list[str]:
         return strings
     regex_id = regex_ids[0]
     regex = ctx.config.regex(regex_id)
-    column = ctx.data[regex_id]
+    string = ctx.data[regex_id]
     LOG.info(f"Matching {regex_id} regex")
-    strings = []
-    num_matches = 0
-    num_defaults = 0
-    num_no_change = 0
-    for string in column:
-        result = regex.pattern.search(string)
-        if result is not None:
-            num_matches += 1
-            # Replace text with either group or format string
-            if regex.format is not None:
-                string = regex.format.format(result.groupdict())
-            else:
-                string = result.group(regex.group)  # Group 0 is the whole match
-        elif regex.use_default_on_failure:
-            num_defaults += 1
-            string = regex.default
+    result = regex.pattern.search(string)
+    if result is not None:
+        # Replace text with either group or format string
+        if regex.format is not None:
+            string = regex.format.format(result.groupdict())
+            replacement = "FormatString"
         else:
-            num_no_change += 1
-        strings.append(ScrapeString(string))
-    LOG.info(
-        f"Match/Default/NoChange/Total: {num_matches}/{num_defaults}/{num_no_change}/{len(column)}"
-    )
-    ctx.data[ctx.savemap_lookup(regex_id, savemap)] = strings
-    return strings
+            string = result.group(regex.group)  # Group 0 is the whole match
+            replacement = "RegExGroup"
+    elif regex.use_default_on_failure:
+        string = regex.default
+        replacement = "Default"
+    else:
+        replacement = "NoChange"
+    string = ScrapeString(string)
+    LOG.info(f"Match: {result is not None}")
+    LOG.info(f"Replacement: {replacement}")
+    ctx.data[ctx.savemap_lookup(regex_id, savemap)] = string
+    return string
 
 
 @raise_on_failure
