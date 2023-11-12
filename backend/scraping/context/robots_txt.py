@@ -44,6 +44,8 @@ class RobotsTxt:
     def set_url(self, url: str):
         """Sets the URL to the robots.txt at the root of the specified link."""
         parsed_url = urlparse(url)
+        if len(parsed_url.netloc) == 0:
+            raise ValueError(f'URL "{url}" is invalid!')
         self.url = f"{parsed_url.scheme if len(parsed_url.scheme) > 0 else 'http'}://{parsed_url.netloc}/robots.txt"
 
     def parse(self, text: str) -> bool:
