@@ -17,6 +17,9 @@ ctxvar = contextvars.ContextVar("ctx")
 class ScrapeSettings:
     # noinspection PyTypeChecker
     def __init__(self):
+        # Set the number of seconds that the web scraper waits for elements to exist before raising an error
+        self.timeout: float = 5
+
         # Limit the number of links visited, jobs processed, etc
         self.max_internships: int = 3
 
@@ -27,6 +30,10 @@ class ScrapeSettings:
         # Prints the processed Job objects as JSON to the console before writing to the database
         # It is recommended to also set max_internships to avoid flooding the console
         self.print_result: bool = False
+
+        # Enables printing tracebacks in addition to error messages when errors are encountered during scraping
+        # Can sometimes be useful when debugging, but most of the time it is too much information
+        self.print_tracebacks: bool = False
         # TODO: Add more variables that change how scraping is performed
 
 
