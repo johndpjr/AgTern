@@ -34,7 +34,11 @@ class ScrapeSettings:
         # Enables printing tracebacks in addition to error messages when errors are encountered during scraping
         # Can sometimes be useful when debugging, but most of the time it is too much information
         self.print_tracebacks: bool = False
-        # TODO: Add more variables that change how scraping is performed
+
+        # This is a case-insensitive list of the names of the companies that should be scraped
+        # If None, everything is scraped
+        # If [], nothing is scraped
+        self.scrape_companies: list[str] = ["Amazon"]
 
 
 class ScrapeContext:
