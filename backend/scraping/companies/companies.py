@@ -43,9 +43,29 @@ def process_amazon():
     default_process()
 
 
+@scrape_internships("Apple")
+def scrape_apple():
+    while True:
+        scrape_text("title", "post_date")
+        scrape_links("posting_link")
+        if not is_clickable("next_page"):
+            break
+        click("next_page")
+    for link in column("posting_link"):
+        goto(link)
+        scrape_text("category", "location", "company_job_id", "description")
+        scrape_links("apply_link")
+
+
+@process_internship("Apple")
+def process_apple():
+    match("description")
+    default_process()
+
+
 @scrape_internships("Tesla")
 def scrape_tesla():
-    # scroll_to_bottom()
+    scroll_to_bottom()
     scrape_text("title", "year", "period", "category", "location")
     for link in scrape_links("posting_link"):
         goto(link)

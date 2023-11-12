@@ -1,6 +1,34 @@
 {
-  "company": "Apple",
-  "link": "https://jobs.apple.com/en-us/search?team=Internships-STDNT-INTRN",
+  "$schema": "AgTernScrapeConfigSchema.json",
+  "company": {
+    "name": "Apple"
+  },
+  "links": {
+    "home": "https://www.apple.com/",
+    "internships": "https://jobs.apple.com/en-us/search?team=Internships-STDNT-INTRN"
+  },
+  "xpaths": {
+    "next_page": "//li[@class='pagination__next']//a",
+    "title": "//a[contains(@id,'jotTitle')]",
+    "posting_link": "//a[contains(@id,'jotTitle')]/@href",
+    "post_date": "//span[contains(@id,'postedDate')]",
+    "category": "//div[@id='job-team-name']",
+    "apply_link": "(//div[@id='job-details-actions']/a)[1]/@href",
+    "location": "//div[@itemprop='address']",
+    "company_job_id": "//strong[@id='jobNumber']",
+    "description": "//div[@itemprop='description']"
+  },
+  "regexes": {
+    "description": {
+      "pattern": "(Role Number:\\d*\\n)([\\s\\S]*)",
+      "group": 2,
+      "multiline": true
+    }
+  },
+  "unique": [
+    "posting_link",
+    "company_job_id"
+  ],
   "scrape": [
     {
       "action": "scrape",
