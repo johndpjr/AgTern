@@ -28,6 +28,10 @@
       "pattern": "(?<=Posted )[\\\\s\\\\S]+"
     }
   },
+  "unique": [
+    "company_job_id",
+    "posting_link"
+  ],
   "scrape": [
     {
       "action": "scrape",
