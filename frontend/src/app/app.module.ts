@@ -10,13 +10,15 @@ import { LoginComponent } from './pages/login/login.component';
 import { SignUpComponent } from './pages/sign-up/sign-up.component';
 import { AppRoutingModule } from './app-routing.module';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { GoogleSignInComponent } from './shared/components/google-sign-in/google-sign-in.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     SignUpComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    GoogleSignInComponent
   ],
   imports: [
     BrowserAnimationsModule,
