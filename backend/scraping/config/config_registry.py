@@ -54,6 +54,7 @@ def load_config(file: DataFile) -> dict:
         for name, value in json["regex"].items():
             if isinstance(value, str):
                 json["regex"][name] = {"pattern": value}
+    return json
 
 
 def load_configs():
