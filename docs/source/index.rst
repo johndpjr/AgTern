@@ -19,4 +19,4 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
-include:: /path/to/README.rst
+include:: README.rst
