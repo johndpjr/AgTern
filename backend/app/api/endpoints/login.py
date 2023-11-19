@@ -14,12 +14,18 @@ from backend.app.crud import crud
 from backend.app.database import engine
 from backend.app.models import User as UserModel
 
+from google.oauth2 import id_token
+from google.auth.transport import requests
+
 from ..deps import get_db
 
 load_dotenv()
 JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
+
+# Google Client ID
+CLIENT_ID = None
 
 users_db = get_db()
 
@@ -39,6 +45,8 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login/token")
 
 class User(BaseModel):
     username: str
+    google_id: str | None = None 
+    made_password: bool | None = None
     email: str | None = None
     full_name: str | None = None
     disabled: bool | None = None
@@ -176,3 +184,33 @@ async def delete_user(
         return {"deleted": True}
     else:
         return {"deleted": False}
+
+
+@router.post("/users/google-login")
+async def google_login(
+    token: str,
+    db: Session = Depends(get_db)
+):
+
+
+    # (Receive token by HTTPS POST)
+    # ...
+
+    try:
+        # Specify the CLIENT_ID of the app that accesses the backend:
+        idinfo = id_token.verify_oauth2_token(token, requests.Request(), CLIENT_ID)
+
+        # Or, if multiple clients access the backend server:
+        # idinfo = id_token.verify_oauth2_token(token, requests.Request())
+        # if idinfo['aud'] not in [CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]:
+        #     raise ValueError('Could not verify audience.')
+
+        # If auth request is from a G Suite domain:
+        # if idinfo['hd'] != GSUITE_DOMAIN_NAME:
+        #     raise ValueError('Wrong hosted domain.')
+
+        # ID token is valid. Get the user's Google Account ID from the decoded token.
+        userid = idinfo['sub']
+    except ValueError:
+        # Invalid token
+        pass
