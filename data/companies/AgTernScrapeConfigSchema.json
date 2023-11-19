@@ -45,7 +45,7 @@
               "format": "regex"
             },
             "group": {
-              "type": "integer"
+              "type": [ "integer", "string" ]
             },
             "format": {
               "type": "string"
