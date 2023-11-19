@@ -19,13 +19,20 @@
   },
   "regexes": {
     "location": {
-      "pattern": "[\\s\\S]+(?= \\| Job ID: )"
+      "pattern": "Job ID: \\d+ | (.*)",
+      "group": 1
     },
     "company_job_id": {
-      "pattern": "(?<=\\| Job ID: )[\\s\\S]+"
+      "pattern": "Job ID: (\\d+) | .*",
+      "group": 1
     },
     "post_date": {
-      "pattern": "(?<=Posted )[\\\\s\\\\S]+"
+      "pattern": "Updated: (.*)",
+      "group": 1
+    },
+    "description": {
+      "pattern": "DESCRIPTION(.*)",
+      "group": 1
     }
   },
   "unique": [

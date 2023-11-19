@@ -43,6 +43,7 @@ def scrape_amazon():
 
 @process_internship("Amazon")
 def process_amazon():
+    match("location", "company_job_id", "post_date", "description")
     default_process()
 
 
