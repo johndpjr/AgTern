@@ -125,7 +125,6 @@ Current Features
    <li>
 
 Images
-- [Image]
 .. raw:: html
 
    </li>
@@ -476,7 +475,6 @@ Acknowledgments
 .. raw:: html
 
    <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-.. |Image| image:: images/agtern-gui.png
 .. |Contributors| image:: https://img.shields.io/github/contributors/johndpjr/AgTern.svg?style=for-the-badge
    :target: https://github.com/johndpjr/AgTern/graphs/contributors
 .. |Forks| image:: https://img.shields.io/github/forks/johndpjr/AgTern.svg?style=for-the-badge
