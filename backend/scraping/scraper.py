@@ -160,13 +160,7 @@ class WebScraper:
             f"return n.nodeType===Node.ATTRIBUTE_NODE?n.value:n.textContent"
             f'}})}})("{xpath}")'
         )
-        # (x=>{
-        #     const s=document.evaluate(x,document,null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null);
-        #     return [...Array(s.snapshotLength)].map((_,i)=>{
-        #         n=s.snapshotItem(i);
-        #         return n.nodeType===Node.ATTRIBUTE_NODE?n.value:n.textContent
-        #     })
-        # })("")
+        # scrape=(x=>{const s=document.evaluate(x,document,null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null);return [...Array(s.snapshotLength)].map((_,i)=>{n=s.snapshotItem(i);return n.nodeType===Node.ATTRIBUTE_NODE?n.value:n.textContent})});scrape_text=scrape;linkify=(l=>new URL(l,window.location.href).href);scrape_links=(x=>scrape(x).map(m=>linkify(m)))
         self.wait_until_true(f"{script}.length!=0")
         return self.js(script)
 
