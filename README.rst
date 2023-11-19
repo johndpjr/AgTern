@@ -248,6 +248,7 @@ Images
 
 .. image:: docs/source/Images/agtern-gui.png
    :alt: AgTern in Action
+   :align: center
 
    AgTern in Action
 
