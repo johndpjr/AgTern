@@ -168,6 +168,16 @@ def scrape_text(*xpath_ids: str, savemap: dict[str, str] = None) -> list[str]:
         return elements
     xpath_id = xpath_ids[0]
     xpath = ctx.config.xpath(xpath_id)
+    if (
+        xpath.endswith("@href")
+        or ctx.config.is_id(xpath_id)
+        and (xpath_id.lower().find("link") != -1 or xpath_id.lower().find("url") != -1)
+    ):
+        id_hint = f" (id={xpath_id})" if ctx.config.is_id(xpath_id) else ""
+        LOG.warn(
+            f"XPath {xpath}{id_hint} looks like a link. "
+            f"Did you mean to use scrape_links instead of scrape_text?"
+        )
     if xpath_id not in ctx.data:
         ctx.data[xpath_id] = []
     if ctx.settings.max_internships is not None:
