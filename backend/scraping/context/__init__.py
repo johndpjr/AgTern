@@ -3,6 +3,7 @@ from .context import (
     ScrapeSettings,
     call_with_context,
     ctx,
+    default_settings,
     get_active_context,
     wrap_with_context,
 )
