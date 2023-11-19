@@ -125,6 +125,7 @@ Current Features
    <li>
 
 Images
+
 .. raw:: html
 
    </li>
