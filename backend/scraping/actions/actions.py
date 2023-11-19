@@ -159,7 +159,9 @@ def scroll_to_bottom():
 
 
 @raise_on_failure
-def scrape_text(*xpath_ids: str, savemap: dict[str, str] = None) -> list[str]:
+def scrape_text(
+    *xpath_ids: str, savemap: dict[str, str] = None, link_check: bool = True
+) -> list[str]:
     """Looks up a series of XPaths by ID, gets the text from each of the elements, and stores them in ctx.data."""
     if len(xpath_ids) != 1:
         elements = []
@@ -168,7 +170,7 @@ def scrape_text(*xpath_ids: str, savemap: dict[str, str] = None) -> list[str]:
         return elements
     xpath_id = xpath_ids[0]
     xpath = ctx.config.xpath(xpath_id)
-    if (
+    if link_check and (
         xpath.endswith("@href")
         or ctx.config.is_id(xpath_id)
         and (xpath_id.lower().find("link") != -1 or xpath_id.lower().find("url") != -1)
@@ -214,7 +216,7 @@ def scrape_links(*xpath_ids, savemap: dict[str, str] = None) -> list[str]:
         return elements
     xpath_id = xpath_ids[0]
     column_id = ctx.savemap_lookup(xpath_id, savemap)
-    links = scrape_text(xpath_id, savemap=savemap)
+    links = scrape_text(xpath_id, savemap=savemap, link_check=False)
     ctx.data[column_id] = [
         ScrapeString(ctx.scraper.make_link_absolute(link))
         for link in ctx.data[column_id]
