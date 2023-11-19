@@ -68,6 +68,14 @@ class WebScraper:
         if config.default_link is None:
             return None  # The company cannot be scraped
         context = ScrapeContext()
+        if ctx.settings.scrape_companies is not None:
+            found = False
+            for name in ctx.settings.scrape_companies:
+                if name.lower() == company_name.lower():
+                    found = True
+                    break
+            if not found:
+                return None  # The company should be ignored
         context.config = config
         context.scraper = self
         context.robots_txt.set_url(config.default_link)
@@ -276,14 +284,6 @@ class WebScraper:
         ctx = self.generate_context(company_name)
         if ctx is None:
             return None
-        if ctx.settings.scrape_companies is not None:
-            found = False
-            for name in ctx.settings.scrape_companies:
-                if name.lower() == company_name.lower():
-                    found = True
-                    break
-            if not found:
-                return None
         self.wait = WebDriverWait(self.driver, ctx.settings.timeout)
         pipelines = get_pipelines_for_company(company_name)
         try:
