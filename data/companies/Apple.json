@@ -20,9 +20,9 @@
   },
   "regexes": {
     "description": {
-      "pattern": "(Role Number:\\d*\\n)([\\s\\S]*)",
-      "group": 2,
-      "multiline": true
+      "pattern": "Role Number:\\d*(.*)",
+      "group": 1,
+      "dot_all": true
     }
   },
   "unique": [

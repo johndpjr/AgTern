@@ -20,17 +20,17 @@
   },
   "regexes": {
     "description": {
-      "pattern": "(Job Overview\\n*)([\\s\\S]+)(\\n*Job ID)",
-      "group": 2,
-      "multiline": true
+      "pattern": "Job Overview\\n*(.*)\\n*Job ID",
+      "group": 1,
+      "dot_all": true
     },
     "company_job_id": {
-      "pattern": "(Job ID )(.*)",
-      "group": 2
+      "pattern": "Job ID (.*)",
+      "group": 1
     },
     "post_date": {
-      "pattern": "(Date posted )(.*)",
-      "group": 2
+      "pattern": "Date posted (.*)",
+      "group": 1
     }
   },
   "scrape": [

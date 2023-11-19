@@ -25,7 +25,7 @@
     },
     "description": {
       "pattern": "Job Description(.*)",
-      "multiline": true,
+      "dot_all": true,
       "group": 1
     }
   },

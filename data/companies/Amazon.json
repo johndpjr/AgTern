@@ -32,7 +32,8 @@
     },
     "description": {
       "pattern": "DESCRIPTION(.*)",
-      "group": 1
+      "group": 1,
+      "dot_all": true
     }
   },
   "unique": [
