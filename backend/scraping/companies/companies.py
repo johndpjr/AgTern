@@ -1,4 +1,5 @@
 from backend.scraping.actions import *
+from backend.scraping.context import ctx
 from backend.scraping.pipelines import *
 
 
@@ -8,6 +9,8 @@ def default_scrape():
 
 def default_process():
     get_tags("title", "description")
+    # Strip whitespace from either side of all columns
+    ctx.data = {key: value.strip() for key, value in ctx.data.items()}
 
 
 @scrape_internships("Allstate")
@@ -78,6 +81,21 @@ def scrape_att():
 @process_internship("AT&T")
 def process_att():
     match("description", "company_job_id", "post_date")
+    default_process()
+
+
+@scrape_internships("Boeing")
+def scrape_boeing():
+    scrape_text("title", "company_job_id", "location", "post_date")
+    for link in scrape_links("posting_link"):
+        goto(link)
+        scrape_text("description", "category")
+        scrape_links("apply_link")
+
+
+@process_internship("Boeing")
+def process_boeing():
+    match("category", "description")
     default_process()
 
 
