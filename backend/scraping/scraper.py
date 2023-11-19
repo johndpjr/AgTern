@@ -67,7 +67,8 @@ class WebScraper:
         config = get_config(company_name)
         if config.default_link is None:
             return None  # The company cannot be scraped
-        context = ScrapeContext()
+        # noinspection PyShadowingNames
+        ctx = ScrapeContext()
         if ctx.settings.scrape_companies is not None:
             found = False
             for name in ctx.settings.scrape_companies:
@@ -76,27 +77,27 @@ class WebScraper:
                     break
             if not found:
                 return None  # The company should be ignored
-        context.config = config
-        context.scraper = self
-        context.robots_txt.set_url(config.default_link)
+        ctx.config = config
+        ctx.scraper = self
+        ctx.robots_txt.set_url(config.default_link)
         # noinspection PyBroadException
         try:
-            self.goto(context.robots_txt.url, ignore_robots_txt=True)
+            self.goto(ctx.robots_txt.url, ignore_robots_txt=True)
         except Exception:
             LOG.error(
-                f"Request for robots.txt located at {context.robots_txt.url} timed out!"
+                f"Request for robots.txt located at {ctx.robots_txt.url} timed out!"
             )
         # noinspection PyBroadException
         try:
-            LOG.info(f"Parsing {context.robots_txt.url}")
-            context.robots_txt.parse(self.scrape_xpath("//body")[0])
+            LOG.info(f"Parsing {ctx.robots_txt.url}")
+            ctx.robots_txt.parse(self.scrape_xpath("//body")[0])
         except Exception:
             LOG.error(f"robots.txt parsing failed!")
             LOG.error(traceback.format_exc())
-        LOG.info(f"Crawl-Delay: {context.robots_txt.crawl_delay}")
-        if not context.valid():
+        LOG.info(f"Crawl-Delay: {ctx.robots_txt.crawl_delay}")
+        if not ctx.valid():
             raise Exception("The generated ScrapeContext is invalid!")
-        return context
+        return ctx
 
     def signal_handler(self, signal_id=None, frame=None):
         LOG.error("Interrupt detected. Aborting!")
