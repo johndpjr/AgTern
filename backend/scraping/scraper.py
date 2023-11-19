@@ -115,30 +115,7 @@ class WebScraper:
     def make_link_absolute(self, link: str):
         """Makes a link absolute relative to the current URL.
         If link is already an absolute URL, it is returned unchanged."""
-        relative_url = urlparse(link)
-        current_url = urlparse(self.driver.current_url)
-        scheme = relative_url.scheme if relative_url.scheme else current_url.scheme
-        netloc = relative_url.netloc if relative_url.netloc else current_url.netloc
-        path = relative_url.path if relative_url.path else current_url.path
-        params = relative_url.params if relative_url.params else current_url.params
-        query = relative_url.query if relative_url.query else current_url.query
-        fragment = (
-            relative_url.fragment if relative_url.fragment else current_url.fragment
-        )
-        absolute_link = ""
-        if scheme:
-            absolute_link += scheme + "://"
-        absolute_link += netloc
-        absolute_link += path
-        if not relative_url.path:
-            # The following are page-specific, so don't use them if the path changed
-            if params:
-                absolute_link += ";" + params
-            if query:
-                absolute_link += "?" + query
-            if fragment:
-                absolute_link += "#" + query
-        return absolute_link
+        return self.js(f"return new URL('{link}',window.location.href).href")
 
     def goto(self, link: str, ignore_robots_txt: bool = False):
         """Navigates to a link.
