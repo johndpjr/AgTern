@@ -4,7 +4,7 @@ from typing import Union
 
 from pydantic import ValidationError
 
-from backend.app.utils import LOG, DataFolder
+from backend.app.utils import LOG, DataFile, DataFolder
 
 from .models import CompanyScrapeConfigModel
 
@@ -40,6 +40,22 @@ def remove_config(company_name: str):
         )
 
 
+def load_config(file: DataFile) -> dict:
+    """Loads the json from the given file and preprocesses it. Raises JSONDecodeError on failure."""
+    json = file.load_json()
+    if isinstance(json, list):
+        raise JSONDecodeError("Expected JSON object, not list", file.name, 0)
+    for required_prop in ["$schema", "company", "unique"]:
+        if required_prop not in json:
+            LOG.warn(f'{file.name} does not have a "{required_prop}" property!')
+    if "company" in json and isinstance(json["company"], str):
+        json["company"] = {"name": json["company"]}
+    if "regex" in json and isinstance(json["regex"], dict):
+        for name, value in json["regex"].items():
+            if isinstance(value, str):
+                json["regex"][name] = {"pattern": value}
+
+
 def load_configs():
     """Attempts to load all scrape configuration json files from data/companies and store them in the config registry. Logs errors for invalid configs. Returns all of the configs that have been loaded."""
     global configs_loaded
@@ -53,14 +69,12 @@ def load_configs():
         if (
             not file.extension == ".json"
             or file.name_without_extension.lower().endswith("schema")
+            or file.name.startswith("_")
         ):
             continue
         # noinspection PyBroadException
         try:
-            json = file.load_json()
-            for required_prop in ["$schema", "company", "unique"]:
-                if required_prop not in json:
-                    LOG.warn(f'{file.name} does not have a "{required_prop}" property!')
+            json = load_config(file)
             register_config(CompanyScrapeConfigModel(**json))
         except (ValidationError, JSONDecodeError) as e:
             LOG.error(

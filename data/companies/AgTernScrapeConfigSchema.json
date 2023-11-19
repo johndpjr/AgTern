@@ -38,8 +38,7 @@
       "type": "object",
       "patternProperties": {
         ".*": {
-          "type": "object",
-          "$comment": "TODO: Support type ['object', 'string']",
+          "type": [ "object", "string" ],
           "properties": {
             "pattern": {
               "type": "string",
