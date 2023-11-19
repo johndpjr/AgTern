@@ -116,7 +116,7 @@ def click(xpath_id: str, must_exist: bool = True):
     i = 0
     for element in elements:
         i += 1
-        LOG.info(f"Clicking element {i}/{len(elements)}...")
+        LOG.info(f"Clicking {xpath_id} {i}/{len(elements)}...")
         if must_exist:
             ctx.scraper.js("arguments[0].click()", element)
             time.sleep(0.25)
@@ -225,7 +225,7 @@ def scrape_links(*xpath_ids, savemap: dict[str, str] = None) -> list[str]:
 
 
 @raise_on_failure
-def match(*regex_ids: str, savemap: dict[str, str] = None) -> str:
+def match(*regex_ids: str, savemap: dict[str, str] = None) -> Union[str, list[str]]:
     """Looks up a series of RegExes by ID and filters each column in ctx.data according to those IDs."""
     if len(regex_ids) != 1:
         strings = []
