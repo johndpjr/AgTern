@@ -234,6 +234,10 @@ def match(*regex_ids: str, savemap: dict[str, str] = None) -> Union[str, list[st
         return strings
     regex_id = regex_ids[0]
     regex = ctx.config.regex(regex_id)
+    if regex_id not in ctx.data:
+        raise ActionFailure(
+            f"Cannot match {regex_id} regex, column {regex_id} does not exist!"
+        )
     string = ctx.data[regex_id]
     LOG.info(f"Matching {regex_id} regex")
     result = regex.pattern.search(string)
