@@ -9,7 +9,6 @@ from multiprocessing import Process
 from threading import Thread
 from time import time
 from typing import Any
-from urllib.parse import urlparse
 
 import selenium.webdriver.support.expected_conditions as condition
 from pydantic import ValidationError
@@ -19,7 +18,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.wait import WebDriverWait
 from undetected_chromedriver import Chrome
-from webdriver_manager.chrome import ChromeDriverManager
 
 from backend.app.crud import crud
 from backend.app.models import Job as JobModel
@@ -51,10 +49,7 @@ class WebScraper:
     def start(self):
         """Starts a new Chrome instance."""
         # TODO: Support multiple drivers?
-        driver_path = ChromeDriverManager().install()
-        self.driver = Chrome(
-            driver_executable_path=driver_path, options=self.driver_options
-        )
+        self.driver = Chrome(options=self.driver_options)
         self.wait = WebDriverWait(self.driver, 5)
 
     @property
