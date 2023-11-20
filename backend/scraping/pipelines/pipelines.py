@@ -1,7 +1,16 @@
+from backend.app.utils import LOG
 from backend.scraping.actions.actions import ActionFailure, goto_default, sleep
 from backend.scraping.context.context import ctx
 
 from .pipeline_registry import pipeline_decorator
+
+
+def warn_if_unused(id_type: str):
+    unused = ", ".join(ctx.config.unused_ids(id_type))
+    if len(unused) != 0:
+        LOG.warn(
+            f"The following {ctx.config.company_name} {id_type} were unused: {unused}"
+        )
 
 
 def before_scrape():
@@ -26,8 +35,17 @@ def after_scrape():
     ctx.data = [
         dict(zip(ctx.data.keys(), internship)) for internship in zip(*ctx.data.values())
     ]
-    # TODO: Warn when xpaths, regexes, etc. are unused in the pipeline
+    warn_if_unused("xpaths")
+    warn_if_unused("links")
+
+
+def before_process():
+    pass
+
+
+def after_process():
+    warn_if_unused("regexes")
 
 
 scrape_internships = pipeline_decorator("scrape", before_scrape, after_scrape)
-process_internship = pipeline_decorator("process")
+process_internship = pipeline_decorator("process", before_process, after_process)

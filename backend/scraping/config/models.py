@@ -85,6 +85,8 @@ class CompanyScrapeConfigModel(BaseModel):
     regexes: dict[str, RegexConfigModel] = {}
     unique: list[str] = []
 
+    _used_ids: dict[str, list[str]] = {"links": [], "xpaths": [], "regexes": []}
+
     @root_validator(pre=True)
     def validate(cls, values):
         """Transforms string aliases into config objects."""
@@ -106,11 +108,11 @@ class CompanyScrapeConfigModel(BaseModel):
         if not isinstance(self.links, dict) or len(self.links.values()) == 0:
             return None
         if "internships" in self.links:
-            return self.links["internships"]
+            return self.link("internships")
         if "home" in self.links:
-            return self.links["home"]
-        return next(
-            iter(self.links.values())
+            return self.link("home")
+        return self.link(
+            next(iter(self.links.keys()))
         )  # First value in dict (at least for CPython 3.6+)
 
     # noinspection PyShadowingBuiltins
@@ -125,8 +127,23 @@ class CompanyScrapeConfigModel(BaseModel):
             return name
         source = getattr(self, source_name)
         if name in source:
+            if (
+                source_name in self._used_ids
+                and name not in self._used_ids[source_name]
+            ):
+                self._used_ids[source_name].append(name)
             return source[name]
         raise ConfigLookupError(f"{self.company_name.lower()}:{source_name}:{name}")
+
+    def unused_ids(self, id_type: str) -> list[str]:
+        if id_type not in self._used_ids:
+            return []
+        id_mapping: dict[str, Any] = getattr(self, id_type)
+        all_ids = list(id_mapping.keys())
+        used_ids = self._used_ids[id_type]
+        for id in used_ids:
+            all_ids.remove(id)
+        return all_ids
 
     def link(self, name: str):
         return self.lookup("links", name)
