@@ -296,7 +296,9 @@ class WebScraper:
         delta_time = int(end_time - start_time)
         minutes = delta_time // 60
         seconds = delta_time % 60
-        LOG.info(f"Scraping and processing for {company_name} took {minutes}:{seconds}")
+        LOG.info(
+            f"Scraping and processing for {company_name} took {minutes}:{seconds:02d}"
+        )
         return ctx
 
     def __enter__(self):
@@ -353,7 +355,7 @@ def scrape_all(args: Namespace):
             minutes = delta_time // 60
             seconds = delta_time % 60
             LOG.info("SCRAPING COMPLETE!")
-            LOG.info(f"Scraping ALL companies took {minutes}:{seconds}")
+            LOG.info(f"Scraping ALL companies took {minutes}:{seconds:02d}")
 
 
 def start_scraper(args: Namespace):
