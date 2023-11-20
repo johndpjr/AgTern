@@ -142,7 +142,8 @@ class CompanyScrapeConfigModel(BaseModel):
         all_ids = list(id_mapping.keys())
         used_ids = self._used_ids[id_type]
         for id in used_ids:
-            all_ids.remove(id)
+            if id in all_ids:
+                all_ids.remove(id)
         return all_ids
 
     def link(self, name: str):
