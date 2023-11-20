@@ -29,6 +29,7 @@ def process_allstate():
 
 @scrape_internships("Amazon")
 def scrape_amazon():
+    scroll_to_bottom()
     while True:
         scrape_text("title", "location", "post_date")
         scrape_links("posting_link")
