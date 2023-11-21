@@ -2,7 +2,6 @@ bcrypt==4.0.1
 celery==5.3.4
 fastapi==0.95.2
 nltk==3.8.1
-pandas==1.5.0
 passlib[bcrypt]==1.7.4
 pre-commit==3.5.0
 protego==0.3.0
@@ -10,7 +9,6 @@ pydantic==1.10.2
 python-dotenv==1.0.0
 python-jose[cryptography]==3.3.0
 python-multipart==0.0.6
-requests==2.31.0
 selenium==4.15.2
 sqlalchemy==1.4.42
 undetected-chromedriver==3.5.4
