@@ -7,7 +7,6 @@ from argparse import Namespace
 from datetime import datetime
 from multiprocessing import Process
 from threading import Thread
-from time import time
 from typing import Any
 
 import selenium.webdriver.support.expected_conditions as condition
@@ -21,7 +20,7 @@ from undetected_chromedriver import Chrome
 
 from backend.app.crud import crud
 from backend.app.models import Job as JobModel
-from backend.app.utils import LOG
+from backend.app.utils import LOG, Timer
 
 from .actions import ActionFailure
 from .companies import *  # Do not remove!
@@ -246,7 +245,8 @@ class WebScraper:
     def scrape_company(self, company_name: str):
         """Navigates to the given link and starts scraping based on the scrape config.
         Returns the final context or None if scraping could not be performed."""
-        start_time = time()
+        timer = Timer()
+        timer.start()
         # noinspection PyShadowingNames
         ctx = self.generate_context(company_name)
         if ctx is None:
@@ -287,18 +287,15 @@ class WebScraper:
             ctx.data = final_data
         if ctx.settings.print_result:
             LOG.info(json.dumps(ctx.data, indent=2))
-        end_time = time()
-        delta_time = int(end_time - start_time)
-        minutes = delta_time // 60
-        seconds = delta_time % 60
-        LOG.info(
-            f"Scraping and processing for {company_name} took {minutes}:{seconds:02d}"
-        )
+        timer.stop()
+        LOG.info(f"Scraping and processing for {company_name} took {timer.time_passed}")
         return ctx
 
     def __enter__(self):
         """Called when a WebScraper is created in a 'with' statement."""
         self.start()
+        # Ensure driver is closed if interrupted:
+        signal.signal(signal.SIGINT, self.signal_handler)
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
@@ -315,18 +312,36 @@ class WebScraper:
             LOG.error(traceback.format_exc())
 
 
-def scrape_all(args: Namespace):
-    """Scrapes all companies in scraping config if actions are defined there.
-    Scraped jobs are stored in a database."""
-    start_time = time()
+def scrape_company(args: Namespace, company_name: str):
+    """Launches a new Chrome instance and scrapes a company according to its scraping config."""
     with WebScraper(args.save_jobs, args.headless) as scraper:
-        # Ensure driver is closed if interrupted:
-        signal.signal(signal.SIGINT, scraper.signal_handler)
+        config = get_config(company_name)
+        company_name = config.company_name
+        # noinspection PyBroadException
+        try:
+            # noinspection PyShadowingNames
+            ctx = scraper.scrape_company(company_name)
+            if ctx is None:  # No config for company or no "scrape" pipeline
+                LOG.error(f"Skipped scraping {company_name}")
+                return
+            ctx.execute(scraper.commit_jobs)
+        except Exception:
+            LOG.error(f"Error scraping {company_name}:")
+            LOG.error(traceback.format_exc())
+            LOG.error(f"Scraping {company_name} aborted!")
+
+
+def scrape_all(args: Namespace):
+    """Launches a new Chrome instances and scrapes all companies that have valid scraping configs."""
+    timer = Timer()
+    timer.start()
+    with WebScraper(args.save_jobs, args.headless) as scraper:
         configs = get_configs()
         something_succeeded = False
         skipped = []
         for config in configs:
             company_name = config.company_name
+            # noinspection PyBroadException
             try:
                 # noinspection PyShadowingNames
                 ctx = scraper.scrape_company(company_name)
@@ -335,22 +350,17 @@ def scrape_all(args: Namespace):
                     continue
                 ctx.execute(scraper.commit_jobs)
                 something_succeeded = True
-            except ActionFailure as e:
+            except Exception:
                 LOG.error(f"Error scraping {company_name}:")
                 LOG.error(traceback.format_exc())
                 LOG.error(f"Scraping {company_name} aborted!")
-            if len(skipped) > 0:
-                skipped_company_names = ", ".join(skipped)
-                LOG.error(
-                    f"The following companies were skipped: {skipped_company_names}"
-                )
+        if len(skipped) > 0:
+            skipped_company_names = ", ".join(skipped)
+            LOG.error(f"The following companies were skipped: {skipped_company_names}")
         if something_succeeded:
-            end_time = time()
-            delta_time = int(end_time - start_time)
-            minutes = delta_time // 60
-            seconds = delta_time % 60
+            timer.stop()
             LOG.info("SCRAPING COMPLETE!")
-            LOG.info(f"Scraping ALL companies took {minutes}:{seconds:02d}")
+            LOG.info(f"Scraping ALL companies took {timer.time_passed}")
 
 
 def start_scraper(args: Namespace):
