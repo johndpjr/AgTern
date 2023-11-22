@@ -1,47 +1,18 @@
 from __future__ import annotations
 
-import contextvars
+from contextvars import Context, ContextVar
 from typing import TYPE_CHECKING, Any, Callable, Union
 
 from backend.app.database import DatabaseSession
 
 from .robots_txt import RobotsTxt
+from .settings import ScrapeSettings
 
 if TYPE_CHECKING:
     from backend.scraping import WebScraper
     from backend.scraping.config import CompanyScrapeConfigModel
 
-ctxvar = contextvars.ContextVar("ctx")
-
-
-class ScrapeSettings:
-    # noinspection PyTypeChecker
-    def __init__(self):
-        # Set the number of seconds that the web scraper waits for elements to exist before raising an error
-        self.timeout: float = 5
-
-        # Limit the number of links visited, jobs processed, etc
-        self.max_internships: int = 3
-
-        # Override the crawl_delay specified in robots.txt
-        # WARNING! Setting this too low WILL get you blocked on certain websites!
-        self.crawl_delay_override: float = None
-
-        # Prints the processed Job objects as JSON to the console before writing to the database
-        # It is recommended to also set max_internships to avoid flooding the console
-        self.print_result: bool = False
-
-        # Enables printing tracebacks in addition to error messages when errors are encountered during scraping
-        # Can sometimes be useful when debugging, but most of the time it is too much information
-        self.print_tracebacks: bool = False
-
-        # This is a case-insensitive list of the names of the companies that should be scraped
-        # If None, everything is scraped
-        # If [], nothing is scraped
-        self.scrape_companies: list[str] = None
-
-
-default_settings = ScrapeSettings()
+ctxvar = ContextVar("ctx")
 
 
 class ScrapeContext:
@@ -137,7 +108,7 @@ def wrap_with_context(function: Callable, context: ScrapeContext) -> Callable:
     """Wraps a function so that it is aware of the ScrapeContext for this company."""
 
     def wrapper(*args, **kwargs):
-        local_ctx = contextvars.Context()
+        local_ctx = Context()
 
         def modified_function():
             ctxvar.set(context)
@@ -152,7 +123,7 @@ def call_with_context(
     function: Callable, context: ScrapeContext, *args, **kwargs
 ) -> Any:
     """Calls a function with a ScrapeContext."""
-    local_ctx = contextvars.Context()
+    local_ctx = Context()
 
     def modified_function():
         ctxvar.set(context)

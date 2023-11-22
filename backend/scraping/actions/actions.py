@@ -182,9 +182,9 @@ def scrape_text(
         )
     if xpath_id not in ctx.data:
         ctx.data[xpath_id] = []
-    if ctx.settings.max_internships is not None:
-        if len(ctx.data[xpath_id]) > ctx.settings.max_internships:
-            ctx.data[xpath_id] = ctx.data[xpath_id][: ctx.settings.max_internships]
+    if ctx.settings.max_jobs is not None:
+        if len(ctx.data[xpath_id]) > ctx.settings.max_jobs:
+            ctx.data[xpath_id] = ctx.data[xpath_id][: ctx.settings.max_jobs]
             return []
     try:
         result = ctx.scraper.scrape_xpath(xpath)
@@ -197,9 +197,9 @@ def scrape_text(
             f"{ctx.scraper.current_url}"
         ) from None
     LOG.info(f"Found {len(result)}x {xpath_id}")
-    if ctx.settings.max_internships is not None:
-        if len(ctx.data[xpath_id]) + len(result) > ctx.settings.max_internships:
-            result = result[: ctx.settings.max_internships - len(ctx.data[xpath_id])]
+    if ctx.settings.max_jobs is not None:
+        if len(ctx.data[xpath_id]) + len(result) > ctx.settings.max_jobs:
+            result = result[: ctx.settings.max_jobs - len(ctx.data[xpath_id])]
     result = [ScrapeString(value) for value in result]
     ctx.data[ctx.savemap_lookup(xpath_id, savemap)] += result
     return result
