@@ -1,5 +1,24 @@
+a {
+  text-decoration: none;
+  display: inline-block;
+  color: inherit;
+}
+
+.title-container {
+  display: flex;
+  flex-direction: row;
+
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.title-container:hover {
+  text-decoration: none;
+}
+
 .toolbar-spacer {
-    flex: 0.75 1 auto;
+  flex: 0.75 1 auto;
 }
 
 .toolbar-bttn-container {
