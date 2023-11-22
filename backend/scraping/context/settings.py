@@ -11,7 +11,7 @@ class ScrapeSettings:
 
         # Limit the number of links visited, jobs processed, etc
         # If None, all internships are scraped
-        self.max_jobs: int = 3
+        self.max_jobs: int = None
 
         # Override the crawl_delay specified in robots.txt
         # WARNING! Setting this too low WILL get you blocked on some websites!
