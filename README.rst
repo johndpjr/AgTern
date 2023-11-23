@@ -61,6 +61,7 @@
       </h3>
 
    .. raw:: html
+
       <div align="center">
         <img src="images/agtern-logo.png" width="80" height="80" />
       </div>
