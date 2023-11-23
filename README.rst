@@ -53,7 +53,7 @@
    .. raw:: html
 
       <div align="center">
-        <img src="docs/source/images/agtern-logo.png" width="80" height="80" />
+        <img src="source/images/agtern-logo.png" width="80" height="80" />
       </div>
 
    .. raw:: html
