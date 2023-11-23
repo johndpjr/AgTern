@@ -91,20 +91,6 @@
 
    <!-- TABLE OF CONTENTS -->
 
-Table of Contents
------------------
-
-- `About The Project`_
-- `Current Features`_
-- `Images`_
-- `Built With`_
-- `Getting Started`_
-- `Installation`_
-- `Running`_
-- `Contributing`_
-- `Contact`_
-- `Acknowledgments`_
-
 .. raw:: html
 
    <details>
