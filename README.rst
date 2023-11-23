@@ -51,15 +51,16 @@
 .. container::
 
    .. raw:: html
-
-      <h3 align="center">
-
-   .. raw:: html
-
       <div align="center">
         <img src="images/agtern-logo.png" width="80" height="80" />
       </div>
+
+      <h3 align="center">
+   
    AgTern
+
+   .. raw:: html
+
       </h3>
 
    .. raw:: html
