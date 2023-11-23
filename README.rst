@@ -69,8 +69,8 @@
    .. raw:: html
 
       <div align="center">
-        <img src="url_of_your_image.jpg" width="80" height="80" />
-    </div>
+        <img src="images/agtern-logo.png" width="80" height="80" />
+      </div>
 
    Howdy! AgTern is a program that helps students find, track, and apply
    to internships by scraping the web for job postings. Based off a
