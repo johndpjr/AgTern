@@ -244,22 +244,6 @@ Acknowledgments
 
    <!-- ABOUT THE PROJECT -->
 
-Table of Contents
------------------
-
-- `About The Project`_
-- `Current Features`_
-- `Images`_
-- `Built With`_
-- `Getting Started`_
-- `Installation`_
-- `Running`_
-- `Contributing`_
-- `Contact`_
-- `Acknowledgments`_
-
-.. _About The Project:
-
 About The Project
 =================
 
