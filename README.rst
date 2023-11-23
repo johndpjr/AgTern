@@ -62,6 +62,97 @@
          AgTern
       </h3>
 
+.. raw:: html
+
+   <div align="center">
+      ...
+      </p>
+   </div>
+
+Table of Contents
+-----------------
+
+- `About The Project`_
+- `Current Features`_
+- `Images`_
+- `Built With`_
+- `Getting Started`_
+- `Installation`_
+- `Running`_
+- `Contributing`_
+- `Contact`_
+- `Acknowledgments`_
+
+.. _About The Project:
+
+About The Project
+=================
+
+...
+
+.. _Current Features:
+
+Current Features
+----------------
+
+...
+
+.. _Images:
+
+Images
+------
+
+...
+
+.. _Built With:
+
+Built With
+----------
+
+...
+
+.. _Getting Started:
+
+Getting Started
+===============
+
+...
+
+.. _Installation:
+
+Installation
+------------
+
+...
+
+.. _Running:
+
+Running
+=======
+
+...
+
+.. _Contributing:
+
+Contributing
+============
+
+...
+
+.. _Contact:
+
+Contact
+=======
+
+...
+
+.. _Acknowledgments:
+
+Acknowledgments
+===============
+
+...
+
 
 .. raw:: html
 
