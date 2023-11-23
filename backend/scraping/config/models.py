@@ -1,0 +1,156 @@
+import re
+from typing import *
+
+from pydantic import *
+from pydantic import AnyUrl
+
+
+class ConfigLookupError(KeyError):
+    def __init__(self, *args):
+        super().__init__(*args)
+
+
+# TODO: Update these validators for Pydantic 2 (should be less buggy)
+class RegexConfigModel(BaseModel):
+    pattern: re.Pattern  # Automatically compiles regex
+    group: Union[
+        conint(ge=0, lt=100), str
+    ] = 0  # Can be 0 (whole match), 1-99 (group number), or str (group name)
+    format: str = None  # Specify either format or group
+    default: str = None  # String to use if the match fails
+    _use_default_on_failure: bool = False
+
+    # Regex flags
+    # See https://docs.python.org/3/howto/regex.html#compilation-flags
+    ascii: bool = False
+    dot_all: bool = False
+    ignore_case: bool = False
+    locale: bool = False
+    multiline: bool = False
+    verbose: bool = False
+
+    _flags: int = 0
+
+    @root_validator(pre=True)
+    def validate_format(cls, values):
+        if "group" in values and "format" in values:
+            raise ValueError(
+                'Both "group" and "format" were specified. '
+                "Either specify a group id or a format string!"
+            )
+        return values
+
+    @root_validator(skip_on_failure=True)
+    def validate(cls, values):
+        if "pattern" in values:
+            pattern = values["pattern"]
+            if isinstance(pattern, re.Pattern):
+                pattern = pattern.pattern
+            # Recompile regex with specified flags
+            flags = 0
+            all_flags = {
+                "ascii": re.ASCII,
+                "dot_all": re.DOTALL,
+                "ignore_case": re.IGNORECASE,
+                "multiline": re.MULTILINE,
+                "verbose": re.VERBOSE,
+            }
+            for flag in all_flags:
+                if flag in values:
+                    if values[flag]:
+                        flags |= all_flags[flag]
+            values["_flags"] = flags
+            values["_use_default_on_failure"] = "default" in values
+            values["pattern"] = re.compile(pattern, flags)
+            return RegexConfigModel.construct(**values)
+
+    @property
+    def flags(self):
+        return self._flags
+
+    @property
+    def use_default_on_failure(self):
+        return self._use_default_on_failure
+
+
+class CompanyConfigModel(BaseModel):
+    name: str
+    # TODO: Add company metadata here (category, tags, etc)
+
+
+class CompanyScrapeConfigModel(BaseModel):
+    company: CompanyConfigModel
+    links: dict[str, AnyUrl] = {}
+    xpaths: dict[str, str] = {}
+    regexes: dict[str, RegexConfigModel] = {}
+    unique: list[str] = []
+
+    _used_ids: dict[str, list[str]] = {"links": [], "xpaths": [], "regexes": []}
+
+    @root_validator(pre=True)
+    def validate(cls, values):
+        """Transforms string aliases into config objects."""
+        # TODO: Fix, possibly update to Pydantic 2 validator
+        if "company" in values and isinstance(values["company"], str):
+            values["company"] = CompanyConfigModel(name=values["company"])
+        if "regexes" in values and isinstance(values["regexes"], dict):
+            for key, value in values["regexes"].items():
+                if isinstance(value, str):
+                    values["regexes"][key] = RegexConfigModel(pattern=value)
+        return values
+
+    @property
+    def company_name(self):
+        return self.company.name
+
+    @property
+    def default_link(self) -> Union[AnyUrl, None]:
+        if not isinstance(self.links, dict) or len(self.links.values()) == 0:
+            return None
+        if "internships" in self.links:
+            return self.link("internships")
+        if "home" in self.links:
+            return self.link("home")
+        return self.link(
+            next(iter(self.links.keys()))
+        )  # First value in dict (at least for CPython 3.6+)
+
+    # noinspection PyShadowingBuiltins
+    @staticmethod
+    def is_id(id: str):
+        return type(id) == str
+
+    def lookup(self, source_name: str, name: str):
+        if not self.is_id(
+            name
+        ):  # If name is a subclass of str (like ScrapeString), return it
+            return name
+        source = getattr(self, source_name)
+        if name in source:
+            if (
+                source_name in self._used_ids
+                and name not in self._used_ids[source_name]
+            ):
+                self._used_ids[source_name].append(name)
+            return source[name]
+        raise ConfigLookupError(f"{self.company_name.lower()}:{source_name}:{name}")
+
+    def unused_ids(self, id_type: str) -> list[str]:
+        if id_type not in self._used_ids:
+            return []
+        id_mapping: dict[str, Any] = getattr(self, id_type)
+        all_ids = list(id_mapping.keys())
+        used_ids = self._used_ids[id_type]
+        for id in used_ids:
+            if id in all_ids:
+                all_ids.remove(id)
+        return all_ids
+
+    def link(self, name: str):
+        return self.lookup("links", name)
+
+    def xpath(self, name: str):
+        return self.lookup("xpaths", name)
+
+    def regex(self, name: str):
+        return self.lookup("regexes", name)
