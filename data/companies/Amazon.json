@@ -1,6 +1,45 @@
 {
-  "company": "Amazon",
-  "link": "https://www.amazon.jobs/en/teams/internships-for-students?offset=0&result_limit=10&sort=relevant&country%5B%5D=USA&distanceType=Mi&radius=24km&latitude=&longitude=&loc_group_id=&loc_query=&base_query=&city=&country=&region=&county=&query_options=&",
+  "$schema": "AgTernScrapeConfigSchema.json",
+  "company": {
+    "name": "Amazon"
+  },
+  "links": {
+    "home": "https://www.amazon.com/",
+    "internships": "https://www.amazon.jobs/en/teams/internships-for-students?offset=0&result_limit=10&sort=relevant&country%5B%5D=USA&distanceType=Mi&radius=24km&latitude=&longitude=&loc_group_id=&loc_query=&base_query=&city=&country=&region=&county=&query_options=&"
+  },
+  "xpaths": {
+    "next_page": "//nav/button[@data-test-component='StencilPaginationButton'][2]",
+    "title": "//h3/a[contains(@class,'header-module_title')]",
+    "posting_link": "//h3/a[contains(@class,'header-module_title')]/@href",
+    "location": "//*[local-name()='svg']/*[local-name()='title' and text()='Location']/../../../div[contains(@class,'metadatum-module_text')]",
+    "post_date": "//*[local-name()='svg']/*[local-name()='title' and text()='Calendar']/../../../div[contains(@class,'metadatum-module_text')]",
+    "company_job_id": "//div[@class='details-line']",
+    "description": "//div[@id='job-detail-body']//div[@class='content']",
+    "apply_link": "//a[@id='apply-button']/@href"
+  },
+  "regexes": {
+    "location": {
+      "pattern": "Job ID: \\d+ | (.*)",
+      "group": 1
+    },
+    "company_job_id": {
+      "pattern": "Job ID: (\\d+) | .*",
+      "group": 1
+    },
+    "post_date": {
+      "pattern": "Updated: (.*)",
+      "group": 1
+    },
+    "description": {
+      "pattern": "DESCRIPTION(.*)",
+      "group": 1,
+      "dot_all": true
+    }
+  },
+  "unique": [
+    "company_job_id",
+    "posting_link"
+  ],
   "scrape": [
     {
       "action": "scrape",

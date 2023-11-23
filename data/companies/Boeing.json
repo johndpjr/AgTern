@@ -1,6 +1,38 @@
 {
-  "company": "Boeing",
-  "link": "https://jobs.boeing.com/category/internship-jobs/185/9287/1",
+  "$schema": "AgTernScrapeConfigSchema.json",
+  "company": {
+    "name": "Boeing"
+  },
+  "links": {
+    "home": "https://www.boeing.com/",
+    "internships": "https://jobs.boeing.com/category/internship-jobs/185/9287/1"
+  },
+  "xpaths": {
+    "title": "//span[@class='search-results__job-title']",
+    "posting_link": "//a[@class='search-results__job-link']/@href",
+    "company_job_id": "//a[@class='search-results__job-link']/@data-job-id",
+    "location": "//span[@class='search-results__job-info location']",
+    "post_date": "//span[@class='search-results__job-info date']",
+    "apply_link": "(//a[text()='Apply Now'])[1]/@href",
+    "description": "//div[@id='ats-description']",
+    "category": "//span[@class='job-description__job-info job-category']"
+  },
+  "regexes": {
+    "category": {
+      "pattern": "Category (.*)",
+      "group": 1,
+      "default": ""
+    },
+    "description": {
+      "pattern": "Job Description(.*)",
+      "dot_all": true,
+      "group": 1
+    }
+  },
+  "unique": [
+    "company_job_id",
+    "posting_link"
+  ],
   "scrape": [
     {
       "action": "click",
