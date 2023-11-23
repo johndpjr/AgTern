@@ -246,7 +246,7 @@ Current Features
 Images
 ------
 
-.. figure:: Images/agtern-gui.png
+.. figure:: images/agtern-gui.png
    :alt: AgTern in Action
    :align: center
 
