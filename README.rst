@@ -74,7 +74,7 @@
          student. AgTern was built because searching for internships that
          match your interests and situation can be hard. We wanted the process
          to be as seamless as possible so that students can focus on applying
-         and not searching. 
+         and not searching.
          <br />
          <a href="https://github.com/johndpjr/AgTern"><strong>Explore the docs (TODO)»</strong></a>
          <br />
