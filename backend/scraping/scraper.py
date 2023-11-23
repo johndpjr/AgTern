@@ -332,7 +332,7 @@ def scrape_company(args: Namespace, company_name: str):
 
 
 def scrape_all(args: Namespace):
-    """Launches a new Chrome instances and scrapes all companies that have valid scraping configs."""
+    """Launches a new Chrome instance and scrapes all companies that have valid scraping configs."""
     timer = Timer()
     timer.start()
     with WebScraper(args.save_jobs, args.headless) as scraper:
@@ -364,7 +364,7 @@ def scrape_all(args: Namespace):
 
 
 def start_scraper(args: Namespace):
-    load_configs()
+    load_configs(args.include_companies, args.exclude_companies)
     LOG.info("Starting scraper...")
     if args.scrape_only:
         scrape_all(args)  # Run in main thread

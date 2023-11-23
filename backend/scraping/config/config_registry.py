@@ -57,8 +57,10 @@ def load_config(file: DataFile) -> dict:
     return json
 
 
-def load_configs():
-    """Attempts to load all scrape configuration json files from data/companies and store them in the config registry. Logs errors for invalid configs. Returns all of the configs that have been loaded."""
+def load_configs(included: list[str] | None, excluded: list[str] | None):
+    """Attempts to load all scrape configuration json files from data/companies and store them in the config registry.
+    Logs errors for invalid configs. Returns all of the configs that have been loaded.
+    """
     global configs_loaded
     if configs_loaded:
         raise Exception(
@@ -71,6 +73,8 @@ def load_configs():
             not file.extension == ".json"
             or file.name_without_extension.lower().endswith("schema")
             or file.name.startswith("_")
+            or (included and file.name_without_extension not in included)
+            or (excluded and file.name_without_extension in excluded)
         ):
             continue
         # noinspection PyBroadException
