@@ -318,13 +318,18 @@ Part 2: Backend Setup
 ~~~~~~~~~~~~~~~~~~~~~
 
 1. Install `Python <https://www.python.org/downloads/>`__
-
 2. Create a virtual environment and activate it (run at repo root)
-   \```sh pip3 install virtualenv python3 -m virtualenv venv virtualenv
-   venv
 
-   # Linux & MacOS source venv/bin/activate # Windows
-   .:raw-latex:`\venv`:raw-latex:`\Scripts`:raw-latex:`\activate` \``\`
+   .. code-block:: shell
+
+      pip3 install virtualenv
+      python3 -m virtualenv venv
+      virtualenv venv
+
+      # Linux & MacOS
+      source venv/bin/activate
+      # Windows
+      .\\venv\\Scripts\\activate
 
 3. Install Python packages: ``pip3 install -r requirements.txt``
 
@@ -333,66 +338,62 @@ Part 3: Frontend Setup
 
 1. Install `NodeJS <https://nodejs.org/en>`__
 2. Navigate to the ``frontend`` directory
-3. Build the frontend ``sh     npm install     npm run build``
+3. Build the frontend
+
+   .. code-block:: shell
+
+      npm install
+      npm run build
 
 .. raw:: html
 
-   <p align="right">
+   <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-(back to top)
-
-.. raw:: html
-
-   </p>
 
 Running
--------
+=======
 
-*Note: if you are running the program for the first time, you either
-need to download the database (see #file-upload in Discord for file) or
-run a scraping job to populate jobs in a database*
+.. note::
+
+   If you are running the program for the first time, you either need to download the
+   database (see #file-upload in Discord for file) or run a scraping job to populate jobs in a database
 
 Option 1: Command Line
-~~~~~~~~~~~~~~~~~~~~~~
+----------------------
 
-Common commands to run the program (make sure you’re in the ``AgTern``
-directory):
+Common commands to run the program (make sure you're in the ``AgTern`` directory):
 
-**Run frontend and backend:** 1. Navigate to the ``frontend`` directory
-2. ``npm run start`` 3. (Open a new terminal) Run in repo root:
-``python3 -m backend --dev --no-scrape`` 4. Goto ``localhost:8000`` in
-your web browser
+**Run frontend and backend:**
+1. Navigate to the ``frontend`` directory
+2. ``npm run start``
+3. (Open a new terminal) Run in repo root: ``python3 -m backend --dev --no-scrape``
+4. Goto ``localhost:8000`` in your web browser
 
 **Run scraper command (only scrape):**
 ``python3 -m agtern --dev --scrape-only --save-jobs``
 
 Option 2: PyCharm
-~~~~~~~~~~~~~~~~~
+------------------
 
-If you are using `PyCharm <https://www.jetbrains.com/pycharm/>`__ (it’s
-free for students!), run configurations are already defined in the
-``.idea`` folder. You should be able to run all configurations without
-issue.
+If you are using `PyCharm <https://www.jetbrains.com/pycharm/>`__ (it's free for students!), run configurations are already defined in the ``.idea`` folder.
+You should be able to run all configurations without issue.
 
 Option 3: Docker Run
-~~~~~~~~~~~~~~~~~~~~
+--------------------
 
 1. Install `Docker <https://www.docker.com/>`__
 2. Start Docker container: ``docker-compose up``
 3. Goto ``localhost:8000`` in your web browser
 
-*Note: Right now, the container won’t auto-reload (detect local changes
-and rebuild), but this is planned!*
+.. note::
+
+   Right now, the container won't auto-reload (detect local changes and rebuild), but this is planned!
 
 .. raw:: html
 
-   <p align="right">
+   <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-(back to top)
-
-.. raw:: html
-
-   </p>
+   <!-- CONTRIBUTING -->
 
 .. raw:: html
 
@@ -401,41 +402,33 @@ and rebuild), but this is planned!*
 Contributing
 ============
 
-*Contributions are only open to students currently enrolled at Texas A&M
-University, as this is a club project for Aggie Coding Club.*
+*Contributions are only open to students currently enrolled at Texas A&M University, as this is a club project for Aggie Coding Club.*
 
 Contributions give life to the project: without them this project dies.
 
-Our list of tasks can be found on our GitHub `projects
-page <https://github.com/users/johndpjr/projects/2/views/1>`__. Feel
-free to add issues to the project: these can be bugs, feature requests,
-or just observations. If you are interested in a ticket (that is not
-assigned already), assign it to yourself, make your changes, and create
-a pull request completing the task.
+Our list of tasks can be found on our GitHub `projects page <https://github.com/users/johndpjr/projects/2/views/1>`__.
+Feel free to add issues to the project: these can be bugs, feature requests, or just observations.
+If you are interested in a ticket (that is not assigned already), assign it to yourself, make your changes, and
+create a pull request completing the task.
 
-1. Assign the task to yourself and set the status as “In Progress”
-2. Ensure you’re on the ``dev`` branch with the latest changes
-   ``bash     git checkout dev     git pull``
-3. Create your feature branch:
-   ``git checkout -b feature/ticket#/short-description``
+1. Assign the task to yourself and set the status as "In Progress"
+2. Ensure you're on the ``dev`` branch with the latest changes
+
+   .. code-block:: bash
+
+      git checkout dev
+      git pull
+
+3. Create your feature branch: ``git checkout -b feature/ticket#/short-description``
 4. Implement feature/bug fix and stage your changes: ``git add .``
-5. Commit your changes with the following format:
-   ``git commit -m 'AT-ticket#: Add some feature``
+5. Commit your changes with the following format: ``git commit -m 'AT-ticket#: Add some feature``
 6. Push to the remote branch: ``git push``
-7. Open a `pull request <https://github.com/johndpjr/AgTern/pulls>`__ to
-   merge your feature branch into ``dev``
+7. Open a `pull request <https://github.com/johndpjr/AgTern/pulls>`__ to merge your feature branch into ``dev``
 
 .. raw:: html
 
-   <p align="right">
+   <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-(back to top)
-
-.. raw:: html
-
-   </p>
-
-.. raw:: html
 
    <!-- CONTACT -->
 
