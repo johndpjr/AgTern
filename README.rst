@@ -63,19 +63,21 @@
       </h3>
 
 
-   Howdy! AgTern is a program that helps students find, track, and apply
-   to internships by scraping the web for job postings. Based off a
-   student profile (major, graduation date, industry interests, etc.),
-   it retrieves scraped internships that are most relevant to the
-   student. AgTern was built because searching for internships that
-   match your interests and situation can be hard. We wanted the process
-   to be as seamless as possible so that students can focus on applying
-   and not searching. Explore the docs (TODO)» Read the wiki » View Demo
-   · Report Bug
+.. raw:: html
 
-   .. raw:: html
-
+   <div align="center">
+      <p>
+         Howdy! AgTern is a program that helps students find, track, and apply
+         to internships by scraping the web for job postings. Based off a
+         student profile (major, graduation date, industry interests, etc.),
+         it retrieves scraped internships that are most relevant to the
+         student. AgTern was built because searching for internships that
+         match your interests and situation can be hard. We wanted the process
+         to be as seamless as possible so that students can focus on applying
+         and not searching. Explore the docs (TODO)» Read the wiki » View Demo
+         · Report Bug
       </p>
+   </div>
 
 .. raw:: html
 
