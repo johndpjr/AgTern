@@ -24,5 +24,26 @@
             <mat-chip color="accent" selected *ngFor="let tag of job.tags.split(',')">{{tag}}</mat-chip>
         </mat-chip-list>
     </div>
-    <mat-card-content style="white-space: pre-wrap">{{job.description}}</mat-card-content>
+    <mat-card-content style="white-space: pre-wrap">
+      <div class="job-container">
+        <div class="job-description">
+          {{job.description}}
+        </div>
+        <div class="job-tracking">
+          <div class="status">
+            <strong>Status:</strong> Applied
+          </div>
+          <div class="status-line"></div>
+          <div class="status-list">
+            <ul>
+              <li>
+                <span class="status-text">Unapplied</span>
+                <span class="date">11/12/23</span>
+              </li>
+              <!-- Add more status entries here -->
+            </ul>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
 </mat-card>

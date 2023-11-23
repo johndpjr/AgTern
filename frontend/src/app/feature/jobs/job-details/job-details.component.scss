@@ -25,3 +25,52 @@
 .apply-now-icon {
     line-height: 20px;
 }
+
+.job-container {
+  display: flex;
+}
+
+.job-description {
+  flex: 2;
+  background-color: #e0e0e0;
+  /* Change background color as needed */
+  padding: 20px;
+  border: 1px solid #ccc;
+}
+
+.job-tracking {
+  flex: 1;
+  background-color: #f0f0f0;
+  /* Change background color as needed */
+  padding: 20px;
+  border: 1px solid #ccc;
+}
+
+.status {
+  margin-bottom: 15px;
+}
+
+.status-line {
+  border-top: 1px solid #ccc;
+  margin-bottom: 15px;
+}
+
+.status-list ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.status-list li {
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: space-between; /* Places content at opposite ends */
+}
+
+.date {
+  color: #777;
+}
+
+/* Adjust spacing between text and date */
+.status-text {
+  margin-right: 10px;
+}
