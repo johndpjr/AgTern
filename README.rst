@@ -56,6 +56,12 @@
 
    AgTern
 
+.. figure:: images/agtern-logo.png
+   :alt: AgTern
+   :align: center
+
+   AgTern
+
    .. raw:: html
 
       </h3>
