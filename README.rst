@@ -416,8 +416,8 @@ create a pull request completing the task.
 
    .. code-block:: bash
 
-      git checkout dev
-      git pull
+         git checkout dev
+         git pull
 
 3. Create your feature branch: ``git checkout -b feature/ticket#/short-description``
 4. Implement feature/bug fix and stage your changes: ``git add .``
