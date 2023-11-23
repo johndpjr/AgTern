@@ -329,7 +329,7 @@ Part 2: Backend Setup
       # Linux & MacOS
       source venv/bin/activate
       # Windows
-      .\\venv\\Scripts\\activate
+      .\venv\Scripts\activate
 
 3. Install Python packages: ``pip3 install -r requirements.txt``
 
