@@ -75,10 +75,15 @@
          match your interests and situation can be hard. We wanted the process
          to be as seamless as possible so that students can focus on applying
          and not searching. 
-         Explore the docs (TODO)» 
-         Read the wiki » 
-         
-         View Demo · Report Bug
+         <br />
+         <a href="https://github.com/johndpjr/AgTern"><strong>Explore the docs (TODO)»</strong></a>
+         <br />
+         <a href="https://github.com/johndpjr/AgTern/wiki"><strong>Read the wiki »</strong></a>
+         <br />
+         <br />
+         <a href="https://www.youtube.com/watch?v=QtYvDcYtCVM">View Demo</a>
+         ·
+         <a href="https://github.com/johndpjr/AgTern/issues">Report Bug</a>
       </p>
    </div>
 
