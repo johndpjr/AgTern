@@ -51,9 +51,6 @@
 .. container::
 
    .. raw:: html
-      <div align="center">
-        <img src="images/agtern-logo.png" width="80" height="80" />
-      </div>
 
       <h3 align="center">
    
@@ -64,6 +61,9 @@
       </h3>
 
    .. raw:: html
+      <div align="center">
+        <img src="images/agtern-logo.png" width="80" height="80" />
+      </div>
 
 
    Howdy! AgTern is a program that helps students find, track, and apply
