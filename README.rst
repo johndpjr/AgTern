@@ -68,7 +68,7 @@
 
    .. raw:: html
 
-      <p align="center">
+      <p align="right">
 
    Howdy! AgTern is a program that helps students find, track, and apply
    to internships by scraping the web for job postings. Based off a
