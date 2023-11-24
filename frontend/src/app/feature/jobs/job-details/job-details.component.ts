@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Job } from '../../../../_generated/api';
+import { Job, JobStatusType } from '../../../../_generated/api';
 import { animate, style, transition, trigger } from '@angular/animations';
 
 @Component({
@@ -24,4 +24,21 @@ export class JobDetailsComponent {
   @Input() public job!: Job;
 
   ngOnInit(): void {}
+
+  jobStatusList: JobStatusType[] = [
+    'unapplied',
+    'applying',
+    'applied',
+    'waiting',
+    'interviewing',
+    'offer_pending',
+    'offer_given',
+    'offer_rescinded',
+    'rejected',
+    'withdrew',
+    'unknown',
+    'accepted_offer',
+    'rejected_offer',
+    'negotiating_offer'
+  ];
 }

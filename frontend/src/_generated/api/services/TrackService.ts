@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { JobStatus } from '../models/JobStatus';
 import type { JobTrack } from '../models/JobTrack';
 import type { JobTrackCreate } from '../models/JobTrackCreate';
 
@@ -12,7 +13,7 @@ export class TrackService {
 
     /**
      * Get Track Points
-     * Returns all jobs from the database.
+     * Returns all jobs.
      * @param jobId
      * @returns JobTrack Successful Response
      * @throws ApiError
@@ -34,7 +35,7 @@ export class TrackService {
 
     /**
      * Create Track Point
-     * Adds a JobTrack object to the database.
+     * Adds a JobTrack.
      * @param requestBody
      * @returns JobTrack Successful Response
      * @throws ApiError
@@ -50,6 +51,19 @@ export class TrackService {
             errors: {
                 422: `Validation Error`,
             },
+        });
+    }
+
+    /**
+     * Get Track Statuses
+     * Returns all job track statuses.
+     * @returns JobStatus Successful Response
+     * @throws ApiError
+     */
+    public static getTrackStatuses(): CancelablePromise<Array<JobStatus>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/track/statuses',
         });
     }
 

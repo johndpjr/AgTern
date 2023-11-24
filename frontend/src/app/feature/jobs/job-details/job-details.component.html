@@ -29,20 +29,35 @@
         <div class="job-description">
           {{job.description}}
         </div>
+
         <div class="job-tracking">
+
           <div class="status">
             <strong>Status:</strong> Applied
           </div>
+
           <div class="status-line"></div>
+
           <div class="status-list">
             <ul>
-              <li>
-                <span class="status-text">Unapplied</span>
+              <li *ngFor="let jobStatus of jobStatusList.slice(0, 5)">
+                <span class="status-text">{{jobStatus}}</span>
                 <span class="date">11/12/23</span>
               </li>
               <!-- Add more status entries here -->
             </ul>
           </div>
+
+          <mat-form-field>
+            <mat-label>Status</mat-label>
+            <mat-select>
+              <mat-option
+                *ngFor="let jobStatus of jobStatusList" value="{{jobStatus}}">
+                {{jobStatus}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
         </div>
       </div>
     </mat-card-content>

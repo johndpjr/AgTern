@@ -4,7 +4,9 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from backend.app.crud import track as crud
+from backend.app.models import JobStatus as TrackStatusModel
 from backend.app.models import JobTrack as TrackModel
+from backend.app.schemas import JobStatus as TrackStatusSchema
 from backend.app.schemas import JobTrack as TrackSchema
 from backend.app.schemas import JobTrackCreate as TrackCreate
 
@@ -20,13 +22,13 @@ async def get_track_points(
     job_id: int,
     db: Session = Depends(get_db),
 ):
-    """Returns all jobs from the database."""
+    """Returns all jobs."""
     return crud.get_track_points(db, job_id, current_user.id)
 
 
 @router.post("/", response_model=TrackSchema)
 async def create_track_point(track: TrackCreate, db: Session = Depends(get_db)):
-    """Adds a JobTrack object to the database."""
+    """Adds a JobTrack."""
     db_track = TrackModel(
         **{
             k: v
@@ -35,3 +37,9 @@ async def create_track_point(track: TrackCreate, db: Session = Depends(get_db)):
         }
     )
     return crud.create_track_point(db, db_track)
+
+
+@router.get("/statuses", response_model=List[TrackStatusSchema])
+async def get_track_statuses(db: Session = Depends(get_db)):
+    """Returns all job track statuses."""
+    return crud.get_track_statuses(db)
