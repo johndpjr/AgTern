@@ -44,19 +44,30 @@
                 <span class="status-text">{{jobStatus}}</span>
                 <span class="date">11/12/23</span>
               </li>
-              <!-- Add more status entries here -->
             </ul>
           </div>
 
-          <mat-form-field>
-            <mat-label>Status</mat-label>
-            <mat-select>
-              <mat-option
-                *ngFor="let jobStatus of jobStatusList" value="{{jobStatus}}">
-                {{jobStatus}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+          <form class="event-form" [formGroup]="eventForm" (ngSubmit)="onEventFormSubmit()">
+
+            <mat-form-field>
+              <mat-label>Status</mat-label>
+              <mat-select>
+                <mat-option
+                  *ngFor="let jobStatus of jobStatusList" value="{{jobStatus}}">
+                  {{jobStatus}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-label>Choose a date</mat-label>
+              <input matInput [matDatepicker]="picker">
+              <mat-hint>MM/DD/YYYY</mat-hint>
+              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+          </form>
 
         </div>
       </div>

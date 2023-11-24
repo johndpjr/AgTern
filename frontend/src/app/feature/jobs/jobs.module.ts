@@ -8,6 +8,9 @@ import { MaterialModule } from '../../shared/modules/material/material.module';
 import { JobCardComponent } from './job-card/job-card.component';
 import { JobDetailsComponent } from './job-details/job-details.component';
 import { JobListComponent } from './job-list/job-list.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -17,6 +20,14 @@ import { JobListComponent } from './job-list/job-list.component';
     JobDetailsComponent
   ],
   exports: [JobCardComponent],
-  imports: [CommonModule, JobsRoutingModule, MaterialModule, SearchModule]
+  imports: [
+    CommonModule,
+    JobsRoutingModule,
+    MaterialModule,
+    SearchModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    ReactiveFormsModule
+  ]
 })
 export class JobsModule {}

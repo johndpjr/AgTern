@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Job, JobStatusType } from '../../../../_generated/api';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-job-details',
@@ -23,8 +24,6 @@ import { animate, style, transition, trigger } from '@angular/animations';
 export class JobDetailsComponent {
   @Input() public job!: Job;
 
-  ngOnInit(): void {}
-
   jobStatusList: JobStatusType[] = [
     'unapplied',
     'applying',
@@ -41,4 +40,27 @@ export class JobDetailsComponent {
     'rejected_offer',
     'negotiating_offer'
   ];
+
+  eventForm: FormGroup;
+  dtPickerConfig = {
+    showSpinners: true,
+    stepMinute: 15,
+    touchUi: false,
+    enableMeridian: true,
+    defaultTime: [9, 0, 0] // 09:00:00 (H, M, S)
+  };
+
+  constructor(private fb: FormBuilder) {
+    this.eventForm = this.fb.group({
+      title: '',
+      event_category_id: '',
+      dt_start: '',
+      dt_end: '',
+      description: ''
+    });
+  }
+
+  ngOnInit(): void {}
+
+  onEventFormSubmit() {}
 }
