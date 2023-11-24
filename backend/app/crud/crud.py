@@ -1,7 +1,7 @@
 from typing import List
 
 from pydantic import ValidationError
-from sqlalchemy import delete, or_
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
 from backend.app.models import Job as JobModel
