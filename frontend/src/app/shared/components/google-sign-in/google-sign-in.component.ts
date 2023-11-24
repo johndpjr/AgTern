@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { LoginService } from 'src/_generated/api';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-google-sign-in',
@@ -6,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./google-sign-in.component.scss']
 })
 export class GoogleSignInComponent implements OnInit {
-  constructor() {}
+  constructor(public router: Router) { }
 
   ngOnInit(): void {
     // @ts-ignore
@@ -28,7 +30,23 @@ export class GoogleSignInComponent implements OnInit {
     // google.accounts.id.prompt((notification: PromptMomentNotification) => {});
   }
 
-  async handleCredentialResponse(response: any) {
-    console.log(response);
-  }
+
+  async handleCredentialResponse(googleUser: any) {
+    console.log(googleUser);
+    var token: string = googleUser.credential
+
+    LoginService.googleLogin(token).then(
+      () => {
+        // login
+        this.router.navigateByUrl('jobs')
+      },
+      () => {
+        // Do nothing since we failed
+      }
+    );
+  };
+
 }
+
+
+

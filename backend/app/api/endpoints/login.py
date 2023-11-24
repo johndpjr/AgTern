@@ -25,7 +25,7 @@ ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 # Google Client ID
-CLIENT_ID = None
+CLIENT_ID = '710734565405-3nkf5plf0m4p460osals94rnksheoh93.apps.googleusercontent.com'
 
 users_db = get_db()
 
@@ -118,6 +118,8 @@ def authenticate_user(username: str, password: str, db: Session = Depends(get_db
     user = get_user(db, username)
     if not user:
         raise HTTPException(status_code=400, detail="Incorrect username or password")
+    if not user.made_password:
+        raise HTTPException(status_code=400, detail="This account didn't make a password. Please login via Google.")
     encoded_password = password.encode("utf-8")
     if not bcrypt.checkpw(encoded_password, user.password.encode("utf-8")):
         raise HTTPException(status_code=400, detail="Incorrect username or password")
@@ -163,6 +165,7 @@ async def register_user(
             "full_name": full_name,
             "email": email,
             "password": hashed_password.decode("utf-8"),
+            "made_password": True,
             "disabled": False,
         }
     )
@@ -191,15 +194,12 @@ async def google_login(
     token: str,
     db: Session = Depends(get_db)
 ):
-
-
-    # (Receive token by HTTPS POST)
-    # ...
-
     try:
         # Specify the CLIENT_ID of the app that accesses the backend:
-        idinfo = id_token.verify_oauth2_token(token, requests.Request(), CLIENT_ID)
-
+        print("testing")
+        idinfo = id_token.verify_oauth2_token(token, requests.Request(), CLIENT_ID, clock_skew_in_seconds=1000000,)
+        # print("Success")
+        # print("ID_info:", idinfo)
         # Or, if multiple clients access the backend server:
         # idinfo = id_token.verify_oauth2_token(token, requests.Request())
         # if idinfo['aud'] not in [CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]:
@@ -210,7 +210,40 @@ async def google_login(
         #     raise ValueError('Wrong hosted domain.')
 
         # ID token is valid. Get the user's Google Account ID from the decoded token.
+        # print("Getting user info")
         userid = idinfo['sub']
-    except ValueError:
+        name = idinfo['name']
+        # print(userid)
+        email = idinfo['email']
+        # print(email)
+        user = crud.search_users_by_google_id(db, userid)
+        if user is None or len(user) == 0:
+            # Register a new user
+            new_user = UserModel(
+                **{
+                    "username": "{}.{}".format(email, userid),
+                    "google_id": userid,
+                    "made_password": False,
+                    "full_name": name,
+                    "email": email,
+                    "password": "",
+                    "disabled": False,
+                }
+            )
+            user_list = [new_user]
+            crud.create_users(db, *user_list)
+            user = new_user
+        else:
+            user = user[0]
+        print(user.username)
+        access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        access_token = create_access_token(
+            data={"sub": user.username}, expires_delta=access_token_expires
+        )
+        return {"access_token": access_token, "token_type": "bearer"}
+
+    except ValueError as e:
         # Invalid token
+        print("Invalid token:", token)
+        print(e)
         pass
