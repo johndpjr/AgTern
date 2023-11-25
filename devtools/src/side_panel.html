@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!--This HTML file defines the layout for the side panel activated by pressing the extension's button.-->
+  <!--It cannot execute JavaScript directly (ex: onclick events) but it can include script files.-->
+  <meta charset="UTF-8">
+  <title>AgTern DevTools</title>
+  <link rel="stylesheet" href="./side_panel.css">
+</head>
+<body>
+<div><hr></div>
+<label>XPath:      <input type="text" id="xpath" value="//"/></label>
+<label>Linkify:    <input type="checkbox" id="linkify"/></label>
+<div><hr></div>
+<label>Regex:      <input type="text" id="regex" value=".*"/></label>
+<label>Ignore Case:<input type="checkbox" id="ignore-case" checked/></label>
+<label>Multiline:  <input type="checkbox" id="multiline" checked/></label>
+<label>Dot All:    <input type="checkbox" id="dot-all" checked/></label>
+<label>Format:     <input type="text" id="format" value="{0}"/></label>
+<div><hr></div>
+<p id="num-results">0 results</p>
+<div><hr></div>
+<div id="result">
+</div>
+<script src="./side_panel.js" type="module"></script>
+</body>
+</html>
