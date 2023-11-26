@@ -1,6 +1,23 @@
 {
-  "company": "Allstate",
-  "link": "https://www.allstate.jobs/job-search-results/?level[]=Intern",
+  "$schema": "AgTernScrapeConfigSchema.json",
+  "company": {
+    "name": "Allstate"
+  },
+  "links": {
+    "home": "https://www.allstate.com/",
+    "internships": "https://www.allstate.jobs/job-search-results/?level[]=Intern"
+  },
+  "xpaths": {
+    "title": "//div[@class='jobTitle']",
+    "posting_link": "//div[@class='jobTitle']/a/@href",
+    "category": "//div[@class='jobCategory']",
+    "location": "//div[contains(@class,'joblist-location')]",
+    "post_date": "//div[contains(@class,'joblist-posdate')]",
+    "company_job_id": "//span[@id='gtm-jobdetail-id']",
+    "apply_link": "//a[contains(@class,'apply-btn')]/@href",
+    "description": "//div[@id='gtm-jobdetail-desc']"
+  },
+  "unique": [ "posting_link", "company_job_id" ],
   "scrape": [
     {
       "action": "scrape",

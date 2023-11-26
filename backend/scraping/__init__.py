@@ -1,1 +1,1 @@
-from .scraper import WebScraper, scrape, start_scraper
+from .scraper import WebScraper, scrape_all, start_scraper

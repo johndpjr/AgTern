@@ -1,0 +1,28 @@
+{
+  "$schema": "AgTernScrapeConfigSchema.json",
+  "company": {
+    "name": "Example Company"
+  },
+  "links": {
+    "home": "https://www.example.com/",
+    "internships": "https://www.example.com/search/?category=internships"
+  },
+  "xpaths": {
+    "title": "//xpath/to/internship/titles",
+    "company_job_id": "//xpath/to/internship/ids",
+    "posting_link": "//xpath/to/posting/links/@href",
+    "description": "//xpath/to/internship/descriptions"
+  },
+  "regexes": {
+    "title": {
+      "pattern": "(regex for title)",
+      "ignore_case": true,
+      "multiline": false
+    },
+    "company_job_id": "(regex for company_job_id)"
+  },
+  "unique": [
+    "company_job_id",
+    "posting_link"
+  ]
+}

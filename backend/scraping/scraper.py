@@ -2,21 +2,14 @@ from __future__ import annotations
 
 import json
 import signal
-import time
 import traceback
 from argparse import Namespace
 from datetime import datetime
 from multiprocessing import Process
-from os import fsdecode, listdir, pardir
-from os.path import abspath, join
 from threading import Thread
 from typing import Any
-from urllib.parse import urlparse
 
-import pandas as pd
-import requests
 import selenium.webdriver.support.expected_conditions as condition
-from cerberus import Validator
 from pydantic import ValidationError
 from selenium.common import InvalidArgumentException
 from selenium.webdriver.chrome.options import Options
@@ -24,14 +17,16 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.wait import WebDriverWait
 from undetected_chromedriver import Chrome
-from webdriver_manager.chrome import ChromeDriverManager
 
 from backend.app.crud import crud
-from backend.app.database import DatabaseSession
 from backend.app.models import Job as JobModel
-from backend.app.utils import LOG, DataFile
+from backend.app.utils import LOG, Timer
 
-from .actions import ScrapingContext, parse_config
+from .actions import ActionFailure
+from .companies import *  # Do not remove!
+from .config import get_config, get_configs, load_configs
+from .context import ScrapeContext, ctx
+from .pipelines import get_pipelines_for_company
 
 
 class WebScraper:
@@ -39,81 +34,179 @@ class WebScraper:
 
     # Suppress warning for assigning None to class variables:
     # noinspection PyTypeChecker
-    def __init__(self, save_jobs: bool):
+    def __init__(self, save_jobs: bool, headless: bool, driver_options: Options = None):
         self.driver: Chrome = None
         self.wait: WebDriverWait = None
-        self.crawl_delay: float = 0
-        self.last_request_time: datetime = None
-        self.save_jobs = save_jobs
+        self.save_jobs: bool = save_jobs
+        self.headless: bool = headless
+        self.driver_options: Options = (
+            driver_options if driver_options is not None else Options()
+        )
+        self.driver_options.headless = headless
+        self.driver_options.add_argument("--start-maximized")
 
-    def start(self, headless: bool, options: Options = None):
+    def start(self):
         """Starts a new Chrome instance."""
-        if options is None:
-            options = Options()
-        options.headless = headless
-        options.add_argument("--start-maximized")
-        driver_path = ChromeDriverManager().install()
-        self.driver = Chrome(driver_executable_path=driver_path, options=options)
-
+        # TODO: Support multiple drivers?
+        self.driver = Chrome(options=self.driver_options)
         self.wait = WebDriverWait(self.driver, 5)
 
-    def goto(self, link: str):
-        if self.last_request_time is not None and self.crawl_delay > 0:
-            time_passed = (datetime.now() - self.last_request_time).total_seconds()
-            if self.crawl_delay > time_passed:
-                delay_amount = self.crawl_delay - time_passed
-                LOG.info(f"Delaying for {delay_amount:.2f} seconds...")
-                time.sleep(delay_amount)
+    @property
+    def current_url(self):
+        return self.driver.current_url
+
+    def generate_context(self, company_name: str):
+        """Generates a ScrapeContext bound to this WebScraper and the CompanyScrapeConfigModel for the given company.
+        Returns None if scraping cannot be performed."""
+        config = get_config(company_name)
+        if config.default_link is None:
+            return None  # The company cannot be scraped
+        # noinspection PyShadowingNames
+        ctx = ScrapeContext()
+        if ctx.settings.scrape_companies is not None:
+            found = False
+            for name in ctx.settings.scrape_companies:
+                if name.lower() == company_name.lower():
+                    found = True
+                    break
+            if not found:
+                return None  # The company should be ignored
+        ctx.config = config
+        ctx.scraper = self
+        ctx.robots_txt.set_url(config.default_link)
+        # noinspection PyBroadException
+        try:
+            self.goto(ctx.robots_txt.url, ignore_robots_txt=True)
+        except Exception:
+            LOG.error(
+                f"Request for robots.txt located at {ctx.robots_txt.url} timed out!"
+            )
+        # noinspection PyBroadException
+        try:
+            LOG.info(f"Parsing {ctx.robots_txt.url}")
+            ctx.robots_txt.parse(self.scrape_xpath("//body")[0])
+        except Exception:
+            LOG.error(f"robots.txt parsing failed!")
+            LOG.error(traceback.format_exc())
+        LOG.info(f"Crawl-Delay: {ctx.robots_txt.crawl_delay}")
+        if not ctx.valid():
+            raise Exception("The generated ScrapeContext is invalid!")
+        return ctx
+
+    def signal_handler(self, signal_id=None, frame=None):
+        LOG.error("Interrupt detected. Aborting!")
+        self.quit()
+
+    def quit(self):
+        """Closes the driver if it has been started."""
+        if self.driver is not None:
+            LOG.info("Closing driver...")
+            self.driver.quit()
+            self.driver = None
+            self.wait = None
+            LOG.info("Driver closed.")
+
+    def make_link_absolute(self, link: str):
+        """Makes a link absolute relative to the current URL.
+        If link is already an absolute URL, it is returned unchanged."""
+        return self.js(f"return new URL('{link}',window.location.href).href")
+
+    def goto(self, link: str, ignore_robots_txt: bool = False):
+        """Navigates to a link.
+        Waits until the crawl delay specified in robots.txt has passed.
+        Waits until the page is loaded."""
+        link = self.make_link_absolute(link)
+        LOG.info(f"Navigating to {link}")
+        if not ignore_robots_txt and not ctx.robots_txt.crawl_allowed(link):
+            LOG.warning(f"Warning: Crawling is disallowed for {link}")
+        if not ignore_robots_txt:
+            ctx.robots_txt.delay_if_needed()
         try:
             self.driver.get(link)
         except InvalidArgumentException as e:
             LOG.exception(f"Could not navigate to link: {link}", e)
-        self.last_request_time = datetime.now()
+        if not ignore_robots_txt:
+            ctx.robots_txt.last_request_time = datetime.now()
         self.wait.until(
             lambda d: d.execute_script("return document.readyState") == "complete"
         )
 
     def js(self, code: str, *args: Any) -> Any:
+        """Executes a JavaScript code string. Waits for and returns the result."""
         return self.driver.execute_script(code, *args)
 
-    def scrape_xpath(self, xpath: str) -> list[WebElement]:
+    def wait_until_true(self, code: str, *args: Any):
+        """Waits until a JavaScript code string returns true.
+        Times out after a few seconds."""
+        return self.wait.until(lambda d: d.execute_script(code, *args))
+
+    def scrape_xpath(self, xpath: str) -> list[str]:
+        """Retrieves a list of strings from elements on the current page.
+        Waits until there is at least one element that matches the XPath.
+        Times out after a few seconds."""
+        # Loosely based on https://stackoverflow.com/a/68216786/11827673
+        xpath = xpath.replace('"', '\\"')
+        script = (
+            f"return (x=>{{"
+            f"const s=document.evaluate(x,document,null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null);"
+            f"return [...Array(s.snapshotLength)].map((_,i)=>{{"
+            f"n=s.snapshotItem(i);"
+            f"return n.nodeType===Node.ATTRIBUTE_NODE?n.value:n.textContent"
+            f'}})}})("{xpath}")'
+        )
+        # scrape=(x=>{const s=document.evaluate(x,document,null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null);return [...Array(s.snapshotLength)].map((_,i)=>{n=s.snapshotItem(i);return n.nodeType===Node.ATTRIBUTE_NODE?n.value:n.textContent})});scrape_text=scrape;linkify=(l=>new URL(l,window.location.href).href);scrape_links=(x=>scrape(x).map(m=>linkify(m)))
+        self.wait_until_true(f"{script}.length!=0")
+        return self.js(script)
+
+    def get_elements_by_xpath(self, xpath: str) -> list[WebElement]:
+        """Retrieves a list of elements on the current page.
+        Waits until there is at least one element that matches the XPath.
+        Times out after a few seconds."""
         return self.wait.until(
             condition.presence_of_all_elements_located((By.XPATH, xpath))
         )
 
-    def scrape_css(self, xpath: str, property_value: str) -> list[dict]:
+    def scrape_css(
+        self, xpath: str, property_value: str
+    ) -> list[dict]:  # TODO: Check if this really returns list[dict]
+        """Retrieves a list of CSS property values based on an XPath.
+        Waits until there is at least one element that matches the XPath.
+        Times out after a few seconds."""
         return [
             self.js(
                 "return window.getComputedStyle(arguments[0]).getPropertyValue(arguments[1])",
                 element,
                 property_value,
             )
-            for element in self.scrape_xpath(xpath)
+            for element in self.get_elements_by_xpath(xpath)
         ]
 
-    def commit_jobs(self, ctx: ScrapingContext) -> bool:
+    def commit_jobs(self) -> bool:
+        """Saves the jobs added to the ScrapeContext to the database.
+        Returns True if successful.
+        Logs validation errors."""
+        # TODO: Clean up this function so it's easier to read and possibly more performant
         if not self.save_jobs:
             return True
-        LOG.info("Writing to database...")
         success = True
         jobs_to_add = []
+        num_skipped = 0
         column_names = JobModel.__table__.columns.keys()
-        for idx, job in ctx.data.iterrows():
+        for job in ctx.data:
             try:
                 job_exists = False
-                for unique_prop in ctx.unique_properties:
+                for unique_prop in ctx.unique:
                     if (
                         unique_prop in column_names
                         and hasattr(JobModel, unique_prop)
-                        and hasattr(job, unique_prop)
+                        and unique_prop in job
                     ):
                         # noinspection PyTypeChecker
                         if (
                             ctx.db.query(getattr(JobModel, unique_prop))
                             .filter(
-                                JobModel.company == ctx.company
-                                and getattr(JobModel, unique_prop)
-                                == getattr(job, unique_prop)
+                                JobModel.company == ctx.config.company_name
+                                and getattr(JobModel, unique_prop) == job[unique_prop]
                             )
                             .count()
                             > 0
@@ -129,168 +222,155 @@ class WebScraper:
                             }
                         )
                     )
+                else:
+                    num_skipped += 1
             except ValidationError as errors:
                 LOG.error("Unable to create job!")
-                LOG.error(f"Job: {job.to_dict()}")
+                LOG.error(f"Job: {json.dumps(job, indent=2)}")
                 LOG.error(errors)
                 success = False
-        try:
-            crud.create_jobs(ctx.db, *jobs_to_add)
-            LOG.info("Saving to database succeeded!")
-        except Exception as e:
-            LOG.error("Saving to database FAILED!")
-            LOG.error(e)
+        LOG.info(f"{num_skipped} jobs were skipped.")
+        if len(jobs_to_add) > 0:
+            try:
+                LOG.info("Writing to database...")
+                crud.create_jobs(ctx.db, *jobs_to_add)
+                LOG.info(f"Saved {len(jobs_to_add)} jobs to the database!")
+            except Exception as e:
+                LOG.error("Saving to database FAILED!")
+                LOG.error(e)
+        else:
+            LOG.info("Nothing to save!")
         return success
 
-    def scrape_company(self, link: str, config: pd.Series):
-        db = DatabaseSession()
-        if "company" not in config:
-            LOG.warning(
-                'One of the companies in the scraping config does not have a "company" property. Skipping!'
-            )
-            return
-        company_name = config["company"]
-        self.last_request_time = None
-        self.crawl_delay = 0
-        parsed_link = urlparse(link)
-        robots_txt_response = requests.get(
-            f"{parsed_link.scheme if len(parsed_link.scheme) > 0 else 'http'}://{parsed_link.netloc}/robots.txt"
-        )
-        robots_txt = (
-            None if robots_txt_response.status_code != 200 else robots_txt_response.text
-        )
-        context = ScrapingContext(
-            scraper=self,
-            company=company_name,
-            db=db,
-            data=pd.DataFrame(),
-            robots_txt=robots_txt,
-        )
-        crawl_delay = None
-        if robots_txt is not None:
-            for line in context.robots_txt.splitlines():
-                line = line.strip()
-                while line.find("#") != -1:
-                    line = line[: line.find("#")]
-                if line.lower().startswith("crawl-delay:"):
-                    new_crawl_delay = float(line[12:].strip())
-                    if crawl_delay is None or new_crawl_delay < crawl_delay:
-                        crawl_delay = new_crawl_delay
-        else:
-            LOG.info("No robots.txt was found!")
-        if crawl_delay is None:
-            crawl_delay = 1
-        LOG.info(f"Crawl-delay: {crawl_delay}")
-        self.goto(link)
-        time.sleep(3)  # Make sure page is fully loaded
-        self.crawl_delay = crawl_delay
-        procedure = parse_config(context, config["scrape"])
-        action_num = 0
-        for action in procedure:
-            action_num += 1
-            try:
-                # noinspection PyUnresolvedReferences
-                LOG.info(
-                    f"Running Action {company_name}:{action_num} ({action.action.name})..."
-                )
-                action()
-            except Exception as e:
-                LOG.error(f"ERROR: Could not execute {company_name}:{action_num}!")
+    def scrape_company(self, company_name: str):
+        """Navigates to the given link and starts scraping based on the scrape config.
+        Returns the final context or None if scraping could not be performed."""
+        timer = Timer()
+        timer.start()
+        # noinspection PyShadowingNames
+        ctx = self.generate_context(company_name)
+        if ctx is None:
+            return None
+        self.wait = WebDriverWait(self.driver, ctx.settings.timeout)
+        pipelines = get_pipelines_for_company(company_name)
+        try:
+            if "scrape" not in pipelines:
+                return None
+            LOG.info(f"Scraping {company_name}...")
+            ctx.execute(pipelines["scrape"])
+        except ActionFailure as cause:
+            LOG.error(f"Error scraping {company_name}:")
+            if ctx.settings.print_tracebacks or len(cause.args) == 0:
+                # If there's no message, print the traceback
                 LOG.error(traceback.format_exc())
-        self.commit_jobs(context)
+            else:
+                # If the ActionFailure has a message, just print it
+                for arg in cause.args:
+                    LOG.error(arg)
+            LOG.error(f"Scraping {company_name} aborted!")
+            return None
+        if "process" in pipelines:
+            # TODO: Execute processing in parallel
+            original_data = ctx.data
+            final_data = []
+            for i, row in enumerate(original_data):
+                LOG.info(f"Processing job {i+1}/{len(original_data)}...")
+                try:
+                    ctx.data = row
+                    ctx.execute(pipelines["process"])
+                    final_data.append(ctx.data)
+                except ActionFailure:
+                    LOG.error("Error processing job:")
+                    LOG.error(json.dumps(row, indent=2))
+                    LOG.error(traceback.format_exc())
+                    LOG.error("Saving job aborted!")
+            ctx.data = final_data
+        if ctx.settings.print_result:
+            LOG.info(json.dumps(ctx.data, indent=2))
+        timer.stop()
+        LOG.info(f"Scraping and processing for {company_name} took {timer.time_passed}")
+        return ctx
+
+    def __enter__(self):
+        """Called when a WebScraper is created in a 'with' statement."""
+        self.start()
+        # Ensure driver is closed if interrupted:
+        signal.signal(signal.SIGINT, self.signal_handler)
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """Called when a WebScraper that has been created with a 'with' statement either
+        goes out of scope or raises an error."""
+        if exc_type is not None:
+            LOG.error("A fatal error occurred. Aborting!")
+            LOG.error(traceback.format_exc())
+        # noinspection PyBroadException
+        try:
+            self.quit()
+        except Exception:
+            LOG.error("Error closing driver:")
+            LOG.error(traceback.format_exc())
 
 
-ScrapingContext.update_forward_refs(
-    WebScraper=WebScraper
-)  # Allow ScrapingContext to reference WebScraper
+def scrape_company(args: Namespace, company_name: str):
+    """Launches a new Chrome instance and scrapes a company according to its scraping config."""
+    with WebScraper(args.save_jobs, args.headless) as scraper:
+        config = get_config(company_name)
+        company_name = config.company_name
+        # noinspection PyBroadException
+        try:
+            # noinspection PyShadowingNames
+            ctx = scraper.scrape_company(company_name)
+            if ctx is None:  # No config for company or no "scrape" pipeline
+                LOG.error(f"Skipped scraping {company_name}")
+                return
+            ctx.execute(scraper.commit_jobs)
+        except Exception:
+            LOG.error(f"Error scraping {company_name}:")
+            LOG.error(traceback.format_exc())
+            LOG.error(f"Scraping {company_name} aborted!")
 
 
-def scrape(args: Namespace):
-    """Scrapes all companies in scraping config if actions are defined there.
-    Scraped jobs are stored in a database."""
-    scraper = None
-
-    # Close driver when work is finished
-    def close_driver(signal_number=None, frame=None):
-        # Make sure driver exists
-        if scraper is not None and scraper.driver is not None:
-            LOG.info("Closing driver...")
-            scraper.driver.quit()
-        # Close process
-        exit(0)
-
-    # Ensure driver is closed if interrupted:
-    signal.signal(signal.SIGINT, close_driver)
-
-    try:
-        scraper = WebScraper(args.save_jobs)
-        scraper.start(args.headless)
-
-        LOG.info("Loading scraping config...")
-        company_scrape = []
-        directory = abspath(join(__file__, pardir)) + "/../../data/companies"
-        # Schema for valid company JSON file
-        valid_json = {
-            "company": {"type": "string"},
-            "link": {"type": "string"},
-            "scrape": {"type": "list", "nullable": True},
-        }
-        validator = Validator(valid_json)
-        for file in listdir(directory):
-            filename = fsdecode(file)
-            # Include/exclude companies
-            company = filename.removesuffix(".json")
-            if (args.include_companies and company not in args.include_companies) or (
-                args.exclude_companies and company in args.exclude_companies
-            ):
-                continue
-
-            file_dir_path = join(directory, filename)
-            file_scrape_config_json = DataFile(
-                file_dir_path,
-                default_data='{"company":null,"link":null,"scrape":null}',
-            )
-
-            with open(file_scrape_config_json.path, "r") as f:
-                scrape_json = json.load(f)
-                company_scrape.append(scrape_json)
-                if not validator.validate(scrape_json):
-                    LOG.error(f"Validation failed for company: {company}")
-                    LOG.error(validator.errors)
-                    exit(1)
-
-        # Transform JSON data into DataFrame (model that holds scrape data)
-        company_scrape_df = pd.DataFrame.from_records(company_scrape)
-        # Iterate through valid sources to be scraped
-        company_scrape_df: pd.DataFrame = company_scrape_df.loc[
-            company_scrape_df["scrape"].notna()
-        ]
-        LOG.info("Scraping specified companies...")
-        company_scrape_df = company_scrape_df.sort_values(
-            by=["company"], ascending=True
-        )
-        for idx, entry in company_scrape_df.iterrows():
-            LOG.info(f"Scraping {entry['company']}...")
+def scrape_all(args: Namespace):
+    """Launches a new Chrome instance and scrapes all companies that have valid scraping configs."""
+    timer = Timer()
+    timer.start()
+    with WebScraper(args.save_jobs, args.headless) as scraper:
+        configs = get_configs()
+        something_succeeded = False
+        skipped = []
+        for config in configs:
+            company_name = config.company_name
+            # noinspection PyBroadException
             try:
-                scraper.scrape_company(entry["link"], entry)
-            except Exception as ex:
-                LOG.info(ex)
-
-        LOG.info("Done!")
-    except Exception as e:
-        # Log any errors to stdout
-        LOG.error(traceback.format_exc())
-    finally:
-        # Ensure driver is closed if an exception occurs
-        close_driver()
+                # noinspection PyShadowingNames
+                ctx = scraper.scrape_company(company_name)
+                if ctx is None:  # No config for company or no "scrape" pipeline
+                    skipped.append(company_name)
+                    continue
+                ctx.execute(scraper.commit_jobs)
+                something_succeeded = True
+            except Exception:
+                LOG.error(f"Error scraping {company_name}:")
+                LOG.error(traceback.format_exc())
+                LOG.error(f"Scraping {company_name} aborted!")
+        if len(skipped) > 0:
+            skipped_company_names = ", ".join(skipped)
+            LOG.error(f"The following companies were skipped: {skipped_company_names}")
+        if something_succeeded:
+            timer.stop()
+            LOG.info("SCRAPING COMPLETE!")
+            LOG.info(f"Scraping ALL companies took {timer.time_passed}")
 
 
 def start_scraper(args: Namespace):
+    load_configs(args.include_companies, args.exclude_companies)
     LOG.info("Starting scraper...")
     if args.scrape_only:
-        scrape(args)
+        scrape_all(args)  # Run in main thread
         return
 
     worker = Process if args.multiprocessing else Thread
-    scraper = worker(target=scrape, daemon=True, args=(args,))
-    scraper.start()
+    scraper = worker(target=scrape_all, daemon=True, args=(args,))
+    scraper.start()  # Run in background thread/process
+    # TODO: Dispatch multiple scrapers to execute different pipelines at the same time

@@ -1,0 +1,94 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "title": "AgTern Company Scrape Configuration Schema",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "enum": [ "AgTernScrapeConfigSchema.json" ]
+    },
+    "company": {
+      "type": [ "object", "string" ],
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [ "name" ]
+    },
+    "links": {
+      "type": "object",
+      "patternProperties": {
+        ".*": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "required": [ "home", "internships" ]
+    },
+    "xpaths": {
+      "type": "object",
+      "patternProperties": {
+        ".*": {
+          "type": "string"
+        }
+      }
+    },
+    "regexes": {
+      "type": "object",
+      "patternProperties": {
+        ".*": {
+          "type": [ "object", "string" ],
+          "properties": {
+            "pattern": {
+              "type": "string",
+              "format": "regex"
+            },
+            "group": {
+              "type": [ "integer", "string" ]
+            },
+            "format": {
+              "type": "string"
+            },
+            "default": {
+              "type": "string"
+            },
+            "ascii": {
+              "type": "boolean"
+            },
+            "dot_all": {
+              "type": "boolean"
+            },
+            "ignore_case": {
+              "type": "boolean"
+            },
+            "multiline": {
+              "type": "boolean"
+            },
+            "verbose": {
+              "type": "boolean"
+            }
+          },
+          "required": [ "pattern" ],
+          "additionalProperties": false
+        }
+      },
+      "format": "regex"
+    },
+    "unique": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "scrape": {
+      "type": "array",
+      "$comment": "Holds the old scrape config (TODO: remove after migration)",
+      "items": {
+        "type": "object"
+      }
+    }
+  },
+  "required": [ "$schema", "company", "links" ],
+  "additionalProperties": false
+}
