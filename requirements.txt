@@ -1,3 +1,4 @@
+async_timeout==4.0.3
 bcrypt==4.0.1
 celery[redis]
 fastapi==0.95.2
