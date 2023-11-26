@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
   <!--This HTML file defines the layout for the side panel activated by pressing the extension's button.-->
   <!--It cannot execute JavaScript directly (ex: onclick events) but it can include script files.-->
@@ -9,7 +9,7 @@
 </head>
 <body>
 <div><hr></div>
-<label>XPath:      <input type="text" id="xpath" value="//"/></label>
+<label>XPath:      <textarea id="xpath" rows="2">//</textarea></label>
 <label>Linkify:    <input type="checkbox" id="linkify"/></label>
 <div><hr></div>
 <label>Regex:      <input type="text" id="regex" value=".*"/></label>

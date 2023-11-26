@@ -26,27 +26,46 @@ label {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
+    padding-top: 0.1em;
+    padding-bottom: 0.1em;
+    margin: 0;
+}
+
+hr {
+    margin-top: 9px;
+    margin-bottom: 9px;
+    color: #ffffff;
+}
+
+p {
+    margin: 0;
 }
 
 .card {
     background: #ffffff;
     color: #000000;
-    padding: 1em;
+    padding: 0.75em;
     border: 0.1em solid black;
-    border-radius: 0.25em;
-    filter: drop-shadow( 0.25em 0.25em );
-    margin-bottom: 0.5em;
+    border-radius: 0.5em;
+    filter: drop-shadow( 0 0 0.25em );
+    margin-top: 0.5em;
+    margin-bottom: 1em;
 }
 
-input[type=text] {
-    font-size: 12pt;
-    width: 75%;
+input[type=text], textarea {
+    font-size: 9pt;
+    min-width: 75%;
+    max-width: 75%;
+    border: 1px solid black;
+    border-radius: 0.25em;
+    font-family: monospace;
+    word-break: break-all;
 }
 
 #num-results {
     font-weight: bold;
-    margin-top: 1em;
-    margin-bottom: 1em;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
     text-align: center;
 }
 
