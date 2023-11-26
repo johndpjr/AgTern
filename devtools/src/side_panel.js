@@ -23,6 +23,7 @@ let current_tab_id = chrome.tabs.TAB_ID_NONE
 let previous_tab_id = chrome.tabs.TAB_ID_NONE
 let previous_result = []
 let previous_linkify = linkify.checked
+let previous_sanity_check = true
 
 function is_chrome()
 {
@@ -57,6 +58,11 @@ async function execute_on_previous_tab( func, args )
 // Execute a function in the context of the current tab and return the result
 async function execute_on_page( func, args )
 {
+    try {
+        current_tab_id = ( await current_tab() ).id
+    } catch {
+        return
+    }
     if( current_tab_id === chrome.tabs.TAB_ID_NONE )
         return
     const [ query ] = await chrome.scripting.executeScript( {
@@ -69,6 +75,21 @@ async function execute_on_page( func, args )
     if( query === undefined )
         return
     return query.result
+}
+
+async function sanity_check()
+{
+    try {
+        return await execute_on_page( () => {
+            try {
+                return __agtern_devtools_ok__
+            } catch {
+                return false
+            }
+        }, [] )
+    } catch {
+        return false
+    }
 }
 
 // Retrieve the result of scrape() or scrape_links(), filter with regex,
@@ -117,13 +138,25 @@ function arrays_equal( a, b )
 // Update the results list and highlighting on the page if needed
 async function update_results()
 {
-    current_tab_id = ( await current_tab() ).id
+    if( !( await sanity_check() ) )
+    {
+        if( previous_sanity_check )
+        {
+            num_results.innerText = "AgTern DevTools Unavailable"
+            let message = document.createElement( "p" )
+            message.innerText = "Try refreshing the page. You may also need to grant the extension access to this page."
+            result.replaceChildren( message )
+        }
+        previous_sanity_check = false
+        return
+    }
     await execute_on_previous_tab( x => unhighlight_all() )
-    const scrape_result = await scrape( xpath.value )
-    if( scrape_result === undefined || arrays_equal( scrape_result, previous_result ) && linkify.checked === previous_linkify )
+    const scrape_result = await scrape( xpath.value.replaceAll( "\n", "" ) )
+    if( scrape_result === undefined || previous_sanity_check && arrays_equal( scrape_result, previous_result ) && linkify.checked === previous_linkify )
         return
     previous_result = scrape_result
     previous_linkify = linkify.checked
+    previous_sanity_check = true
     num_results.innerText = scrape_result.length + " results"
     let result_elements = []
     for( let node of scrape_result )
