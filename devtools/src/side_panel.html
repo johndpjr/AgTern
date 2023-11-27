@@ -9,14 +9,28 @@
 </head>
 <body>
 <div><hr></div>
-<label>XPath:      <textarea id="xpath" rows="2">//</textarea></label>
-<label>Linkify:    <input type="checkbox" id="linkify"/></label>
+<div class="input">
+  <label for="xpath">XPath:</label><textarea id="xpath" rows="2">//</textarea>
+</div>
+<div class="input">
+  <label for="linkify">Linkify:</label><input type="checkbox" id="linkify"/>
+</div>
 <div><hr></div>
-<label>Regex:      <input type="text" id="regex" value=".*"/></label>
-<label>Ignore Case:<input type="checkbox" id="ignore-case" checked/></label>
-<label>Multiline:  <input type="checkbox" id="multiline" checked/></label>
-<label>Dot All:    <input type="checkbox" id="dot-all" checked/></label>
-<label>Format:     <input type="text" id="format" value="{0}"/></label>
+<div class="input">
+  <label for="regex">Regex:</label><input type="text" id="regex" value=".*"/>
+</div>
+<div class="input">
+  <label for="ignore-case">Ignore Case:</label><input type="checkbox" id="ignore-case"/>
+</div>
+<div class="input">
+  <label for="multiline">Multiline:</label><input type="checkbox" id="multiline"/>
+</div>
+<div class="input">
+  <label for="dot-all">Dot All:</label><input type="checkbox" id="dot-all"/>
+</div>
+<div class="input">
+  <label for="format">Format:</label><input type="text" id="format" value="{0}"/>
+</div>
 <div><hr></div>
 <p id="num-results">0 results</p>
 <div><hr></div>

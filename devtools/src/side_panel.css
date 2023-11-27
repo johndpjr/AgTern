@@ -22,15 +22,6 @@ body {
     font-size: 12pt;
 }
 
-label {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    padding-top: 0.1em;
-    padding-bottom: 0.1em;
-    margin: 0;
-}
-
 hr {
     margin-top: 9px;
     margin-bottom: 9px;
@@ -38,6 +29,15 @@ hr {
 }
 
 p {
+    margin: 0;
+}
+
+.input {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-top: 0.1em;
+    padding-bottom: 0.1em;
     margin: 0;
 }
 
@@ -52,14 +52,25 @@ p {
     margin-bottom: 1em;
 }
 
+.invalid {
+    border: 0.25em solid red;
+}
+
+label {
+    min-width: 8ch;
+}
+
 input[type=text], textarea {
     font-size: 9pt;
-    min-width: 75%;
-    max-width: 75%;
-    border: 1px solid black;
+    flex-grow: 1;
+    border: 0.25em solid black;
     border-radius: 0.25em;
     font-family: monospace;
     word-break: break-all;
+}
+
+input[type=text]:focus-visible, textarea:focus-visible {
+    outline: 1px solid white;
 }
 
 #num-results {

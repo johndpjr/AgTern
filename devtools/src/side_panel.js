@@ -31,6 +31,26 @@ function is_chrome()
     return typeof chrome !== typeof browser
 }
 
+function xpath_valid( xpath )
+{
+    try {
+        document.evaluate( xpath, document )
+        return true
+    } catch {
+        return false
+    }
+}
+
+function regex_valid( regex )
+{
+    try {
+        new RegExp( regex )
+        return true
+    } catch {
+        return false
+    }
+}
+
 async function current_tab()
 {
     const [ tab ] = await chrome.tabs.query( { currentWindow: true, active: true } )
@@ -138,6 +158,14 @@ function arrays_equal( a, b )
 // Update the results list and highlighting on the page if needed
 async function update_results()
 {
+    if( xpath_valid( xpath.value ) )
+        xpath.classList.remove( "invalid" )
+    else
+        xpath.classList.add( "invalid" )
+    if( regex_valid( regex.value ) )
+        regex.classList.remove( "invalid" )
+    else
+        regex.classList.add( "invalid" )
     if( !( await sanity_check() ) )
     {
         if( previous_sanity_check )
@@ -157,7 +185,7 @@ async function update_results()
     previous_result = scrape_result
     previous_linkify = linkify.checked
     previous_sanity_check = true
-    num_results.innerText = scrape_result.length + " results"
+    num_results.innerText = scrape_result.length + " result" + ( scrape_result.length === 1 ? "" : "s" )
     let result_elements = []
     for( let node of scrape_result )
     {
@@ -184,8 +212,9 @@ async function update_results()
     result.replaceChildren( ...result_elements )
 }
 
-for( let e of document.getElementsByTagName( "input" ) )
-    e.addEventListener( "input", update_results )
+[
+    ...document.getElementsByTagName( "input" ), ...document.getElementsByTagName( "textarea" )
+].forEach( e => e.addEventListener( "input", update_results ) )
 
 await chrome.tabs.onCreated.addListener( update_results )
 await chrome.tabs.onActivated.addListener( update_results )
