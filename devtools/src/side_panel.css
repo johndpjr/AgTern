@@ -80,6 +80,11 @@ input[type=text]:focus-visible, textarea:focus-visible {
     text-align: center;
 }
 
+#result {
+    text-align: center;
+}
+
 .result-item {
     overflow-wrap: anywhere;
+    text-align: left;
 }
