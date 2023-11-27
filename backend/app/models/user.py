@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Boolean, Column, Integer, String
 
 from backend.app.database import DatabaseModel
 
@@ -14,7 +14,6 @@ class User(DatabaseModel):
     full_name = Column(String)
     email = Column(String)
     disabled = Column(String)
-    
 
     def __str__(self):
         return str(

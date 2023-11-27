@@ -5,7 +5,7 @@
 0010: Host: www.example.com
 0027: User-Agent: curl/7.81.0
 0040: Accept: */*
-004d: 
+004d:
 == Info: Mark bundle as not supporting multiuse
 <= Recv header, 17 bytes (0x11)
 0000: HTTP/1.1 200 OK
@@ -32,26 +32,26 @@
 <= Recv header, 22 bytes (0x16)
 0000: Content-Length: 1256
 <= Recv header, 2 bytes (0x2)
-0000: 
+0000:
 <= Recv data, 1256 bytes (0x4e8)
 0000: <!doctype html>.<html>.<head>.    <title>Example Domain</title>.
 0040: .    <meta charset="utf-8" />.    <meta http-equiv="Content-type
 0080: " content="text/html; charset=utf-8" />.    <meta name="viewport
 00c0: " content="width=device-width, initial-scale=1" />.    <style ty
-0100: pe="text/css">.    body {.        background-color: #f0f0f2;.   
+0100: pe="text/css">.    body {.        background-color: #f0f0f2;.
 0140:      margin: 0;.        padding: 0;.        font-family: -apple-
-0180: system, system-ui, BlinkMacSystemFont, "Segoe UI", "Open Sans", 
-01c0: "Helvetica Neue", Helvetica, Arial, sans-serif;.        .    }. 
-0200:    div {.        width: 600px;.        margin: 5em auto;.       
+0180: system, system-ui, BlinkMacSystemFont, "Segoe UI", "Open Sans",
+01c0: "Helvetica Neue", Helvetica, Arial, sans-serif;.        .    }.
+0200:    div {.        width: 600px;.        margin: 5em auto;.
 0240:  padding: 2em;.        background-color: #fdfdff;.        border
 0280: -radius: 0.5em;.        box-shadow: 2px 3px 7px 2px rgba(0,0,0,0
-02c0: .02);.    }.    a:link, a:visited {.        color: #38488f;.    
+02c0: .02);.    }.    a:link, a:visited {.        color: #38488f;.
 0300:     text-decoration: none;.    }.    @media (max-width: 700px) {
 0340: .        div {.            margin: 0 auto;.            width: au
 0380: to;.        }.    }.    </style>    .</head>..<body>.<div>.    <
 03c0: h1>Example Domain</h1>.    <p>This domain is for use in illustra
 0400: tive examples in documents. You may use this.    domain in liter
-0440: ature without prior coordination or asking for permission.</p>. 
+0440: ature without prior coordination or asking for permission.</p>.
 0480:    <p><a href="https://www.iana.org/domains/example">More inform
 04c0: ation...</a></p>.</div>.</body>.</html>.
 == Info: Connection #0 to host www.example.com left intact

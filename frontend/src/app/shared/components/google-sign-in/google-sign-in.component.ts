@@ -11,7 +11,7 @@ import { LoginComponent } from 'src/app/pages/login/login.component';
 })
 export class GoogleSignInComponent implements OnInit {
   @Input() loginRef!: LoginComponent;
-  constructor(private zone: NgZone) { }
+  constructor(private zone: NgZone) {}
 
   ngOnInit(): void {
     // @ts-ignore
@@ -33,27 +33,22 @@ export class GoogleSignInComponent implements OnInit {
     // google.accounts.id.prompt((notification: PromptMomentNotification) => {});
   }
 
-
   async handleCredentialResponse(googleUser: any) {
     console.log(googleUser);
-    var token: string = googleUser.credential
+    var token: string = googleUser.credential;
 
     LoginService.googleLogin(token).then(
       () => {
         // login
-        console.log("Resetting");
-        this.loginRef.form.reset()
-        console.log("Navigating");
+        console.log('Resetting');
+        this.loginRef.form.reset();
+        console.log('Navigating');
         this.zone.run(() => this.loginRef.router.navigate(['/jobs']));
       },
       () => {
         // Do nothing since we failed
-        console.log("Failed");
+        console.log('Failed');
       }
     );
-  };
-
+  }
 }
-
-
-
