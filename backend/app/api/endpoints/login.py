@@ -196,9 +196,9 @@ async def google_login(
 ):
     try:
         # Specify the CLIENT_ID of the app that accesses the backend:
-        print("testing")
+        print("testing:", token)
         idinfo = id_token.verify_oauth2_token(token, requests.Request(), CLIENT_ID, clock_skew_in_seconds=1000000,)
-        # print("Success")
+        print("Success")
         # print("ID_info:", idinfo)
         # Or, if multiple clients access the backend server:
         # idinfo = id_token.verify_oauth2_token(token, requests.Request())
@@ -246,4 +246,4 @@ async def google_login(
         # Invalid token
         print("Invalid token:", token)
         print(e)
-        pass
+        return {"Error!"}

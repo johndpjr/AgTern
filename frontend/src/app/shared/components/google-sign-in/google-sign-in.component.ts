@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, NgZone } from '@angular/core';
+import 'zone.js';
 import { LoginService } from 'src/_generated/api';
 import { Router } from '@angular/router';
+import { LoginComponent } from 'src/app/pages/login/login.component';
 
 @Component({
   selector: 'app-google-sign-in',
@@ -8,7 +10,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./google-sign-in.component.scss']
 })
 export class GoogleSignInComponent implements OnInit {
-  constructor(public router: Router) { }
+  @Input() loginRef!: LoginComponent;
+  constructor(private zone: NgZone) { }
 
   ngOnInit(): void {
     // @ts-ignore
@@ -38,10 +41,14 @@ export class GoogleSignInComponent implements OnInit {
     LoginService.googleLogin(token).then(
       () => {
         // login
-        this.router.navigateByUrl('jobs')
+        console.log("Resetting");
+        this.loginRef.form.reset()
+        console.log("Navigating");
+        this.zone.run(() => this.loginRef.router.navigate(['/jobs']));
       },
       () => {
         // Do nothing since we failed
+        console.log("Failed");
       }
     );
   };
