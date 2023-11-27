@@ -1,6 +1,41 @@
 {
-  "company": "Cigna",
-  "link": "https://jobs.cigna.com/us/en/search-results?keywords=Intern",
+  "$schema": "AgTernScrapeConfigSchema.json",
+  "company": {
+    "name": "Cigna"
+  },
+  "links": {
+    "home": "https://www.cigna.com/",
+    "internships": "https://jobs.cigna.com/us/en/search-results?keywords=Intern"
+  },
+  "xpaths": {
+    "next_page": "//a[contains(@class,'next-btn')]",
+    "title": "//div[@class='job-title']",
+    "posting_link": "//a[@ph-tevent='job_click']/@href",
+    "category": "(//span[contains(@class,'category')])[1]",
+    "post_date": "//span[contains(@class,'job-postedDate')]",
+    "company_job_id": "//span[contains(@class,'jobId')]",
+    "apply_link": "(//a[@ph-tevent='apply_click']/@href)[1]",
+    "description": "//section[@class='job-description']"
+  },
+  "regexes": {
+    "category": {
+      "pattern": "Category\\s+(.*)",
+      "group": 1
+    },
+    "post_date": {
+      "pattern": "Posted Date\\s+(.*)",
+      "group": 1
+    },
+    "company_job_id": {
+      "pattern": "Job Id\\s+(.*)",
+      "group": 1
+    },
+    "description": {
+      "pattern": "JOB DESCRIPTION\\s+(.*)",
+      "group": 1
+    }
+  },
+  "unique": [ "posting_link", "company_job_id" ],
   "scrape": [
     {
       "action": "scrape",
