@@ -1,24 +1,53 @@
 {
-  "company": "Texas Instruments",
-  "link": "https://careers.ti.com/search-jobs/?brand=Interns",
+  "$schema": "AgTernScrapeConfigSchema.json",
+  "company": {
+    "name": "Texas Instruments"
+  },
+  "links": {
+    "home": "https://careers.ti.com/",
+    "internships": "https://careers.ti.com/search-jobs/?brand=Interns"
+  },
+  "xpaths": {
+    "title": "//div[contains(@class,'jobTitle')]/a",
+    "posting_link": "//div[contains(@class,'jobTitle')]/a/@href",
+    "location": "//div[@class='search-results-table']/div/div/div/div/div[@class='flex_column joblist-location fusion-layout-column fusion-one-fourth']",
+    "description": "//div[@class='jd-description']",
+    "company_job_id": "//div[@class='fusion-text fusion-text-1']//p",
+    "apply_link": "//a[contains(@class,'fusion-button button-flat')]/@href"
+  },
+  "regexes": {
+    "title": {
+      "pattern": "(.+)",
+      "ignore_case": true,
+      "default": ""
+    },
+  },
+  "unique": [ "posting_link", "company_job_id" ],
   "scrape": [
     {
+      "action": "scroll_to_bottom"
+    },
+    {
       "action": "scrape",
-      "next_page": "//li[@class='pagination-li']//a[contains(@onclick,'next_page')]",
       "properties": [
         {
           "name": "title",
-          "xpath": "//div[contains(@class,'jobTitle')]"
+          "xpath": "//div[contains(@class,'jobTitle')]/a",
+          "regex": {
+            "pattern": "(.+)",
+            "ignore_case": true,
+            "default": ""
+          }
         },
         {
           "name": "posting_link",
-          "xpath": "//a[@class='fusion-button button-default button-small white-button']",
+          "xpath": "//div[contains(@class,'jobTitle')]/a/@href",
           "html_property": "href",
           "unique": true
         },
         {
-          "name": "post_date",
-          "xpath": "//div[@class='flex_column joblist-posdate fusion-layout-column fusion-one-fourth ']"
+          "name": "location",
+          "xpath": "//div[@class='search-results-table']/div/div/div/div/div[@class='flex_column joblist-location fusion-layout-column fusion-one-fourth']"
         }
       ]
     },
@@ -27,31 +56,22 @@
       "link_property": "posting_link",
       "properties": [
         {
-          "name": "apply_link",
-          "xpath": "//a[contains(@class,'fusion-button button-flat')]",
-          "html_property": "href"
+          "name": "description",
+          "xpath": "//div[@class='jd-description']"
         },
         {
-          "name": "location",
-          "xpath": "//hi[@class='fusion-responsive-typography-calculated']",
-          "regex": {
-            "pattern": ".+ – .+ – (.+)",
-            "group": 1,
-            "multiline": false
-          }
+          "name": "tags",
+          "xpath": "//div[@class='jd-description']",
+          "data_processing": "get_keywords(text)"
         },
         {
           "name": "company_job_id",
           "xpath": "//div[@class='fusion-text fusion-text-1']//p"
         },
         {
-          "name": "description",
-          "xpath": "//div[@class='fusion-text fusion-text-2']"
-        },
-        {
-          "name": "tags",
-          "xpath": "//div[@class='fusion-text fusion-text-2']",
-          "data_processing": "get_keywords(text)"
+          "name": "apply_link",
+          "xpath": "//a[contains(@class,'fusion-button button-flat')]",
+          "html_property": "href"
         }
       ]
     }
