@@ -21,8 +21,8 @@
   },
   "regexes": {
     "title": {
-      "pattern": ".+?intern(ship)?(\\))?",
-      "ignore_case": true
+      "pattern": "(.+) \\(.+ \\d{4}\\)",
+      "group": 1
     },
     "year": {
       "pattern": "\\d{4}",
