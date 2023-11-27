@@ -100,6 +100,20 @@ def process_boeing():
     match("category", "description")
     default_process()
 
+@scrape_internships("JPMorgan")
+def scrape_jpmorgan():
+    scroll_to_bottom()
+    scrape_text("title", "category", "location")
+    for link in scrape_links("posting_link"):
+        goto(link)
+        scrape_text("description", "job_type")
+        scrape_links("apply_link")
+
+
+@process_internship("JPMorgan")
+def process_jpmorgan():
+    match("title")
+    default_process()
 
 @scrape_internships("Tesla")
 def scrape_tesla():
@@ -114,4 +128,33 @@ def scrape_tesla():
 @process_internship("Tesla")
 def process_tesla():
     match("title", "year", "period")
+    default_process()
+    
+@scrape_internships("Texas Instruments")
+def scrape_ti():
+    scroll_to_bottom()
+    scrape_text("title", "location")
+    for link in scrape_links("posting_link"):
+        goto(link)
+        scrape_text("description", "company_job_id")
+        scrape_links("apply_link")
+
+
+@process_internship("Texas Instruments")
+def process_ti():
+    match("title")
+    default_process()
+    
+@scrape_internships("Verizon")
+def scrape_verizon():
+    scroll_to_bottom()
+    scrape_text("title", "category", "location")
+    for link in scrape_links("posting_link"):
+        goto(link)
+        scrape_text("description", "company_job_id")
+        scrape_links("apply_link")
+
+@process_internship("Verizon")
+def process_verizon():
+    match("title")
     default_process()
