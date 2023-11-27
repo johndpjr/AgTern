@@ -23,7 +23,7 @@
       "group": 1
     },
     "post_date": {
-      "pattern": "Posted Date\\s+(.*)",
+      "pattern": "Posted Date:\\s+(.*)",
       "group": 1
     },
     "company_job_id": {
