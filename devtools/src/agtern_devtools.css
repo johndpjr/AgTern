@@ -3,7 +3,7 @@
 /* Like the content script, naming conflicts may occur with the webpage. */
 
 @keyframes agtern-devtools-border-blink {
-    from, to { border-color:transparent }
+    from, to { border-color: transparent }
     50% { border-color: red }
 }
 

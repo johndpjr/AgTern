@@ -10,7 +10,12 @@ let __agtern_devtools_invalid_functions__ = [] // Hopefully no naming conflict
 if( typeof highlight === "undefined" )
     function highlight( e )
     {
-        return e.classList.add( "agtern-devtools-selected" )
+        if( !e.classList.contains( "agtern-devtools-selected" ) )
+        {
+            e.classList.add( "agtern-devtools-selected" )
+            return true
+        } else
+            return false
     }
 else
     __agtern_devtools_invalid_functions__.push( "highlight" )
@@ -18,7 +23,12 @@ else
 if( typeof unhighlight === "undefined" )
     function unhighlight( e )
     {
-        e.classList.remove( "agtern-devtools-selected" )
+        if( e.classList.contains( "agtern-devtools-selected" ) )
+        {
+            e.classList.remove( "agtern-devtools-selected" )
+            return true
+        } else
+            return false
     }
 else
     __agtern_devtools_invalid_functions__.push( "unhighlight" )
