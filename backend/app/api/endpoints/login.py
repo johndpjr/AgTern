@@ -4,8 +4,6 @@ from typing import Annotated
 
 import bcrypt
 from dotenv import load_dotenv
-
-from backend.app.core import settings
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from google.auth.transport import requests
@@ -14,6 +12,7 @@ from jose import JWTError, jwt
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
+from backend.app.core import settings
 from backend.app.crud import crud
 from backend.app.database import engine
 from backend.app.models import User as UserModel

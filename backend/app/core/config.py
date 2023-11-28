@@ -15,7 +15,6 @@ class Base(BaseSettings):
     CLIENT_ID: str = None
 
 
-
 class Dev(Base):
     class Config:
         env_file = os.path.join("envs", "dev.env")
