@@ -4,6 +4,8 @@ from typing import Annotated
 
 import bcrypt
 from dotenv import load_dotenv
+
+from backend.app.core import settings
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from google.auth.transport import requests
@@ -19,12 +21,12 @@ from backend.app.models import User as UserModel
 from ..deps import get_db
 
 load_dotenv()
-JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
-ALGORITHM = os.getenv("ALGORITHM")
-ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
+JWT_SECRET_KEY = settings.JWT_SECRET_KEY
+ALGORITHM = settings.ALGORITHM
+ACCESS_TOKEN_EXPIRE_MINUTES = settings.ACCESS_TOKEN_EXPIRE_MINUTES
 
 # Google Client ID
-CLIENT_ID = os.getenv("CLIENT_ID")
+CLIENT_ID = settings.CLIENT_ID
 
 users_db = get_db()
 
