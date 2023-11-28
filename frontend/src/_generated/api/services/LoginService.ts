@@ -39,7 +39,6 @@ export class LoginService {
     public static googleLogin(
         token: string,
     ): CancelablePromise<any> {
-        console.log("Testing");
         return __request(OpenAPI, {
             method: 'POST',
             url: '/login/users/google-login',

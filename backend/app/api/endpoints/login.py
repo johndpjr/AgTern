@@ -20,11 +20,11 @@ from ..deps import get_db
 
 load_dotenv()
 JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ALGORITHM = os.getenv("ALGORITHM")
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
 
 # Google Client ID
-CLIENT_ID = "710734565405-3nkf5plf0m4p460osals94rnksheoh93.apps.googleusercontent.com"
+CLIENT_ID = os.getenv("CLIENT_ID")
 
 users_db = get_db()
 
@@ -195,14 +195,12 @@ async def delete_user(
 async def google_login(token: str, db: Session = Depends(get_db)):
     try:
         # Specify the CLIENT_ID of the app that accesses the backend:
-        print("testing:", token)
         idinfo = id_token.verify_oauth2_token(
             token,
             requests.Request(),
             CLIENT_ID,
             clock_skew_in_seconds=1000000,
         )
-        print("Success")
         # print("ID_info:", idinfo)
         # Or, if multiple clients access the backend server:
         # idinfo = id_token.verify_oauth2_token(token, requests.Request())
@@ -239,7 +237,6 @@ async def google_login(token: str, db: Session = Depends(get_db)):
             user = new_user
         else:
             user = user[0]
-        print(user.username)
         access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
         access_token = create_access_token(
             data={"sub": user.username}, expires_delta=access_token_expires
@@ -248,6 +245,4 @@ async def google_login(token: str, db: Session = Depends(get_db)):
 
     except ValueError as e:
         # Invalid token
-        print("Invalid token:", token)
-        print(e)
-        return {"Error!"}
+        return {"Error": e}

@@ -34,20 +34,16 @@ export class GoogleSignInComponent implements OnInit {
   }
 
   async handleCredentialResponse(googleUser: any) {
-    console.log(googleUser);
     var token: string = googleUser.credential;
 
     LoginService.googleLogin(token).then(
       () => {
         // login
-        console.log('Resetting');
         this.loginRef.form.reset();
-        console.log('Navigating');
         this.zone.run(() => this.loginRef.router.navigate(['/jobs']));
       },
       () => {
         // Do nothing since we failed
-        console.log('Failed');
       }
     );
   }
