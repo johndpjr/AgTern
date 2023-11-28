@@ -27,12 +27,19 @@ async def get_track_points(
 @router.post("/", response_model=JobTrackSchema)
 async def create_track_point(track: JobTrackCreate, db: Session = Depends(get_db)):
     """Adds a JobTrack."""
+
+    # Create a new track if one does not exist for this job and user
+    # user_job_track = crud.get_user_job_track(db, 1, track.job_id)
+    # if not user_job_track:
+    #     user_job_track = crud.create_user_job_track(db, 1, track.job_id)
+
     db_track = JobTrackModel(
         **{
             k: v
             for k, v in track.dict().items()
             if k in JobTrackModel.__table__.columns.keys() and v is not None
-        }
+        },
+        # user_job_track_id=user_job_track.id
     )
     return crud.create_track_point(db, db_track)
 

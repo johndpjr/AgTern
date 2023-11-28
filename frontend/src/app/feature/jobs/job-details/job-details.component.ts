@@ -1,7 +1,8 @@
 import { Component, Input } from '@angular/core';
-import { Job, JobStatusType } from '../../../../_generated/api';
+import { Job, JobStatusType, TrackService } from '../../../../_generated/api';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { AuthService } from '../../../shared/services/auth.service';
 
 @Component({
   selector: 'app-job-details',
@@ -54,5 +55,10 @@ export class JobDetailsComponent {
 
   onStatusFormSubmit() {
     console.log(this.statusForm.value);
+    TrackService.createTrackPoint({
+      status: this.statusForm.get('status')!.value,
+      timestamp: this.statusForm.get('dateStatusChange')!.value,
+      job_id: this.job.id
+    });
   }
 }

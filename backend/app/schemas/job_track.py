@@ -26,18 +26,19 @@ class JobStatusType(str, Enum):
 
 
 class JobTrackBase(BaseModel):
-    id: Union[int, None] = None
-    job_status: Union[JobStatusType, None] = None
-    user_job_track_id: Union[int, None] = None
-    timestamp: str = None
+    status: Union[JobStatusType, None] = None
+    timestamp: Union[str, None] = None
 
 
 class JobTrackCreate(JobTrackBase):
-    pass
+    job_id: Union[int, None] = None
 
 
 class JobTrack(JobTrackBase):
     """Models job track items."""
+
+    id: Union[int, None] = None
+    user_job_track_id: Union[int, None] = None
 
     class Config:
         validate_assignment = True

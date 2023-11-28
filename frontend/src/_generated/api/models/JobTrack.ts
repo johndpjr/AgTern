@@ -8,8 +8,8 @@ import type { JobStatusType } from './JobStatusType';
  * Models job track items.
  */
 export type JobTrack = {
-    id?: number;
-    job_status?: JobStatusType;
-    user_job_track_id?: number;
+    status?: JobStatusType;
     timestamp?: string;
+    id?: number;
+    user_job_track_id?: number;
 };
