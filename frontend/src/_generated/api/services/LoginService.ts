@@ -30,28 +30,6 @@ export class LoginService {
     }
 
     /**
-      * GoogleLogin
-      * Logins a user via google
-      * @param id_token
-      * @returns any Successful Response
-      * @throws ApiError
-      */
-    public static googleLogin(
-        token: string,
-    ): CancelablePromise<any> {
-        return __request(OpenAPI, {
-            method: 'POST',
-            url: '/login/users/google-login',
-            query: {
-                'token': token,
-            },
-            errors: {
-                422: `Validation Error`,
-            },
-        });
-    }
-
-    /**
      * Read Users Me
      * @returns any Successful Response
      * @throws ApiError
@@ -112,6 +90,27 @@ export class LoginService {
             query: {
                 'username': username,
                 'password': password,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Google Login
+     * @param token
+     * @returns any Successful Response
+     * @throws ApiError
+     */
+    public static googleLogin(
+        token: string,
+    ): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/login/users/google-login',
+            query: {
+                'token': token,
             },
             errors: {
                 422: `Validation Error`,

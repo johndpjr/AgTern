@@ -1,7 +1,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { JobStatus } from '../models/JobStatus';
 import type { JobTrack } from '../models/JobTrack';
 import type { JobTrackCreate } from '../models/JobTrackCreate';
 
@@ -57,10 +56,10 @@ export class TrackService {
     /**
      * Get Track Statuses
      * Returns all job track statuses.
-     * @returns JobStatus Successful Response
+     * @returns JobTrack Successful Response
      * @throws ApiError
      */
-    public static getTrackStatuses(): CancelablePromise<Array<JobStatus>> {
+    public static getTrackStatuses(): CancelablePromise<Array<JobTrack>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/track/statuses',

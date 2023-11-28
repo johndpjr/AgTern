@@ -2,7 +2,6 @@ from typing import List
 
 from sqlalchemy.orm import Session
 
-from backend.app.models import JobStatus as TrackStatusModel
 from backend.app.models import JobTrack as TrackModel
 from backend.app.models import UserJobTrack as UserTrackModel
 from backend.app.schemas import JobTrack as TrackSchema
@@ -38,4 +37,4 @@ def update_track():
 
 
 def get_track_statuses(db: Session):
-    return db.query(TrackStatusModel).all()
+    return []
