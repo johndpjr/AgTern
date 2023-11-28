@@ -5,8 +5,7 @@ WORKDIR /app/frontend
 COPY frontend ./
 
 RUN npm install
-
-CMD npm start
+RUN npm run build
 
 FROM python:3.11
 
@@ -17,9 +16,11 @@ WORKDIR /app
 # install all requirements
 COPY requirements.txt ./
 RUN pip3 install --no-cache-dir -r requirements.txt
+RUN python -m nltk.downloader popular
 
 COPY backend /app/backend
 COPY data /app/data
+COPY envs /app/envs
 
 COPY --from=build /app/frontend/dist/agtern-client /app/frontend/dist/agtern-client
 
