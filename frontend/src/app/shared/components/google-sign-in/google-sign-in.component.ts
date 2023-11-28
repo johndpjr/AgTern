@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, NgZone } from '@angular/core';
+import 'zone.js';
+import { LoginService } from 'src/_generated/api';
+import { Router } from '@angular/router';
+import { LoginComponent } from 'src/app/pages/login/login.component';
 
 @Component({
   selector: 'app-google-sign-in',
@@ -6,7 +10,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./google-sign-in.component.scss']
 })
 export class GoogleSignInComponent implements OnInit {
-  constructor() {}
+  @Input() loginRef!: LoginComponent;
+  constructor(private zone: NgZone) {}
 
   ngOnInit(): void {
     // @ts-ignore
@@ -28,7 +33,18 @@ export class GoogleSignInComponent implements OnInit {
     // google.accounts.id.prompt((notification: PromptMomentNotification) => {});
   }
 
-  async handleCredentialResponse(response: any) {
-    console.log(response);
+  async handleCredentialResponse(googleUser: any) {
+    var token: string = googleUser.credential;
+
+    LoginService.googleLogin(token).then(
+      () => {
+        // login
+        this.loginRef.form.reset();
+        this.zone.run(() => this.loginRef.router.navigate(['/jobs']));
+      },
+      () => {
+        // Do nothing since we failed
+      }
+    );
   }
 }

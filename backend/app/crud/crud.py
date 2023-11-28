@@ -151,6 +151,20 @@ def search_users(db: Session, username: str, skip: int = 0, limit: int = 1000):
     return convert_users(*results)
 
 
+def search_users_by_google_id(
+    db: Session, field_val: str, skip: int = 0, limit: int = 1000
+):
+    """Searches for users by a given field value in a field"""
+    results = (
+        db.query(UserModel)
+        .filter(UserModel.google_id == field_val)
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
+    return convert_users(*results)
+
+
 def delete_user(db: Session, username: str):
     """Deletes a user with the given username"""
     user = db.query(UserModel).filter(UserModel.username == username).first()

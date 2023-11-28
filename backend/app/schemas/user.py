@@ -5,6 +5,8 @@ from pydantic import BaseModel
 
 class UserBase(BaseModel):
     id: Union[int, None] = None
+    google_id: str = ""
+    made_password: bool = False
     username: str = ""
     password: str = ""
     full_name: str = ""

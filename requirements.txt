@@ -2,6 +2,7 @@ async_timeout==4.0.3
 bcrypt==4.0.1
 celery[redis]
 fastapi==0.95.2
+google-api-python-client==2.108.0
 nltk==3.8.1
 passlib[bcrypt]==1.7.4
 pre-commit==3.5.0

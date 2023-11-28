@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Boolean, Column, Integer, String
 
 from backend.app.database import DatabaseModel
 
@@ -7,6 +7,8 @@ class User(DatabaseModel):
     __tablename__ = "user"
 
     id = Column(Integer, primary_key=True, index=True)
+    google_id = Column(String)
+    made_password = Column(Boolean)
     username = Column(String)
     password = Column(String)
     full_name = Column(String)

@@ -9,6 +9,8 @@ import { AuthService } from '../../shared/services/auth.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
+  // Reference to itself
+  selfRef: LoginComponent = this;
   constructor(
     private authService: AuthService,
     public router: Router

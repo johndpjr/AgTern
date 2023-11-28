@@ -9,6 +9,10 @@ class Base(BaseSettings):
     API_V1_STR = ""
     HOST: str = None
     PORT: int = None
+    JWT_SECRET_KEY: str = None
+    ALGORITHM: str = None
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = None
+    CLIENT_ID: str = None
 
 
 class Dev(Base):
