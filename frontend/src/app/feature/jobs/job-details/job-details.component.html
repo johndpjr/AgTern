@@ -47,27 +47,35 @@
             </ul>
           </div>
 
-          <form class="event-form" [formGroup]="eventForm" (ngSubmit)="onEventFormSubmit()">
+          <div class="status-line"></div>
 
-            <mat-form-field>
-              <mat-label>Status</mat-label>
-              <mat-select>
-                <mat-option
-                  *ngFor="let jobStatus of jobStatusList" value="{{jobStatus}}">
-                  {{jobStatus}}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
+          <div class="status-form-container">
 
-            <mat-form-field>
-              <mat-label>Choose a date</mat-label>
-              <input matInput [matDatepicker]="picker">
-              <mat-hint>MM/DD/YYYY</mat-hint>
-              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
+            <form class="status-form" [formGroup]="statusForm" (ngSubmit)="onStatusFormSubmit()">
 
-          </form>
+              <mat-form-field>
+                <mat-label>Status</mat-label>
+                <mat-select formControlName="status" required>
+                  <mat-option
+                    *ngFor="let jobStatus of jobStatusList" value="{{jobStatus}}">
+                    {{jobStatus}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field>
+                <mat-label>Choose a date</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="dateStatusChange">
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+
+              <button mat-stroked-button type="submit" color="primary">Change Status</button>
+
+            </form>
+
+          </div>
 
         </div>
       </div>

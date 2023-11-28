@@ -55,6 +55,10 @@
   margin-bottom: 15px;
 }
 
+.status-list {
+  margin-bottom: 15px;
+}
+
 .status-list ul {
   list-style-type: none;
   padding: 0;
@@ -64,6 +68,11 @@
   margin-bottom: 5px;
   display: flex;
   justify-content: space-between; /* Places content at opposite ends */
+}
+
+.status-form-container {
+  display: flex;
+  flex-direction: column;
 }
 
 .date {

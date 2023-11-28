@@ -41,26 +41,18 @@ export class JobDetailsComponent {
     'negotiating_offer'
   ];
 
-  eventForm: FormGroup;
-  dtPickerConfig = {
-    showSpinners: true,
-    stepMinute: 15,
-    touchUi: false,
-    enableMeridian: true,
-    defaultTime: [9, 0, 0] // 09:00:00 (H, M, S)
-  };
+  statusForm: FormGroup;
 
   constructor(private fb: FormBuilder) {
-    this.eventForm = this.fb.group({
-      title: '',
-      event_category_id: '',
-      dt_start: '',
-      dt_end: '',
-      description: ''
+    this.statusForm = this.fb.group({
+      status: '',
+      dateStatusChange: ''
     });
   }
 
   ngOnInit(): void {}
 
-  onEventFormSubmit() {}
+  onStatusFormSubmit() {
+    console.log(this.statusForm.value);
+  }
 }
