@@ -30,7 +30,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: manual
+  storageClassName: local-storage
   resources:
     requests:
       storage: 1Gi
@@ -44,21 +44,21 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: manual
+  storageClassName: local-storage
   resources:
     requests:
       storage: 1Gi
 
 ---
 
-apiVersion: v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: agtern-deployment
   labels:
     app: agtern
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: agtern
@@ -69,7 +69,7 @@ spec:
     spec:
       containers:
       - name: agtern
-        image: ghcr.io/agtern:dev
+        image: jeremyeastham/agtern:dev
         ports:
         - containerPort: 8000
         volumeMounts:
@@ -77,13 +77,13 @@ spec:
           mountPath: /app/data
         - name: log-volume
           mountPath: /app/log
-  volumes:
-    - name: data-volume
-      persistentVolumeClaim:
-        claimName: data-pvc
-    - name: log-volume
-      persistentVolumeClaim:
-        claimName: config-pvc
+      volumes:
+        - name: data-volume
+          persistentVolumeClaim:
+            claimName: data-pvc
+        - name: log-volume
+          persistentVolumeClaim:
+            claimName: log-pvc
 
 ---
 

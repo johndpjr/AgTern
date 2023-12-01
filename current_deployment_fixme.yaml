@@ -1,0 +1,38 @@
+# FIXME This is the file that was used to deploy the current version of the cluster
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agtern-deployment
+  labels:
+    app: agtern
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: agtern
+  template:
+    metadata:
+      labels:
+        app: agtern
+    spec:
+      containers:
+      - name: agtern
+        image: jeremyeastham/agtern:dev
+        ports:
+        - containerPort: 8000
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: agtern-service
+spec:
+  selector:
+    app: agtern
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8000
+  type: LoadBalancer
