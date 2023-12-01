@@ -1,11 +1,4 @@
-apiVersion: v1
-kind: StorageClass
-metadata:
-  name: local-storage
-provisioner: kubernetes.io/no-provisioner
-volumeBindingMode: WaitForFirstConsumer
-
----
+# FIXME This file is broken right now, the PVs and PVCs are not bound correctly
 
 apiVersion: v1
 kind: PersistentVolume
