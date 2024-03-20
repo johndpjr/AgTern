@@ -6,13 +6,29 @@ metadata:
   name: data-pv
 spec:
   capacity:
-    storage: 2Gi
+    storage: 10Gi
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
   storageClassName: local-storage
   hostPath:
-    path: "/data"
+    path: "/agtern/data"
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: log-pv
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-storage
+  hostPath:
+    path: "/agtern/log"
 
 ---
 
@@ -22,11 +38,12 @@ metadata:
   name: data-pvc
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   storageClassName: local-storage
   resources:
     requests:
-      storage: 1Gi
+      storage: 10Gi
+  volumeName: data-pv
 
 ---
 
@@ -36,11 +53,12 @@ metadata:
   name: log-pvc
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   storageClassName: local-storage
   resources:
     requests:
-      storage: 1Gi
+      storage: 10Gi
+  volumeName: log-pv
 
 ---
 
