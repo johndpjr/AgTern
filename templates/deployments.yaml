@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agtern-deployment
+  labels:
+    app: agtern
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: agtern
+  template:
+    metadata:
+      labels:
+        app: agtern
+    spec:
+      containers:
+      - name: agtern
+        image: jeremyeastham/agtern:dev
+        ports:
+        - containerPort: 8000

@@ -128,6 +128,9 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# Helm
+charts/
+
 # Ignore temp data and SQLite db
 data/temp/
 data/*.db

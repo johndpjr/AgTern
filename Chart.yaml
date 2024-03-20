@@ -1,6 +1,19 @@
 apiVersion: v2
 name: AgTern
 description: A Helm chart for Kubernetes
+# TODO: Add home URL when we register a domain
+sources:
+  - https://github.com/johndpjr/AgTern
+dependencies:
+  - name: kubernetes-dashboard
+    version: 7.1.2
+    repository: https://kubernetes.github.io/dashboard
+  - name: actions-runner-controller
+    version: 0.23.7
+    repository: https://actions-runner-controller.github.io/actions-runner-controller
+  - name: postgresql
+    version: 15.1.0
+    repository: https://charts.bitnami.com/bitnami
 
 # A chart can be either an 'application' or a 'library' chart.
 #

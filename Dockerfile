@@ -9,6 +9,7 @@ ENV PYTHONUNBUFFERED 1
 WORKDIR /agtern
 COPY requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
+# TODO: Remove the nltk download step since it's time and bandwidth consuming
 RUN python -m nltk.downloader popular
 COPY ./backend ./backend
 COPY ./data ./data
