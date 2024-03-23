@@ -8,12 +8,18 @@ dependencies:
   - name: kubernetes-dashboard
     version: 7.1.2
     repository: https://kubernetes.github.io/dashboard
-  - name: actions-runner-controller
-    version: 0.23.7
-    repository: https://actions-runner-controller.github.io/actions-runner-controller
+  # See https://github.com/actions/actions-runner-controller/blob/master/charts/actions-runner-controller/docs/UPGRADING.md
+  # before upgrading the version of actions-runner-controller. More CRDs may need to be installed manually before deployment.
+#  - name: actions-runner-controller
+#    version: 0.23.7
+#    repository: https://actions-runner-controller.github.io/actions-runner-controller
+  # TODO: Fix actions-runner-controller
   - name: postgresql
     version: 15.1.0
     repository: https://charts.bitnami.com/bitnami
+  - name: harbor
+    version: 1.14.0
+    repository: https://helm.goharbor.io
 
 # A chart can be either an 'application' or a 'library' chart.
 #

@@ -1,0 +1,14 @@
+# Default values for AgTern's Helm Chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+kubernetes-dashboard: {}
+
+actions-runner-controller: {}
+
+postgresql:
+  auth:
+    username: postgres
+    password: postgres
+
+harbor: {}

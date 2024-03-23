@@ -129,7 +129,7 @@ dmypy.json
 .pyre/
 
 # Helm
-charts/
+helm/charts/
 
 # Ignore temp data and SQLite db
 data/temp/

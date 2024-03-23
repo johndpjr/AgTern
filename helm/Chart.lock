@@ -1,0 +1,15 @@
+dependencies:
+- name: kubernetes-dashboard
+  repository: https://kubernetes.github.io/dashboard
+  version: 7.1.2
+- name: actions-runner-controller
+  repository: https://actions-runner-controller.github.io/actions-runner-controller
+  version: 0.23.7
+- name: postgresql
+  repository: https://charts.bitnami.com/bitnami
+  version: 15.1.0
+- name: harbor
+  repository: https://helm.goharbor.io
+  version: 1.14.0
+digest: sha256:c713836fcfa1680ec99f507973a89b9b109c03b7bd4b40e4a616c59ac3bda239
+generated: "2024-03-22T17:21:15.4100046-05:00"
