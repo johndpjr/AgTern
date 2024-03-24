@@ -26,7 +26,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from undetected_chromedriver import Chrome
 from webdriver_manager.chrome import ChromeDriverManager
 
-from backend.app.crud import crud
+from backend.app.crud import jobs
 from backend.app.database import DatabaseSession
 from backend.app.models import Job as JobModel
 from backend.app.utils import LOG, DataFile
@@ -135,7 +135,7 @@ class WebScraper:
                 LOG.error(errors)
                 success = False
         try:
-            crud.create_jobs(ctx.db, *jobs_to_add)
+            jobs.create_jobs(ctx.db, *jobs_to_add)
             LOG.info("Saving to database succeeded!")
         except Exception as e:
             LOG.error("Saving to database FAILED!")

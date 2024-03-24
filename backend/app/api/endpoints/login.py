@@ -10,7 +10,7 @@ from jose import JWTError, jwt
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
-from backend.app.crud import crud
+from backend.app.crud import login
 from backend.app.database import engine
 from backend.app.models import User as UserModel
 
@@ -69,7 +69,7 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
 
 
 def get_user(db, username: str):
-    users = crud.search_users(db, username)
+    users = login.search_users(db, username)
     if len(users) > 0:
         return users[0]
     return None
@@ -145,7 +145,7 @@ async def register_user(
     db: Session = Depends(get_db),
 ):
     """Registers a user"""
-    users = crud.search_users(db, username)
+    users = login.search_users(db, username)
     hashed_password = hashing_function(password)
     if len(users) > 0:
         raise HTTPException(status_code=400, detail="Username already exists!")
@@ -159,7 +159,7 @@ async def register_user(
         }
     )
     user_list = [new_user]
-    crud.create_users(db, *user_list)
+    login.create_users(db, *user_list)
     return {"status": "success"}
 
 
@@ -172,7 +172,7 @@ async def delete_user(
 ):
     """Deletes a user. Requires password confirmation"""
     if authenticate_user(username, password, db):
-        crud.delete_user(db, username)
+        login.delete_user(db, username)
         return {"deleted": True}
     else:
         return {"deleted": False}
