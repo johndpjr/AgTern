@@ -2,6 +2,7 @@ apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
 metadata:
   name: kubernetes-dashboard
+  namespace: agtern-dependencies
 spec:
   interval: 1m
   url: https://kubernetes.github.io/dashboard
@@ -12,6 +13,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
   name: kubernetes-dashboard
+  namespace: agtern-dependencies
 spec:
   interval: 5m
   targetNamespace: kubernetes-dashboard
