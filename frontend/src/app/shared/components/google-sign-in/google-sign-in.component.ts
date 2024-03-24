@@ -12,7 +12,7 @@ import { SignUpComponent } from 'src/app/pages/sign-up/sign-up.component';
 })
 export class GoogleSignInComponent implements OnInit {
   @Input() loginRef!: LoginComponent;
-  constructor(private zone: NgZone) { }
+  constructor(private zone: NgZone) {}
 
   ngOnInit(): void {
     // @ts-ignore
@@ -25,16 +25,15 @@ export class GoogleSignInComponent implements OnInit {
     });
     var sign_up_button_id = 'google-button';
     // @ts-ignore
-    setTimeout(
-      function () {
+    setTimeout(function () {
+      // @ts-ignore
+      google.accounts.id.renderButton(
         // @ts-ignore
-        google.accounts.id.renderButton(
-          // @ts-ignore
-          document.getElementById(sign_up_button_id),
-          { theme: 'outline', size: 'large', width: '100%' }
-        )
-        console.log("Delayed");
-      }, 100);
+        document.getElementById(sign_up_button_id),
+        { theme: 'outline', size: 'large', width: '100%' }
+      );
+      console.log('Delayed');
+    }, 100);
     // @ts-ignore
     // Enable for an additional "Sign-in with Google" notification on the top right
     // google.accounts.id.prompt((notification: PromptMomentNotification) => {});

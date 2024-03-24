@@ -21,12 +21,13 @@ const routes: Routes = [
         path: 'sign-up',
         component: SignUpComponent,
         title: 'AgTern | Sign Up'
-      },
-    ],
-
+      }
+    ]
   },
   {
-    path: '**', component: NotFoundComponent, title: 'AgTern | 404 Not Found Error Helpa'
+    path: '**',
+    component: NotFoundComponent,
+    title: 'AgTern | 404 Not Found Error Helpa'
   }
 ];
 
@@ -34,4 +35,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class MainRoutingModule { }
+export class MainRoutingModule {}
