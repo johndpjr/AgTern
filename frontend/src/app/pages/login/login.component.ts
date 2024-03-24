@@ -14,7 +14,7 @@ export class LoginComponent {
   constructor(
     public authService: AuthService,
     public router: Router
-  ) { }
+  ) {}
 
   incorrectLogin: boolean = false;
 

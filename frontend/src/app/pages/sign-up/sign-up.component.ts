@@ -10,7 +10,6 @@ import { LoginComponent } from '../login/login.component';
   styleUrls: ['./sign-up.component.scss']
 })
 export class SignUpComponent extends LoginComponent {
-
   isTakenUsername: boolean = false;
 
   override form: FormGroup = new FormGroup({
