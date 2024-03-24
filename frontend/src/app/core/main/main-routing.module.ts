@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { MainComponent } from './main.component';
 import { LoginComponent } from '../../pages/login/login.component';
 import { SignUpComponent } from '../../pages/sign-up/sign-up.component';
+import { NotFoundComponent } from '../../pages/not-found/not-found.component';
 
 const routes: Routes = [
   {
@@ -22,6 +23,11 @@ const routes: Routes = [
         title: 'AgTern | Sign Up'
       }
     ]
+  },
+  {
+    path: '**',
+    component: NotFoundComponent,
+    title: 'AgTern | 404 Not Found Error Helpa'
   }
 ];
 

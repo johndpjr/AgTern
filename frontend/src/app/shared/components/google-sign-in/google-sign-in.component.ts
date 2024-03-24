@@ -3,6 +3,7 @@ import 'zone.js';
 import { LoginService } from 'src/_generated/api';
 import { Router } from '@angular/router';
 import { LoginComponent } from 'src/app/pages/login/login.component';
+import { SignUpComponent } from 'src/app/pages/sign-up/sign-up.component';
 
 @Component({
   selector: 'app-google-sign-in',
@@ -22,12 +23,17 @@ export class GoogleSignInComponent implements OnInit {
       auto_select: false,
       cancel_on_tap_outside: true
     });
+    var sign_up_button_id = 'google-button';
     // @ts-ignore
-    google.accounts.id.renderButton(
+    setTimeout(function () {
       // @ts-ignore
-      document.getElementById('google-button'),
-      { theme: 'outline', size: 'large', width: '100%' }
-    );
+      google.accounts.id.renderButton(
+        // @ts-ignore
+        document.getElementById(sign_up_button_id),
+        { theme: 'outline', size: 'large', width: '100%' }
+      );
+      console.log('Delayed');
+    }, 100);
     // @ts-ignore
     // Enable for an additional "Sign-in with Google" notification on the top right
     // google.accounts.id.prompt((notification: PromptMomentNotification) => {});

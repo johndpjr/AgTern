@@ -9,11 +9,15 @@ const routes: Routes = [
       import('./core/main/main.module').then((m) => m.MainModule),
     title: 'AgTern'
   },
-  { path: '**', component: NotFoundComponent, title: 'AgTern | 404 Not Found' }
+  {
+    path: '**',
+    component: NotFoundComponent,
+    title: 'AgTern | 404 Not Found Error Helpa'
+  }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { useHash: true })],
   exports: [RouterModule]
 })
 export class AppRoutingModule {}

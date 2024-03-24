@@ -10,9 +10,9 @@ import { AuthService } from '../../shared/services/auth.service';
 })
 export class LoginComponent {
   // Reference to itself
-  selfRef: LoginComponent = this;
+  public selfRef: LoginComponent = this;
   constructor(
-    private authService: AuthService,
+    public authService: AuthService,
     public router: Router
   ) {}
 
