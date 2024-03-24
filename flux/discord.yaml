@@ -5,6 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   type: discord
+  channel: deployment
   secretRef:
     name: discord-webhook
 
