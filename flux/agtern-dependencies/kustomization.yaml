@@ -1,14 +1,7 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: agtern-dependencies
-
----
-
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 metadata:
   name: kubernetes-dashboard
-  namespace: agtern-dependencies
+  namespace: flux-system
 resources:
   - kubernetes-dashboard.yaml
