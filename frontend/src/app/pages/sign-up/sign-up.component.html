@@ -29,6 +29,10 @@
         <button type="submit" mat-button>Sign Up</button>
       </div>
 
+      <div class="sign-up-button">
+        <app-google-sign-in [loginRef]="selfRef"></app-google-sign-in>
+      </div>
+
       <div class="invalid-username" *ngIf="isTakenUsername"><p>Username is already taken</p></div>
 
     </form>

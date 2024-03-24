@@ -2,21 +2,18 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../shared/services/auth.service';
+import { LoginComponent } from '../login/login.component';
 
 @Component({
   selector: 'app-sign-up',
   templateUrl: './sign-up.component.html',
   styleUrls: ['./sign-up.component.scss']
 })
-export class SignUpComponent {
-  constructor(
-    public router: Router,
-    private authService: AuthService
-  ) {}
+export class SignUpComponent extends LoginComponent {
 
   isTakenUsername: boolean = false;
 
-  form: FormGroup = new FormGroup({
+  override form: FormGroup = new FormGroup({
     username: new FormControl('', Validators.required),
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [
@@ -25,7 +22,7 @@ export class SignUpComponent {
     ])
   });
 
-  submit() {
+  override submit() {
     if (this.form.valid) {
       this.authService
         .signUp(
