@@ -3,8 +3,9 @@ kind: Kustomization
 metadata:
   name: kubernetes-dashboard
   namespace: flux-system
-resources:
+resources: # Note: Order matters!
   - namespaces.yaml
+  - sealed-secrets.yaml
   - longhorn.yaml
   - kubernetes-dashboard.yaml
 #  - postgresql.yaml
