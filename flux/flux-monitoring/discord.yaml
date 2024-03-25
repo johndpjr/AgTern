@@ -1,20 +1,30 @@
 apiVersion: notification.toolkit.fluxcd.io/v1beta3
 kind: Provider
 metadata:
-  name: discord
+  name: discord-webhook
   namespace: flux-system
 spec:
   type: discord
   channel: deployment
-  secretRef:
-    name: discord-webhook
+  address: "https://discord.com/api/webhooks/1221565643434758274/SagIGpo450kL1kbYNomzngSB3hgnULg9SXZP-Wnx9783t_SVFJ5XJ-fzY3ESIC4QSOEQ"
 
 ---
-
-apiVersion: v1
-kind: Secret
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
+kind: Alert
 metadata:
-  name: discord-webhook
+  name: discord-alerts
   namespace: flux-system
-stringData:
-    address: "https://discord.com/api/webhooks/1221565643434758274/SagIGpo450kL1kbYNomzngSB3hgnULg9SXZP-Wnx9783t_SVFJ5XJ-fzY3ESIC4QSOEQ"
+spec:
+  summary: "AgTern Server:"
+  providerRef:
+    name: discord-webhook
+  eventSeverity: info
+  eventSources:
+    - kind: GitRepository
+      name: "*"
+    - kind: Kustomization
+      name: "*"
+    - kind: HelmChart
+      name: "*"
+    - kind: HelmRelease
+      name: "*"
