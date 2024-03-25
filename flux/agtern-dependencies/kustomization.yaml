@@ -4,4 +4,5 @@ metadata:
   name: kubernetes-dashboard
   namespace: flux-system
 resources:
+  - namespaces.yaml
   - kubernetes-dashboard.yaml
