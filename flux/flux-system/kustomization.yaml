@@ -13,7 +13,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 1m0s
-  path: ./flux-monitoring
+  path: ./flux/flux-monitoring
   prune: true
   sourceRef:
     kind: GitRepository
@@ -28,7 +28,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 1m0s
-  path: ./agtern-dependencies
+  path: ./flux/agtern-dependencies
   prune: true
   sourceRef:
     kind: GitRepository
