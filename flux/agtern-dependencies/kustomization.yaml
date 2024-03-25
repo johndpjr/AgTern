@@ -6,4 +6,3 @@ metadata:
 resources:
   - namespaces.yaml
   - kubernetes-dashboard.yaml
-namePrefix: agtern-
