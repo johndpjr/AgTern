@@ -1,0 +1,31 @@
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: postgresql
+  namespace: agtern-dependencies
+spec:
+  interval: 1m
+  url: https://charts.bitnami.com/bitnami
+
+---
+
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: postgresql
+  namespace: agtern-dependencies
+spec:
+  interval: 5m
+  targetNamespace: postgresql
+  chart:
+    spec:
+      chart: postgresql
+      version: "15.1.0"
+      sourceRef:
+        kind: HelmRepository
+        name: postgresql
+      interval: 1m
+  # https://github.com/bitnami/charts/blob/main/bitnami/postgresql/values.yaml
+  values: {}
+  install:
+    createNamespace: true
