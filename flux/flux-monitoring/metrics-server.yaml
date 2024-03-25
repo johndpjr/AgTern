@@ -1,0 +1,31 @@
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: metrics-server
+  namespace: flux-monitoring
+spec:
+  interval: 1m
+  url: https://kubernetes-sigs.github.io/metrics-server/
+
+---
+
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: metrics-server
+  namespace: flux-monitoring
+spec:
+  interval: 5m
+  targetNamespace: metrics-server
+  chart:
+    spec:
+      chart: metrics-server
+      version: "3.12.0"
+      sourceRef:
+        kind: HelmRepository
+        name: metrics-server
+      interval: 1m
+  # https://github.com/kubernetes-sigs/metrics-server/blob/master/charts/metrics-server/values.yaml
+  values: {}
+  install:
+    createNamespace: true

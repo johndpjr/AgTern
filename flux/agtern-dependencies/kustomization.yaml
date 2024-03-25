@@ -5,7 +5,6 @@ metadata:
   namespace: flux-system
 resources: # Note: Order matters!
   - namespaces.yaml
-  - sealed-secrets.yaml
   - longhorn.yaml
-  - kubernetes-dashboard.yaml
+#  - kubernetes-dashboard.yaml
 #  - postgresql.yaml

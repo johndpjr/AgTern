@@ -1,3 +1,5 @@
+# NOTE: This is not being deployed yet! (commented in kustomization.yaml)
+
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
 metadata:

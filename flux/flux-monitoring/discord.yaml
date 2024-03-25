@@ -2,7 +2,7 @@ apiVersion: notification.toolkit.fluxcd.io/v1beta3
 kind: Provider
 metadata:
   name: discord-webhook
-  namespace: flux-system
+  namespace: flux-monitoring
 spec:
   type: discord
   channel: deployment
@@ -14,7 +14,7 @@ apiVersion: notification.toolkit.fluxcd.io/v1beta3
 kind: Alert
 metadata:
   name: discord-alerts
-  namespace: flux-system
+  namespace: flux-monitoring
 spec:
   providerRef:
     name: discord-webhook
@@ -22,30 +22,13 @@ spec:
   eventSources:
     - kind: GitRepository
       name: "*"
+      namespace: flux-system
     - kind: Kustomization
       name: "*"
+      namespace: flux-system
     - kind: HelmChart
       name: "*"
+      namespace: flux-system
     - kind: HelmRelease
       name: "*"
-
----
-
-apiVersion: notification.toolkit.fluxcd.io/v1beta3
-kind: Alert
-metadata:
-  name: discord-alerts
-  namespace: agtern-dependencies
-spec:
-  providerRef:
-    name: discord-webhook
-  eventSeverity: info
-  eventSources:
-    - kind: GitRepository
-      name: "*"
-    - kind: Kustomization
-      name: "*"
-    - kind: HelmChart
-      name: "*"
-    - kind: HelmRelease
-      name: "*"
+      namespace: flux-system
