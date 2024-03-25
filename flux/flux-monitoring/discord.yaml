@@ -15,7 +15,6 @@ metadata:
   name: discord-alerts
   namespace: flux-system
 spec:
-  summary: "AgTern Server:"
   providerRef:
     name: discord-webhook
   eventSeverity: info
