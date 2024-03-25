@@ -5,3 +5,4 @@ metadata:
   namespace: flux-system
 resources:
   - discord.yaml
+namePrefix: agtern-
