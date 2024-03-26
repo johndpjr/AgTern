@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: resize-swapfile
-  namespace: flex-jobs
+  namespace: flex-system
 spec:
   selector:
     matchLabels:
