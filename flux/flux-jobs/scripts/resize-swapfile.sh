@@ -1,13 +1,14 @@
 # Run the script on the host Node:
+export SWAPFILE_SIZE_GB=$1
 chroot /host /bin/bash <<"EOF"
 
-if [ -z "$1" ] || ! [[ $1 =~ ^[0-9]*\.?[0-9]+$ ]]; then
+if [ -z "$SWAPFILE_SIZE_GB" ] || ! [[ $1 =~ ^[0-9]*\.?[0-9]+$ ]]; then
   echo "Please specify the desired size of the swapfile in GB!"
   exit 1
 fi
 
 swapfile_size_bytes=$( [ -f /swapfile ] && wc -c < /swapfile || echo 0 )
-desired_size_bytes=$( printf "%.0f" $(($1 * 1024 * 1024 * 1024)) )
+desired_size_bytes=$( printf "%.0f" $(($SWAPFILE_SIZE_GB * 1024 * 1024 * 1024)) )
 
 if [ "$swapfile_size_bytes" -ne "$desired_size_bytes" ]; then
   # Turn off all swapfiles
