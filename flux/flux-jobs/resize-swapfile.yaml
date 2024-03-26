@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: resize-swapfile
-        image: alpine:latest
+        image: debian:latest
         command:
         - /bin/ash
         - /scripts/resize-swapfile.sh
