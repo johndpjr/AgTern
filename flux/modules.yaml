@@ -27,6 +27,9 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+  dependsOn:
+    - name: namespaces
+      namespace: flux-system
 
 ---
 
@@ -42,6 +45,9 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+  dependsOn:
+    - name: namespaces
+      namespace: flux-system
 
 ---
 
@@ -58,6 +64,9 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+  dependsOn:
+    - name: namespaces
+      namespace: flux-system
 
 ---
 
@@ -73,6 +82,9 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+  dependsOn:
+    - name: namespaces
+      namespace: flux-system
 
 ---
 
@@ -88,3 +100,6 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+  dependsOn:
+    - name: namespaces
+      namespace: flux-system
