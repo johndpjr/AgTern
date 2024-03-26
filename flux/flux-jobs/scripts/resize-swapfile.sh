@@ -3,8 +3,8 @@ if [ -z "$1" ] || ! [[ $1 =~ ^[0-9]*\.?[0-9]+$ ]]; then
   exit 1
 fi
 
-swapfile_size_bytes=$(wc -c < /swapfile)
-desired_size_bytes=$(printf "%.0f" $(($1 * 1024 * 1024 * 1024)))
+swapfile_size_bytes=$( [ -f /swapfile ] && wc -c < /swapfile || echo 0 )
+desired_size_bytes=$( printf "%.0f" $(($1 * 1024 * 1024 * 1024)) )
 
 if [ "$swapfile_size_bytes" -ne "$desired_size_bytes" ]; then
   # Turn off all swapfiles
