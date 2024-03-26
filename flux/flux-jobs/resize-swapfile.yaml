@@ -17,7 +17,7 @@ spec:
       - name: resize-swapfile
         image: debian:latest
         command:
-        - /bin/ash
+        - /bin/bash
         - /scripts/resize-swapfile.sh
         # The size of the swapfile in GB
         - "8"
