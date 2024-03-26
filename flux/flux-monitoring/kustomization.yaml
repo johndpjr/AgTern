@@ -4,7 +4,6 @@ metadata:
   name: flux-monitoring
   namespace: flux-system
 resources:
-  - namespaces.yaml
   - discord.yaml
   - metrics-server.yaml
 #  - kubernetes-dashboard.yaml

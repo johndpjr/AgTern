@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: agtern
+
+---
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: agtern-dependencies
+
+---
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: flux-jobs
+
+---
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: flux-monitoring
+
+---
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: flux-security
+
+---
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: flux-storage
+
+---
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: flux-system

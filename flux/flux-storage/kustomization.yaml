@@ -4,5 +4,4 @@ metadata:
   name: flux-storage
   namespace: flux-system
 resources:
-  - namespaces.yaml
   - longhorn.yaml

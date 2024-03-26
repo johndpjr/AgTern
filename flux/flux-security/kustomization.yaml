@@ -4,5 +4,4 @@ metadata:
   name: flux-security
   namespace: flux-system
 resources:
-  - namespaces.yaml
   - sealed-secrets.yaml
