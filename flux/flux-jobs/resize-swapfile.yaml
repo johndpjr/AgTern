@@ -1,0 +1,33 @@
+# This script runs on each Node when either a Node is added to the cluster or the scripts update
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: resize-swapfile
+  namespace: flex-jobs
+spec:
+  selector:
+    matchLabels:
+      name: resize-swapfile
+  template:
+    metadata:
+      labels:
+        name: resize-swapfile
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: resize-swapfile
+        image: alpine:latest
+        command:
+        - /bin/ash
+        - /scripts/resize-swapfile.sh
+        # The size of the swapfile in GB
+        - "8"
+        volumeMounts:
+        - name: scripts
+          mountPath: /scripts
+        securityContext:
+          privileged: true
+      volumes:
+      - name: scripts
+        configMap:
+          name: scripts # Created by configMapGenerator in kustomization.yaml
