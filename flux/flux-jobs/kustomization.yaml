@@ -5,6 +5,7 @@ metadata:
   namespace: flux-system
 configMapGenerator:
   - name: scripts
+    namespace: flux-jobs
     behavior: create
     files:
       - scripts/resize-swapfile.sh
