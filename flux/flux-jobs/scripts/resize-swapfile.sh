@@ -12,13 +12,13 @@ if [ "$swapfile_size_bytes" -ne "$desired_size_bytes" ]; then
   # Allocate a new swapfile
   fallocate -l "$desired_size_bytes" /swapfile || { echo "Failed to allocate new swapfile!"; exit 1; }
   # Set the proper permissions
-  sudo chmod 600 /swapfile || { echo "Failed to set swapfile permissions!"; exit 1; }
+  chmod 600 /swapfile || { echo "Failed to set swapfile permissions!"; exit 1; }
   # Declare the file as swap space
-  sudo mkswap /swapfile || { echo "Failed to define swap space!"; exit 1; }
+  mkswap /swapfile || { echo "Failed to define swap space!"; exit 1; }
   # Enable the swapfile
-  sudo swapon /swapfile || { echo "Failed to enable swapfile!"; exit 1; }
+  swapon /swapfile || { echo "Failed to enable swapfile!"; exit 1; }
   # Enable the swapfile when the Node restarts
   if ! grep -q "^/swapfile swap swap defaults 0 0$" /etc/fstab; then
-    echo "/swapfile swap swap defaults 0 0" | sudo tee -a /etc/fstab
+    echo "/swapfile swap swap defaults 0 0" | tee -a /etc/fstab
   fi
 fi
