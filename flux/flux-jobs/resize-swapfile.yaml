@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: resize-swapfile
-  namespace: flux-system
+  namespace: flux-jobs
 spec:
   selector:
     matchLabels:
