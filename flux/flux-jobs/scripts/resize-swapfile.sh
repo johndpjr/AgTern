@@ -1,6 +1,3 @@
-# Exit if any of the commands below fail
-set -e
-
 if [ -z "$1" ] || ! [[ $1 =~ ^[0-9]*\.?[0-9]+$ ]]; then
   echo "Please specify the desired size of the swapfile in GB!"
   exit 1
@@ -11,15 +8,15 @@ desired_size_bytes=$(printf "%.0f" $(($1 * 1024 * 1024 * 1024)))
 
 if [ "$swapfile_size_bytes" -ne "$desired_size_bytes" ]; then
   # Turn off all swapfiles
-  swapoff -a
+  swapoff -a || { echo "Failed to disable current swapfile!"; exit 1; }
   # Allocate a new swapfile
-  fallocate -l "$desired_size_bytes" /swapfile
+  fallocate -l "$desired_size_bytes" /swapfile || { echo "Failed to allocate new swapfile!"; exit 1; }
   # Set the proper permissions
-  chmod 600 /swapfile
+  chmod 600 /swapfile || { echo "Failed to set swapfile permissions!"; exit 1; }
   # Declare the file as swap space
-  mkswap /swapfile
+  mkswap /swapfile || { echo "Failed to define swap space!"; exit 1; }
   # Enable the swapfile
-  swapon /swapfile
+  swapon /swapfile || { echo "Failed to enable swapfile!"; exit 1; }
   # Enable the swapfile when the Node restarts
   if ! grep -q "^/swapfile none swap sw 0 0$" /etc/fstab; then
     echo "/swapfile none swap sw 0 0" | tee -a /etc/fstab
