@@ -1,3 +1,6 @@
+# Run the script on the host Node:
+chroot /host /bin/bash <<"EOF"
+
 if [ -z "$1" ] || ! [[ $1 =~ ^[0-9]*\.?[0-9]+$ ]]; then
   echo "Please specify the desired size of the swapfile in GB!"
   exit 1
@@ -22,3 +25,5 @@ if [ "$swapfile_size_bytes" -ne "$desired_size_bytes" ]; then
     echo "/swapfile swap swap defaults 0 0" | tee -a /etc/fstab
   fi
 fi
+
+EOF
