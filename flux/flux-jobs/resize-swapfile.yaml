@@ -13,7 +13,6 @@ spec:
       labels:
         name: resize-swapfile
     spec:
-      restartPolicy: Never
       containers:
       - name: resize-swapfile
         image: alpine:latest
