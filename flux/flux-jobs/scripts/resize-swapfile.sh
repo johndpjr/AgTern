@@ -11,8 +11,9 @@ swapfile_size_bytes=$( [ -f /swapfile ] && wc -c < /swapfile || echo 0 )
 desired_size_bytes=$( printf "%.0f" $(($SWAPFILE_SIZE_GB * 1024 * 1024 * 1024)) )
 
 if [ "$swapfile_size_bytes" -ne "$desired_size_bytes" ]; then
+  echo "Resizing swapfile from $swapfile_size_bytes bytes to $desired_size_bytes bytes."
   # Turn off all swapfiles
-  swapoff -a || { echo "Failed to disable current swapfile!"; exit 1; }
+  swapoff -a || { echo "Failed to disable current swapfile(s)!"; exit 1; }
   # Allocate a new swapfile
   fallocate -l "$desired_size_bytes" /swapfile || { echo "Failed to allocate new swapfile!"; exit 1; }
   # Set the proper permissions
@@ -53,6 +54,7 @@ if [ "$swapfile_size_bytes" -ne "$desired_size_bytes" ]; then
       print $0;
     }
   }' /etc/systemd/system/kubelet.service || { echo "Failed to modify kubelet service! Swapfile may not be used."; exit 1; }
+  echo "Swapfile modified! Scheduling restart in 1 minute..."
   # Restart the Node in 1 minute
   shutdown -r +1 || { echo "Failed to restart the Node!"; exit 1; }
 fi
