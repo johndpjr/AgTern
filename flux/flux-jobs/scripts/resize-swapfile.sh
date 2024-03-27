@@ -14,6 +14,8 @@ if [ "$swapfile_size_bytes" -ne "$desired_size_bytes" ]; then
   echo "Resizing swapfile from $swapfile_size_bytes bytes to $desired_size_bytes bytes."
   # Turn off all swapfiles
   swapoff -a || { echo "Failed to disable current swapfile(s)!"; exit 1; }
+  # Delete the swapfile if it exists
+  [ -f /swapfile ] && rm /swapfile || { echo "Failed to delete current swapfile!"; exit 1; }
   # Allocate a new swapfile
   fallocate -l "$desired_size_bytes" /swapfile || { echo "Failed to allocate new swapfile!"; exit 1; }
   # Set the proper permissions
