@@ -38,4 +38,4 @@ spec:
           type: Directory
       containers:
         - name: pause
-          image: kubernetes/pause # Do nothing
+          image: google/pause # Do nothing
