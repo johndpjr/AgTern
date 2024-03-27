@@ -28,6 +28,9 @@ spec:
         name: kubernetes-dashboard
       interval: 1m
   # https://github.com/kubernetes/dashboard/blob/master/charts/kubernetes-dashboard/values.yaml
-  values: {}
+  values:
+    api:
+      scaling:
+        replicas: 1
   install:
     createNamespace: true
