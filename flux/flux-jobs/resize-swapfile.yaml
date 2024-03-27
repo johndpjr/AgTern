@@ -20,7 +20,7 @@ spec:
         - /bin/bash
         - /scripts/resize-swapfile.sh
         # The size of the swapfile in GB
-        - "4"
+        - "6"
         volumeMounts:
         - name: scripts
           mountPath: /scripts

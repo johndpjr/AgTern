@@ -25,7 +25,7 @@ if [ "$swapfile_size_bytes" -ne "$desired_size_bytes" ]; then
   # Enable the swapfile
   swapon /swapfile || { echo "Failed to enable swapfile!"; exit 1; }
   # Enable the swapfile when the Node restarts
-  if ! grep -q "^/swapfile swap swap defaults 0 0$" /etc/fstab; then
+  if ! grep -q "^/swapfile" /etc/fstab; then
     echo "/swapfile swap swap defaults 0 0" | tee -a /etc/fstab
   fi
   # Modify the Kubernetes command-line arguments to allow using swap
