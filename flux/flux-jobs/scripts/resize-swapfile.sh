@@ -27,7 +27,7 @@ if [ "$swapfile_size_bytes" -ne "$desired_size_bytes" ]; then
     echo "/swapfile swap swap defaults 0 0" | tee -a /etc/fstab
   fi
   # Modify the Kubernetes command-line arguments to allow using swap
-  awk -i inplace '{
+  awk '{
     if(/^ExecStart=/) {
       line = $0;
       gsub(/\r/, "", line);
@@ -53,10 +53,13 @@ if [ "$swapfile_size_bytes" -ne "$desired_size_bytes" ]; then
     } else {
       print $0;
     }
-  }' /etc/systemd/system/kubelet.service || { echo "Failed to modify kubelet service! Swapfile may not be used."; exit 1; }
+  }' /etc/systemd/system/kubelet.service > /etc/systemd/system/kubelet.service.new || { echo "Failed to modify kubelet service! Swapfile may not be used."; exit 1; }
+  mv /etc/systemd/system/kubelet.service.new /etc/systemd/system/kubelet.service || { echo "Failed to write to kubelet service file! Swapfile may not be used."; rm /etc/systemd/system/kubelet.service.new; exit 1; }
   echo "Swapfile modified! Scheduling restart in 1 minute..."
   # Restart the Node in 1 minute
   shutdown -r +1 || { echo "Failed to restart the Node!"; exit 1; }
+else
+  echo "Swapfile size: $SWAPFILE_SIZE_GB GB (unmodified)"
 fi
 
 EOF
