@@ -8,7 +8,7 @@ if [ -z "$SWAPFILE_SIZE_GB" ] || ! [[ $SWAPFILE_SIZE_GB =~ ^[0-9]*\.?[0-9]+$ ]];
 fi
 
 swapfile_size_bytes=$( [ -f /swapfile ] && wc -c < /swapfile || echo 0 )
-desired_size_bytes=$( printf "%.0f" $( ( $SWAPFILE_SIZE_GB * 1024 * 1024 * 1024 ) ) )
+desired_size_bytes=$( printf "%.0f" $(( $SWAPFILE_SIZE_GB * 1024 * 1024 * 1024 )) )
 difference_bytes=$( echo $swapfile_size_bytes $desired_size_bytes | awk '{ print ( $1 > $2 ) ? $1-$2 : $2-$1 }' )
 
 if [ "$difference_bytes" -le 1024 ]; then
