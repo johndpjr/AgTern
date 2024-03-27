@@ -3,5 +3,5 @@ kind: Kustomization
 metadata:
   name: agtern-dependencies
   namespace: flux-system
-resources: [] # Note: Order matters!
-#  - postgresql.yaml
+resources: # Note: Order matters!
+  - postgresql.yaml
