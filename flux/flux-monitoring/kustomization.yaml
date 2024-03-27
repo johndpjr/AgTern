@@ -6,4 +6,4 @@ metadata:
 resources:
   - discord.yaml
   - metrics-server.yaml
-#  - kubernetes-dashboard.yaml
+  - kubernetes-dashboard.yaml
