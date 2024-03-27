@@ -13,7 +13,7 @@ spec:
       labels:
         name: resize-swapfile
     spec:
-      containers:
+      initContainers:
       - name: resize-swapfile
         image: debian:latest
         command:
@@ -36,3 +36,6 @@ spec:
         hostPath:
           path: /
           type: Directory
+      containers:
+        - name: pause
+          image: kubernetes/pause # Do nothing

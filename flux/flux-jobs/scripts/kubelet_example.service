@@ -1,0 +1,24 @@
+[Unit]
+Description=Kubernetes Kubelet Server
+Documentation=https://kubernetes.io/docs/concepts/overview/components/#kubelet
+
+[Service]
+OOMScoreAdjust=-999
+
+ExecStart=/usr/bin/kubelet \
+  --config=/etc/kubernetes/kubelet.conf \
+  --kubeconfig=/etc/kubernetes/kubelet.kubeconfig \
+  --bootstrap-kubeconfig=/etc/kubernetes/bootstrap.kubeconfig \
+  --register-node=true \
+  --node-labels="doks.digitalocean.com/managed=true,doks.digitalocean.com/node-id=7e7d0bde-670b-493c-bbcf-394f1f842a08,doks.digitalocean.com/node-pool-id=faac1a8a-2693-4344-8ba4-c3f0e605e79d,doks.digitalocean.com/node-pool=agtern-production,doks.digitalocean.com/version=1.28.2-do.0" \
+  --root-dir=/var/lib/kubelet \
+  --v=2 \
+  --cloud-provider=external \
+  --node-ip="10.116.0.2" \
+  --container-runtime-endpoint=unix:///run/containerd/containerd.sock
+
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
