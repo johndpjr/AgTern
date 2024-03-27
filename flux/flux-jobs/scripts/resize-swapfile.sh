@@ -11,14 +11,14 @@ swapfile_size_bytes=$( [ -f /swapfile ] && wc -c < /swapfile || echo 0 )
 desired_size_bytes=$( printf "%.0f" $( ( $SWAPFILE_SIZE_GB * 1024 * 1024 * 1024 ) ) )
 difference_bytes=$( echo $swapfile_size_bytes $desired_size_bytes | awk '{ print ( $1 > $2 ) ? $1-$2 : $2-$1 }' )
 
-if [ "$diff_bytes" -le 1024 ]; then
+if [ "$difference_bytes" -le 1024 ]; then
   echo "Swapfile size: $SWAPFILE_SIZE_GB GB (unmodified)"
 else
   echo "Resizing swapfile from $swapfile_size_bytes bytes to $desired_size_bytes bytes."
   # Turn off all swapfiles
   swapoff -a || { echo "Failed to disable current swapfile(s)!"; exit 1; }
   # Delete the swapfile if it exists
-  [ -f /swapfile ] && rm /swapfile || { echo "Failed to delete current swapfile!"; exit 1; }
+  [ -f /swapfile ] && ( rm /swapfile || { echo "Failed to delete current swapfile!"; exit 1; } )
   # Allocate a new swapfile
   fallocate -l "$desired_size_bytes" /swapfile || { echo "Failed to allocate new swapfile!"; exit 1; }
   # Set the proper permissions
