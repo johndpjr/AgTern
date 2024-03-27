@@ -8,9 +8,12 @@ if [ -z "$SWAPFILE_SIZE_GB" ] || ! [[ $SWAPFILE_SIZE_GB =~ ^[0-9]*\.?[0-9]+$ ]];
 fi
 
 swapfile_size_bytes=$( [ -f /swapfile ] && wc -c < /swapfile || echo 0 )
-desired_size_bytes=$( printf "%.0f" $(($SWAPFILE_SIZE_GB * 1024 * 1024 * 1024)) )
+desired_size_bytes=$( printf "%.0f" $( ( $SWAPFILE_SIZE_GB * 1024 * 1024 * 1024 ) ) )
+difference_bytes=$( echo $swapfile_size_bytes $desired_size_bytes | awk '{ print ( $1 > $2 ) ? $1-$2 : $2-$1 }' )
 
-if [ "$swapfile_size_bytes" -ne "$desired_size_bytes" ]; then
+if [ "$diff_bytes" -le 1024 ]; then
+  echo "Swapfile size: $SWAPFILE_SIZE_GB GB (unmodified)"
+else
   echo "Resizing swapfile from $swapfile_size_bytes bytes to $desired_size_bytes bytes."
   # Turn off all swapfiles
   swapoff -a || { echo "Failed to disable current swapfile(s)!"; exit 1; }
@@ -60,8 +63,6 @@ if [ "$swapfile_size_bytes" -ne "$desired_size_bytes" ]; then
   echo "Swapfile modified! Scheduling restart in 1 minute..."
   # Restart the Node in 1 minute
   shutdown -r +1 || { echo "Failed to restart the Node!"; exit 1; }
-else
-  echo "Swapfile size: $SWAPFILE_SIZE_GB GB (unmodified)"
 fi
 
 EOF
